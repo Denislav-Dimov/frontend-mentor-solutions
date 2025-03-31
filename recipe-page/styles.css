@@ -15,6 +15,7 @@
 
     --fs-80: 0.9rem;
     --fs-100: 1rem;
+    --fs-110: 1.05rem;
     --fs-150: 1.1rem;
     --fs-600: 1.7rem;
     --fs-800: 2.4rem;
@@ -42,6 +43,11 @@ body {
     align-items: center;
 }
 
+img {
+    border-radius: 12px;
+    width: 650px;
+}
+
 main {
     background-color: var(--white);
     margin: 80px 0;
@@ -49,10 +55,6 @@ main {
     /* 650px (the image) + 80px (left and right padding) */
     width: 730px;
     border-radius: 20px;
-}
-
-header img {
-    border-radius: 12px;
 }
 
 header h1 {
@@ -145,6 +147,7 @@ h3 {
 
 .nutrition__paragraph {
     margin-bottom: 15px;
+    font-size: var(--fs-110);
 }
 
 .content {
@@ -163,4 +166,31 @@ h3 {
 .stats p {
     display: inline;
     margin: 0;
+}
+
+@media (max-width: 376px) {
+    main {
+        width: auto;
+        margin: 0;
+        padding: 0;
+    }
+
+    img {
+        width: 376px;
+    }
+
+    header,
+    .ingredients,
+    .instructions {
+        margin: 0 30px;
+    }
+
+    .nutrition {
+        margin: 0 30px 30px 30px;
+    }
+
+    .content {
+        width: 70px; /* random width */
+        margin: 0 65px 0 35px;
+    }
 }
