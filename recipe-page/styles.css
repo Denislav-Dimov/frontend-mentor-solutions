@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&family=Poppins:wght@200;400;600&family=Young+Serif&display=swap');
+
+:root {
+    --ff-young-self: 'Young Serif';
+    --ff-Outfit: 'Outfit';
+
+    --white: hsl(0, 0%, 100%);
+    --stone-100: hsl(30, 54%, 90%);
+    --stone-150: hsl(30, 18%, 87%);
+    --stone-600: hsl(30, 10%, 34%);
+    --stone-900: hsl(24, 5%, 18%);
+    --brown-800: hsl(14, 45%, 36%);
+    --rose-800: hsl(332, 51%, 32%);
+    --rose-50: hsl(330, 100%, 98%);
+
+    --fs-80: 0.9rem;
+    --fs-100: 1rem;
+    --fs-150: 1.1rem;
+    --fs-600: 1.7rem;
+    --fs-800: 2.4rem;
+
+    --fw-normal: 400;
+    --fw-bold: 600;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--stone-100);
+    font-family: var(--ff-Outfit);
+    font-weight: var(--fw-normal);
+    font-size: var(--fs-100);
+    color: var(--stone-600);
+    line-height: 1.5;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+main {
+    background-color: var(--white);
+    margin: 80px 0;
+    padding: 40px;
+    /* 650px (the image) + 80px (left and right padding) */
+    width: 730px;
+    border-radius: 20px;
+}
+
+header img {
+    border-radius: 12px;
+}
+
+header h1 {
+    font-family: var(--ff-young-self);
+    font-size: var(--fs-800);
+    color: var(--stone-900);
+    margin-bottom: 15px;
+}
+
+header p {
+    margin: 0 0 25px 0;
+}
+
+.prep-time {
+    background-color: var(--rose-50);
+    border-radius: 12px;
+}
+
+h3 {
+    margin: 0;
+    padding: 20px 0 5px 25px;
+    color: var(--rose-800);
+    font-size: var(--fs-150);
+}
+
+.prep-time ul {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 25px 30px;
+}
+
+.prep-time li {
+    font-size: var(--fs-80);
+}
+
+.prep-time li::before {
+    content: '•';
+    color: var(--rose-800);
+    font-size: 20px;
+    margin-right: 25px;
+    vertical-align: middle;
+}
+
+.headings {
+    font-family: var(--ff-young-self);
+    color: var(--brown-800);
+    font-size: var(--fs-600);
+    font-weight: var(--fw-normal);
+    margin-bottom: 10px;
+}
+
+.ingredients ul {
+    list-style: none;
+    margin: 0 0 20px 0;
+    padding-left: 10px;
+}
+
+.ingredients li {
+    font-size: var(--fs-80);
+}
+
+.ingredients li::before {
+    content: '•';
+    color: var(--brown-800);
+    font-size: 20px;
+    margin-right: 25px;
+    vertical-align: middle;
+}
+
+.line {
+    border: none;
+    height: 1px;
+    background-color: var(--stone-150);
+}
+
+.instructions ol {
+    padding-left: 25px;
+}
+
+.instructions li {
+    font-size: var(--fs-100);
+    margin-bottom: 10px;
+    padding-left: 15px;
+}
+
+.bolded-text {
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-100);
+}
+
+.nutrition__paragraph {
+    margin-bottom: 15px;
+}
+
+.content {
+    display: inline-block;
+    width: 100px; /* random width */
+    margin: 0 200px 0 35px;
+}
+
+.stats {
+    display: inline-block;
+    color: var(--brown-800);
+    font-weight: var(--fw-bold);
+}
+
+.content p,
+.stats p {
+    display: inline;
+    margin: 0;
+}
