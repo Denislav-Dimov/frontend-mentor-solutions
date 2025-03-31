@@ -140,6 +140,12 @@ h3 {
     padding-left: 15px;
 }
 
+.instructions li::marker {
+    font-size: var(--fs-150);
+    font-weight: var(--fw-bold);
+    color: var(--brown-800);
+}
+
 .bolded-text {
     font-weight: var(--fw-bold);
     font-size: var(--fs-100);
