@@ -1,0 +1,131 @@
+:root {
+    --clr-primary-red: hsl(0, 78%, 62%);
+    --clr-primary-orange: hsl(34, 97%, 64%);
+    --clr-primary-blue: hsl(212, 86%, 64%);
+    --clr-primary-cyan: hsl(180, 62%, 55%);
+
+    --clr-neutral-500: hsl(234, 12%, 34%);
+    --clr-neutral-400: hsl(212, 6%, 44%);
+    --clr-neutral-100: hsl(0, 0%, 100%);
+
+    --ff: 'Poppins';
+
+    --fs-default: 15px;
+
+    --fw-bold: 600;
+    --fw-normal: 400;
+    --fw-light: 200;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: var(--fs-default);
+    font-weight: var(--fw-normal);
+    font-family: var(--ff, sans-serif);
+    line-height: 1.4;
+}
+
+body {
+    background-color: var(--clr-neutral-100);
+    color: var(--clr-neutral-400);
+    margin: 5rem 0;
+}
+
+h1,
+h2 {
+    color: var(--clr-neutral-500);
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+header {
+    text-align: center;
+    max-width: 500px;
+    margin-inline: auto;
+}
+
+.header__title span {
+    font-weight: var(--fw-light);
+    font-size: 35px;
+}
+
+.header__title {
+    font-size: 34px;
+}
+
+.header__paragraph {
+    margin-top: 10px;
+    color: var(--clr-neutral-500);
+}
+
+.grid-layout {
+    display: grid;
+    --gap: 2rem;
+    gap: var(--gap);
+    max-width: 1200px;
+    margin-inline: auto;
+    margin-top: 60px;
+}
+
+@media (min-width: 585px) {
+    .grid-layout {
+        grid-template-columns: repeat(3, 1fr);
+        align-items: center;
+    }
+}
+
+.grid-layout-col-center {
+    display: grid;
+    gap: var(--gap);
+}
+
+.card {
+    padding: 30px;
+    box-shadow: 0 12px 20px rgba(0, 92, 178, 0.15);
+    border-radius: 4px;
+    border-top: 4px solid;
+}
+
+.card__icon {
+    margin-top: 30px;
+    margin-left: auto;
+    padding-bottom: 10px;
+}
+
+.card-border-cyan {
+    border-color: var(--clr-primary-cyan);
+}
+
+.card-border-red {
+    border-color: var(--clr-primary-red);
+}
+
+.card-border-orange {
+    border-color: var(--clr-primary-orange);
+}
+
+.card-border-blue {
+    border-color: var(--clr-primary-blue);
+}
+
+@media (max-width: 585px) {
+    body {
+        margin: 3rem 2rem;
+    }
+
+    .header__title {
+        font-size: 24px;
+    }
+
+    .header__title span {
+        font-size: 25px;
+    }
+}
