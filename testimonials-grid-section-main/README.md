@@ -38,26 +38,26 @@ Users should be able to:
     <th style="text-align: center"><span style="font-size:1.2em">Tablet (Smaller) Design</span></th>
   </tr>
   <tr>
-    <td style="width: 50%"><img src="./design/preview/preview-tablet-larger.png" alt="Tablet Larger Design"/></td>
-    <td style="width: 50%"><img src="./design/preview/preview-tablet-smaller.png" alt="Tablet Smaller Design"/></td>
+    <td><img src="./design/preview/preview-tablet-larger.png" alt="Tablet Larger Design"/></td>
+    <td><img src="./design/preview/preview-tablet-smaller.png" alt="Tablet Smaller Design"/></td>
   </tr>
-</table>
+</table> 
 
-<table style="width: 100%">
-  <tr>
-    <th style="text-align: center"><span style="font-size:1.2em">Mobile Design</span></th>
-  </tr>
-  <tr>
-    <td style="text-align: center">
-      <img src="./design/preview/preview-mobile.png" alt="Mobile Design" width="200"/>
-    </td>
-  </tr>
-</table>
+<center>
+  <table>
+    <tr>
+      <th style="text-align: center"><span style="font-size:1.2em">Mobile Design</span></th>
+    </tr>
+    <tr>
+      <td><img src="./design/preview/preview-mobile.png" alt="Mobile Design" width="200"/></td>
+    </tr>
+  </table>
+</center>
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+- Solution URL: https://github.com/Dorm-24/Testimonials-grid-section-main
+- Live Site URL: https://dorm-24.github.io/Testimonials-grid-section-main
 
 ## My process
 
