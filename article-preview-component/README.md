@@ -10,7 +10,6 @@ This is a solution to the [Article preview component challenge on Frontend Mento
   - [Links](#links)
 - [My process](#my-process)
   - [Built with](#built-with)
-  - [What I learned](#what-i-learned)
 
 ## Overview
 
@@ -27,9 +26,7 @@ Users should be able to:
 
 ### Links
 
-<!-- will be upadted -->
-- Solution URL: [solution url for the github]()
-- Live Site URL: [solution url for live site preview]()
+- Live Site URL: [solution url for live site preview](https://dorm-24.github.io/article-preview-component/)
 
 ## My process
 
@@ -40,7 +37,3 @@ Users should be able to:
 - Flexbox
 - CSS Grid
 - Mobile-first workflow
-
-### What I learned
-
-I think I've improved with my CSS responsive designs.
