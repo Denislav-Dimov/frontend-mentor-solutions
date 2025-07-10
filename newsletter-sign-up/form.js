@@ -3,26 +3,20 @@ const email = document.getElementById('email');
 const successMessage = document.getElementById('success-message-container');
 const successMessageBtn = document.getElementById('success-message-btn');
 const successMessageUserEmail = document.getElementById('success-message-email');
-let allowFormSubmission = false;
 
 form.addEventListener('submit', e => {
     e.preventDefault();
 
     if (email.value.trim() === '') {
         setError(email, 'Email required');
-        return;
     }
-
-    if (!isValidEmail(email)) {
+    else if (!isValidEmail(email)) {
         setError(email, 'Valid email required');
-        return;
     }
-
-    setSuccess(email);
-    showSuccessMessage();
-
-    // allow submission after success message is confirmed
-    allowFormSubmission = true;
+    else {
+        setSuccess(email);
+        showSuccessMessage();
+    }
 });
 
 const setError = (element, message) => {
@@ -53,9 +47,4 @@ const showSuccessMessage = () => {
 
 successMessageBtn.addEventListener('click', () => {
     successMessage.classList.add('hidden');
-
-    if (allowFormSubmission) {
-        allowFormSubmission = false;
-        form.submit();
-    }
 });

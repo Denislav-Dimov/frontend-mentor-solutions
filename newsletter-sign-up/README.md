@@ -34,9 +34,8 @@ Users should be able to:
 
 ### Links
 
-<!-- will update later -->
-- Solution URL: [Frontend Mentor](https://your-solution-url.com)
-- Live Site URL: [GitHub live site](https://your-live-site-url.com)
+- Solution URL: [Frontend Mentor](https://www.frontendmentor.io/solutions/responsive-newsletter-sign-up-with-mainly-flexbox-jDIz9T0cCb)
+- Live Site URL: [GitHub live site](https://dorm-24.github.io/newsletter-sign-up/)
 
 ## My process
 
@@ -63,7 +62,7 @@ With this project I've learned a lot. I learned things like how to switch image 
 
 ### Useful resources
 
-- [Example resource 1](https://www.youtube.com/watch?v=Z0duh-0xJ2Y) - This helped me for my layout design and how to manage the different pictures on different screen sizes
+- https://www.youtube.com/watch?v=Z0duh-0xJ2Y - This helped me for my layout design and how to manage the different pictures on different screen sizes
 
 ## Acknowledgments
 
