@@ -43,6 +43,8 @@ const showSuccessMessage = () => {
     successMessage.classList.remove('hidden');
 
     successMessageUserEmail.innerText = email.value.trim();
+
+    email.value = '';
 };
 
 successMessageBtn.addEventListener('click', () => {
