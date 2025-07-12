@@ -28,7 +28,7 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Frontend Mentor]()
+- Solution URL: [Frontend Mentor](https://www.frontendmentor.io/solutions/time-tracking-dashboard-with-grid-fjNEe0tFpr)
 - Live Site URL: [GitHub Live Site](https://dorm-24.github.io/time-tracking-dashboard/)
 
 ## My process
