@@ -1,62 +1,39 @@
-// the options on active state
-const options = document.querySelectorAll('.option');
-
-for (let option of options) {
-    option.addEventListener('click', () => {
-        options.forEach(p => p.classList.remove('active'));
-        option.classList.add('active');
-    });
-}
-
-const title = document.querySelectorAll('.title');
+const titles = document.querySelectorAll('.title');
 const currentHours = document.querySelectorAll('.hours');
 const previousHours = document.querySelectorAll('.previous-hours');
-const dailyBtn = document.getElementById('daily');
-const weeklyBtn = document.getElementById('weekly');
-const monthlyBtn = document.getElementById('monthly');
+const timeframeOptions = document.querySelectorAll('.option');
 
 fetch('data/data.json')
     .then(response => response.json())
     .then(data => {
-        dailyBtn.addEventListener('click', () => {
-            displayTitle();
+        timeframeOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const timeframe = option.dataset.timeframe;
 
-            for (let i = 0; i < currentHours.length; i++) {
-                currentHours[i].innerText = `${data[i].timeframes.daily.current}hrs`;
-            }
-
-            for (let i = 0; i < previousHours.length; i++) {
-                previousHours[i].innerText = `Yesterday - ${data[i].timeframes.daily.previous}hrs`;
-            }
+                updateDisplay(data, timeframe);
+                updateActiveState(timeframeOptions, option);
+            });
         });
 
-        weeklyBtn.addEventListener('click', () => {
-            displayTitle();
-
-            for (let i = 0; i < currentHours.length; i++) {
-                currentHours[i].innerText = `${data[i].timeframes.weekly.current}hrs`;
-            }
-
-            for (let i = 0; i < previousHours.length; i++) {
-                previousHours[i].innerText = `Last Week - ${data[i].timeframes.weekly.previous}hrs`;
-            }
-        });
-
-        monthlyBtn.addEventListener('click', () => {
-            displayTitle();
-
-            for (let i = 0; i < currentHours.length; i++) {
-                currentHours[i].innerText = `${data[i].timeframes.monthly.current}hrs`;
-            }
-
-            for (let i = 0; i < previousHours.length; i++) {
-                previousHours[i].innerText = `Last Month - ${data[i].timeframes.monthly.previous}hrs`;
-            }
-        });
-
-        function displayTitle() {
-            for (let i = 0; i < title.length; i++) {
-                title[i].innerText = `${data[i].title}`;
-            }
-        }
+        // default view
+        updateDisplay(data, 'weekly');
     });
+
+function updateDisplay(data, timeframe) {
+    const labels = {
+        daily: 'Yesterday',
+        weekly: 'Last Week',
+        monthly: 'Last Month'
+    };
+
+    data.forEach((dataItem, i) => {
+        titles[i].innerText = dataItem.title;
+        currentHours[i].innerText = `${dataItem.timeframes[timeframe].current}hrs`;
+        previousHours[i].innerText = `${labels[timeframe]} - ${dataItem.timeframes[timeframe].previous}hrs`;
+    });
+}
+
+function updateActiveState(allOptions, selectedOption) {
+    allOptions.forEach(p => p.classList.remove('active'));
+    selectedOption.classList.add('active');
+}
