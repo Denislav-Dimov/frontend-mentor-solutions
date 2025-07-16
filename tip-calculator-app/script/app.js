@@ -42,7 +42,7 @@ inputBill.addEventListener('input', () => {
     if (inputBillValue === '' || inputBillValue <= 0) {
         billValue = null;
     } else {
-        billValue = inputBillValue;
+        billValue = parseFloat(inputBillValue);
     }
 
     calculate();
@@ -85,7 +85,7 @@ btnCustom.addEventListener('input', () => {
     if (btnCustomValue === '' || btnCustomValue <= 0) {
         btnValue = null;
     } else {
-        btnValue = btnCustomValue / 100;
+        btnValue = parseFloat(btnCustomValue) / 100;
     }
 
     clearActiveState(tipBtns);
@@ -115,24 +115,29 @@ function clearActiveState(buttons) {
 
 const formatNumber = number => '$' + number.toFixed(2);
 
+let resetListenerAdded = false;
+
 function setResetBtn() {
     resetBtn.classList.add('active');
 
-    resetBtn.addEventListener('click', () => {
-        inputBill.value = '';
-        clearActiveState(tipBtns);
-        inputPeople.value = '';
-        btnCustom.value = '';
+    if (!resetListenerAdded) {
+        resetBtn.addEventListener('click', () => {
+            inputBill.value = '';
+            clearActiveState(tipBtns);
+            inputPeople.value = '';
+            btnCustom.value = '';
 
-        billValue = null;
-        peopleValue = null;
-        btnValue = null;
+            billValue = null;
+            peopleValue = null;
+            btnValue = null;
 
-        tipPerPerson.innerText = '$0.00';
-        total.innerText = '$0.00';
+            tipPerPerson.innerText = '$0.00';
+            total.innerText = '$0.00';
 
-        clearAllErrors();
+            clearAllErrors();
 
-        resetBtn.classList.remove('active');
-    });
+            resetBtn.classList.remove('active');
+        });
+        resetListenerAdded = true;
+    }
 }
