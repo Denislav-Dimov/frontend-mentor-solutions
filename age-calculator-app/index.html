@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+
+    <title>Frontend Mentor | Age calculator app</title>
+
+    <link rel="stylesheet" href="./style/style.css">
+    <script src="./script/app.js"></script>
+</head>
+<body>
+    <main>
+        <section class="wrapper">
+            <div class="flex-group">
+                <div class="input-group">
+                    <label for="day" class="label" id="dayLabel">Day</label>
+                    <input type="number" name="day" id="day" class="input" placeholder="DD">
+                    <div id="dayErrorMessage" class="error-message"></div>
+                </div>
+                <div class="input-group">
+                    <label for="month" class="label" id="monthLabel">Month</label>
+                    <input type="number" name="month" id="month" class="input" placeholder="MM">
+                    <p id="monthErrorMessage" class="error-message"></p>
+                </div>
+                <div class="input-group">
+                    <label for="year" class="label" id="yearLabel">Year</label>
+                    <input type="number" name="year" id="year" class="input" placeholder="YYYY">
+                    <p id="yearErrorMessage" class="error-message"></p>
+                </div>
+            </div>
+
+            <div class="line-container">
+                <hr class="line">
+                <button class="button" id="button">
+                    <img src="./assets/images/icon-arrow.svg" alt="" class="icon">
+                </button>
+            </div>
+
+            <div class="output-container">
+                <p class="output-text"><span class="output" id="yearsOutput">- -</span> years</p>
+                <p class="output-text"><span class="output" id="monthsOutput">- -</span> months</p>
+                <p class="output-text"><span class="output" id="daysOutput">- -</span> days</p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
