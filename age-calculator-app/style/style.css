@@ -175,7 +175,7 @@ main {
   border-radius: .5rem;
   font-weight: var(--fw-bold);
   border: 1px solid var(--clr-neutral-200);
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   margin-block-end: .5rem;
 }
 
@@ -188,13 +188,13 @@ main {
 
 @media (min-width: 48em) {
   .input {
-    width: 120px;
-    padding: 0.6rem 1rem;
+    width: 130px;
+    padding: 0.8rem 1rem;
     font-size: 1.5rem;
   }
 
   .error-message {
-    max-width: 120px;
+    max-width: 130px;
   }
 }
 
