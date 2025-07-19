@@ -170,7 +170,7 @@ main {
 }
 
 .input {
-  width: 90px;
+  width: 5.625rem;
   padding: .6rem 0.8rem;
   border-radius: .5rem;
   font-weight: var(--fw-bold);
@@ -183,18 +183,18 @@ main {
   font-style: italic;
   font-size: .6875rem;
   color: var(--clr-primary-400);
-  max-width: 90px;
+  max-width: 5.625rem;
 }
 
 @media (min-width: 48em) {
   .input {
-    width: 130px;
+    width: 8.125rem;
     padding: 0.8rem 1rem;
     font-size: 1.5rem;
   }
 
   .error-message {
-    max-width: 130px;
+    max-width: 8.125rem;
   }
 }
 
@@ -216,12 +216,6 @@ main {
   caret-color: var(--clr-primary-400);
 }
 
-@media (min-width: 48em) {
-  .error-message {
-    max-width: 120px;
-  }
-}
-
 .line-container {
   position: relative;
   display: grid;
@@ -232,7 +226,7 @@ main {
 @media (min-width: 48em) {
   .line-container {
     justify-content: end;
-    width: 550px;
+    width: 34.375rem;
     margin-block-end: 1rem;
   }
 }

@@ -131,7 +131,25 @@ function printResult(birthDate) {
     const month = document.getElementById('monthsOutput');
     const year = document.getElementById('yearsOutput');
 
-    year.innerText = birthDate.year;
-    month.innerText = birthDate.month;
-    day.innerText = birthDate.day;
+    animateValue(year, 1, birthDate.year, 1500);
+    animateValue(month, 1, birthDate.month, 1500);
+    animateValue(day, 1, birthDate.day, 1500);
+}
+
+// everything is copy pasted for this function btw
+function animateValue(element, start, end, duration) {
+    let startTimestamp = null;
+    const step = (timestamp) => {
+        if (!startTimestamp) {
+            startTimestamp = timestamp;
+        }
+
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        element.innerHTML = Math.floor(progress * (end - start) + start);
+
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        }
+    };
+    window.requestAnimationFrame(step);
 }
