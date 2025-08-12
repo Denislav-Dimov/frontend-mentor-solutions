@@ -1,0 +1,145 @@
+:root {
+  --bg-main: hsl(220, 22%, 16%);
+  --bg-card: hsl(219, 19%, 24%);
+  --clr-primary: hsl(193, 38%, 86%);
+  --clr-secondary: hsl(150, 100%, 66%);
+  --shadow: hsl(215, 23%, 15%) 0px 8px 24px;
+
+  --font-family-primary: 'Manrope';
+  --font-weight-bold: 800;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+}
+
+body {
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+
+  background-color: var(--bg-main);
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-bold);
+  color: var(--clr-primary);
+}
+
+main {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  margin-inline: 1rem;
+}
+
+.card {
+  background-color: var(--bg-card);
+  border-radius: 0.5rem;
+  padding: 2.25rem 1.5rem;
+  max-width: 21.25rem;
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: var(--shadow);
+}
+
+.card h1 {
+  font-size: .75rem;
+  color: var(--clr-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.spaced {
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-right: 3px;
+}
+
+.card p {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.card p.appear {
+  animation: appear 500ms ease-in;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.card img {
+  margin-bottom: 1.5rem;
+}
+
+.card button {
+  border: none;
+  cursor: pointer;
+  background-color: var(--clr-secondary);
+  border-radius: 50%;
+  padding: 1.25rem;
+  position: absolute;
+  bottom: -2rem;
+  transition: 200ms;
+}
+
+.card button:hover {
+  box-shadow: 0 0 3rem var(--clr-secondary);
+}
+
+@media (min-width: 568px) {
+  .card {
+    max-width: 25rem;
+  }
+
+  .card p {
+    font-size: 1.75rem;
+  }
+}
