@@ -35,7 +35,7 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: 
+- Solution URL: https://www.frontendmentor.io/solutions/to-do-app-with-drag-and-drop-and-locally-saved-tasks-JqtYrMr6Y_
 - Live Site URL: https://dorm-24.github.io/todo-app/
 
 ## My process
