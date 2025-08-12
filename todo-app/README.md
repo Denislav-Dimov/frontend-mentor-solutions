@@ -2,6 +2,8 @@
 
 This is a solution to the [Todo app challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/todo-app-Su1_KokOW). Frontend Mentor challenges help you improve your coding skills by building realistic projects. 
 
+[![Live Preview](https://img.shields.io/badge/Live%20Preview-Visit%20Site-blue?style=for-the-badge&logo=google-chrome&logoColor=white)](https://dorm-24.github.io/todo-app/)
+
 ## Table of contents
 
 - [Overview](#overview)
@@ -33,8 +35,8 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+- Solution URL: 
+- Live Site URL: https://dorm-24.github.io/todo-app/
 
 ## My process
 
