@@ -28,5 +28,5 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: 
+- Solution URL: https://www.frontendmentor.io/solutions/solution-with-nothing-special-7wS2ldajTG
 - Live Site URL: https://dorm-24.github.io/interactive-rating-component/
