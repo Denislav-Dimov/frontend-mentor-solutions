@@ -71,6 +71,27 @@ main {
   margin-inline: 1rem;
 }
 
+.loader {
+  border: 0.6rem solid var(--clr-primary);
+  border-top: 0.6rem solid var(--clr-secondary);
+  margin-block-start: 0;
+  margin-block-end: 1.5rem;
+  border-radius: 50%;
+  width: 4.5rem;
+  height: 4.5rem;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .card {
   background-color: var(--bg-card);
   border-radius: 0.5rem;

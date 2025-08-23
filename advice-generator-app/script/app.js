@@ -1,5 +1,8 @@
 const adviceNumber = document.getElementById('adviceNumber');
 const adviceText = document.getElementById('adviceText');
+const card = document.querySelector('.card');
+const loading = document.createElement('div');
+loading.className = 'loader';
 
 const API_URL = 'https://api.adviceslip.com/advice';
 
@@ -13,6 +16,8 @@ async function generateAdvice() {
 
 async function getData() {
   try {
+    showLoadingScreen();
+
     const response = await fetch(API_URL);
 
     if (!response.ok) {
@@ -23,7 +28,22 @@ async function getData() {
 
   } catch (error) {
     console.error(`Error when fetching: ${error.message}`);
+  } finally {
+    hideLoadingScreen();
   }
+}
+
+function showLoadingScreen() {
+  if (!card.contains(adviceText)) return;
+
+  adviceNumber.innerText = 0;
+  card.replaceChild(loading, adviceText);
+}
+
+function hideLoadingScreen() {
+  if (!card.contains(loading)) return;
+
+  card.replaceChild(adviceText, loading);
 }
 
 function setFadeIn(textEl) {
@@ -33,6 +53,5 @@ function setFadeIn(textEl) {
     textEl.classList.remove('appear');
   }, 2000);
 }
-
 
 document.addEventListener('DOMContentLoaded', generateAdvice);
