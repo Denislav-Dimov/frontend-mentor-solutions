@@ -16,101 +16,105 @@ const resetBtn = document.getElementById('resetBtn');
 
 
 function calculate() {
-    setResetBtn();
+  setResetBtn();
 
-    clearAllErrors();
+  clearAllErrors();
 
-    if (billValue === null) {
-        setError(inputBill, errorMsgBill);
-        return;
-    } else if (peopleValue === null) {
-        setError(inputPeople, errorMsgPeople);
-        return;
-    }
+  if (billValue === null) {
+    setError(inputBill, errorMsgBill);
+    return;
+  }
 
-    const tipPerPersonResult = (billValue / peopleValue) * btnValue;
-    const totalResult = (billValue / peopleValue) + tipPerPersonResult;
+  if (peopleValue === null) {
+    setError(inputPeople, errorMsgPeople);
+    return;
+  }
 
-    tipPerPerson.innerText = formatNumber(tipPerPersonResult);
-    total.innerText = formatNumber(totalResult);
+  const tipPerPersonResult = (billValue / peopleValue) * btnValue;
+  const totalResult = (billValue / peopleValue) + tipPerPersonResult;
+
+  tipPerPerson.innerText = formatNumber(tipPerPersonResult);
+  total.innerText = formatNumber(totalResult);
 }
 
 
 inputBill.addEventListener('input', () => {
-    let inputBillValue = inputBill.value;
+  if (inputBill.value === '' || inputBill.value <= 0) {
+    billValue = null;
+  }
+  else {
+    billValue = parseFloat(inputBill.value);
+  }
 
-    if (inputBillValue === '' || inputBillValue <= 0) {
-        billValue = null;
-    } else {
-        billValue = parseFloat(inputBillValue);
-    }
-
-    calculate();
+  calculate();
 });
 
 inputPeople.addEventListener('input', () => {
-    let inputPeopleValue = inputPeople.value;
+  let inputPeopleValue = inputPeople.value;
 
-    if (inputPeopleValue === '' || inputPeopleValue <= 0) {
-        peopleValue = null;
-    } else {
-        inputPeopleValue = parseFloat(inputPeopleValue);
-        if (!Number.isInteger(inputPeopleValue)) {
-            peopleValue = null;
-            errorMsgPeople.innerText = `Can't have decimal`;
-        } else {
-            peopleValue = inputPeopleValue;
-            errorMsgPeople.innerText = `Can't be zero`;
-        }
+  if (inputPeopleValue === '' || inputPeopleValue <= 0) {
+    peopleValue = null;
+  }
+  else {
+    inputPeopleValue = parseFloat(inputPeopleValue);
+    if (!Number.isInteger(inputPeopleValue)) {
+      peopleValue = null;
+      errorMsgPeople.innerText = `Can't have decimal`;
     }
+    else {
+      peopleValue = inputPeopleValue;
+      errorMsgPeople.innerText = `Can't be zero`;
+    }
+  }
 
-    calculate();
+  calculate();
 });
 
 tipBtns.forEach(button => {
-    button.addEventListener('click', () => {
-        clearActiveState(tipBtns);
-        button.classList.add('active');
+  button.addEventListener('click', () => {
+    clearActiveState(tipBtns);
+    button.classList.add('active');
 
-        btnValue = parseFloat(button.dataset.value) / 100;
-        btnCustom.value = '';
+    btnValue = parseFloat(button.dataset.value) / 100;
+    btnCustom.value = '';
 
-        calculate();
-    });
+    calculate();
+  });
 });
 
 btnCustom.addEventListener('input', () => {
-    let btnCustomValue = btnCustom.value;
+  let btnCustomValue = btnCustom.value;
 
-    if (btnCustomValue === '' || btnCustomValue <= 0) {
-        btnValue = null;
-    } else {
-        btnValue = parseFloat(btnCustomValue) / 100;
-    }
+  if (btnCustomValue === '' || btnCustomValue <= 0) {
+    btnValue = null;
+  }
+  else {
+    btnValue = parseFloat(btnCustomValue) / 100;
+  }
 
-    clearActiveState(tipBtns);
+  clearActiveState(tipBtns);
 
-    calculate();
+  calculate();
 });
 
 
 function setError(input, errorMsg) {
-    input.classList.add('error-state');
-    errorMsg.classList.add('show-error-msg');
+  input.classList.add('error-state');
+  errorMsg.classList.add('show-error-msg');
 }
 
 function clearError(input, errorMsg) {
-    input.classList.remove('error-state');
-    errorMsg.classList.remove('show-error-msg');
+  input.classList.remove('error-state');
+  errorMsg.classList.remove('show-error-msg');
 }
 
 function clearAllErrors() {
-    clearError(inputBill, errorMsgBill);
-    clearError(inputPeople, errorMsgPeople);
+  clearError(inputBill, errorMsgBill);
+  clearError(inputPeople, errorMsgPeople);
 }
 
 function clearActiveState(buttons) {
-    buttons.forEach(btn => btn.classList.remove('active'));
+  buttons.forEach(btn => btn.classList.remove('active'));
 }
 
 const formatNumber = number => '$' + number.toFixed(2);
@@ -118,26 +122,26 @@ const formatNumber = number => '$' + number.toFixed(2);
 let resetListenerAdded = false;
 
 function setResetBtn() {
-    resetBtn.classList.add('active');
+  resetBtn.classList.add('active');
 
-    if (!resetListenerAdded) {
-        resetBtn.addEventListener('click', () => {
-            inputBill.value = '';
-            clearActiveState(tipBtns);
-            inputPeople.value = '';
-            btnCustom.value = '';
+  if (!resetListenerAdded) {
+    resetBtn.addEventListener('click', () => {
+      inputBill.value = '';
+      clearActiveState(tipBtns);
+      inputPeople.value = '';
+      btnCustom.value = '';
 
-            billValue = null;
-            peopleValue = null;
-            btnValue = null;
+      billValue = null;
+      peopleValue = null;
+      btnValue = null;
 
-            tipPerPerson.innerText = '$0.00';
-            total.innerText = '$0.00';
+      tipPerPerson.innerText = '$0.00';
+      total.innerText = '$0.00';
 
-            clearAllErrors();
+      clearAllErrors();
 
-            resetBtn.classList.remove('active');
-        });
-        resetListenerAdded = true;
-    }
+      resetBtn.classList.remove('active');
+    });
+    resetListenerAdded = true;
+  }
 }

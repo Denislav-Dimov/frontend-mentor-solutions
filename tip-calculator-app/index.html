@@ -1,75 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
-    <title>Frontend Mentor | Tip calculator app</title>
-    <link rel="stylesheet" href="./styles/style.css">
-    <script src="./script/app.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  <title>Frontend Mentor | Tip calculator app</title>
+  <link rel="stylesheet" href="./styles/style.css">
+  <script src="./script/app.js" defer></script>
 
-    <!-- font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <!-- font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 </head>
 <body>
+  <main>
+    <img src="./images/logo.svg" alt="logo of splitter" class="logo">
+    <section class="wrapper">
+      <div class="input-content">
+        <div class="form-input-group">
+          <div class="flex-spacing">
+            <label for="inputBill" class="label-text">Bill</label>
+            <div class="error-msg" id="errorMsgBill">Enter a bill</div>
+          </div>
+          <input type="number" id="inputBill" class="input-field icon-dollar" placeholder="0">
+        </div>
 
-    <main>
-        <img src="./images/logo.svg" alt="logo of splitter" class="logo">
-        <section class="wrapper">
-            <div class="input-content">
-                <div class="form-input-group">
-                    <div class="flex-spacing">
-                        <label for="inputBill" class="label-text">Bill</label>
-                        <div class="error-msg" id="errorMsgBill">Enter a bill</div>
-                    </div>
-                    <input type="number" id="inputBill" class="input-field icon-dollar" placeholder="0">
-                </div>
+        <div class="form-input-group">
+          <label class="label-text">Select Tip %</label>
+          <div class="buttons-container">
+            <button class="tip-btn" data-value="5">5%</button>
+            <button class="tip-btn" data-value="10">10%</button>
+            <button class="tip-btn" data-value="15">15%</button>
+            <button class="tip-btn" data-value="25">25%</button>
+            <button class="tip-btn" data-value="50">50%</button>
+            <input type="number" class="input-field input-field-custom-tip" id="btnCustom" placeholder="Custom"></input>
+          </div>
+        </div>
 
-                <div class="form-input-group">
-                    <label class="label-text">Select Tip %</label>
-                    <div class="buttons-container">
-                        <button class="tip-btn" data-value="5">5%</button>
-                        <button class="tip-btn" data-value="10">10%</button>
-                        <button class="tip-btn" data-value="15">15%</button>
-                        <button class="tip-btn" data-value="25">25%</button>
-                        <button class="tip-btn" data-value="50">50%</button>
-                        <input type="number" class="input-field input-field-custom-tip" id="btnCustom" placeholder="Custom"></input>
-                    </div>
-                </div>
+        <div class="form-input-group">
+          <div class="flex-spacing">
+            <label for="inputPeople" class="label-text">Number of People</label>
+            <div class="error-msg" id="errorMsgPeople">Can't be zero</div>
+          </div>
+          <input type="number" id="inputPeople" class="input-field icon-person" placeholder="0">
+        </div>
+      </div>
 
-                <div class="form-input-group">
-                    <div class="flex-spacing">
-                        <label for="inputPeople" class="label-text">Number of People</label>
-                        <div class="error-msg" id="errorMsgPeople">Can't be zero</div>
-                    </div>
-                    <input type="number" id="inputPeople" class="input-field icon-person" placeholder="0">
-                </div>
+      <div class="output-area">
+        <div class="output-content">
+          <div class="flex-spacing">
+            <div class="text-group">
+              <p>Tip Amount</p>
+              <span>/ person</span>
             </div>
+            <p class="tip-number" id="tipPerPerson">$0.00</p>
+          </div>
 
-            <div class="output-area">
-                <div class="output-content">
-                    <div class="flex-spacing">
-                        <div class="text-group">
-                            <p>Tip Amount</p>
-                            <span>/ person</span>
-                        </div>
-                        <p class="tip-number" id="tipPerPerson">$0.00</p>
-                    </div>
-
-                    <div class="flex-spacing">
-                        <div class="text-group">
-                            <p>Total</p>
-                            <span>/ person</span>
-                        </div>
-                        <p class="tip-number" id="total">$0.00</p>
-                    </div>
-                </div>
-
-                <button class="reset-btn" id="resetBtn">Reset</button>
+          <div class="flex-spacing">
+            <div class="text-group">
+              <p>Total</p>
+              <span>/ person</span>
             </div>
-        </section>
-    </main>
+            <p class="tip-number" id="total">$0.00</p>
+          </div>
+        </div>
+
+        <button class="reset-btn" id="resetBtn">Reset</button>
+      </div>
+    </section>
+  </main>
 </body>
 </html>
