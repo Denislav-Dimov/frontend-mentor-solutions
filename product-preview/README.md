@@ -27,7 +27,8 @@ Users should be able to:
 
 ### Links
 
--   Live Site URL: https://dorm-24.github.io/Product-preview/
+-   Solution URL: https://www.frontendmentor.io/solutions/solution--RXkGlBCy6
+-   Live Site URL: https://denislav-dimov.github.io/Product-preview/
 
 ## My process
 
