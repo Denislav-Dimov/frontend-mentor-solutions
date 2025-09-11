@@ -2,7 +2,7 @@
 
 This is a solution to the [Todo app challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/todo-app-Su1_KokOW). Frontend Mentor challenges help you improve your coding skills by building realistic projects. 
 
-[![Live Preview](https://img.shields.io/badge/Live%20Preview-Visit%20Site-blue?style=for-the-badge&logo=google-chrome&logoColor=white)](https://dorm-24.github.io/todo-app/)
+[![Live Preview](https://img.shields.io/badge/Live%20Preview-Visit%20Site-blue?style=for-the-badge&logo=google-chrome&logoColor=white)](https://denislav-dimov.github.io/todo-app/)
 
 ## Table of contents
 
@@ -36,7 +36,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: https://www.frontendmentor.io/solutions/to-do-app-with-drag-and-drop-and-locally-saved-tasks-JqtYrMr6Y_
-- Live Site URL: https://dorm-24.github.io/todo-app/
+- Live Site URL: https://denislav-dimov.github.io/todo-app/
 
 ## My process
 
