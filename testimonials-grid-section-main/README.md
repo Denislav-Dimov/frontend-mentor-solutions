@@ -56,8 +56,8 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: https://github.com/Dorm-24/Testimonials-grid-section-main
-- Live Site URL: https://dorm-24.github.io/Testimonials-grid-section-main
+- Solution URL: https://www.frontendmentor.io/solutions/responsive-solution-with-grid-and-multiple-breakpoints-S22wekzbXG
+- Live Site URL: https://denislav-dimov.github.io/Testimonials-grid-section-main
 
 ## My process
 
