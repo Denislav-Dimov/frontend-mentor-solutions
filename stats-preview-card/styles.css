@@ -100,13 +100,15 @@ main {
     width: var(--width);
     height: var(--height);
 }
+
 .img {
     width: var(--width);
     height: var(--height);
     border-top-right-radius: var(--br);
     border-bottom-right-radius: var(--br);
-    background: url(image-header-desktop.jpg);
-    mix-blend-mode: luminosity;
+    background: url(./images/image-header-desktop.jpg);
+    mix-blend-mode: multiply;
+    opacity: 75.11%;
 }
 
 @media only screen and (max-width: 750px) {
@@ -158,7 +160,7 @@ main {
         border-top-left-radius: var(--br);
     }
     .img {
-        background: url(image-header-mobile.jpg);
+        background: url(./images/image-header-mobile.jpg);
         height: 420px;
         border-bottom-right-radius: 0;
         border-top-left-radius: var(--br);
