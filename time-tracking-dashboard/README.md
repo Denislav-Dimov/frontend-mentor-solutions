@@ -2,6 +2,8 @@
 
 This is a solution to the [Time tracking dashboard challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/time-tracking-dashboard-UIQ7167Jw). Frontend Mentor challenges help you improve your coding skills by building realistic projects. 
 
+[![Live Preview](https://img.shields.io/badge/Live%20Preview-blue?style=for-the-badge&logo=web&logoColor=white)](https://denislav-dimov.github.io/time-tracking-dashboard/)
+
 ## Table of contents
 
 - [Overview](#overview)
@@ -29,7 +31,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: [Frontend Mentor](https://www.frontendmentor.io/solutions/time-tracking-dashboard-with-grid-fjNEe0tFpr)
-- Live Site URL: [GitHub Live Site](https://dorm-24.github.io/time-tracking-dashboard/)
+- Live Site URL: [GitHub Live Site](https://denislav-dimov.github.io/time-tracking-dashboard/)
 
 ## My process
 
