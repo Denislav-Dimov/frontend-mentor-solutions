@@ -26,7 +26,7 @@ Users should be able to:
 
 ### Links
 
-- Live Site URL: [solution url for live site preview](https://dorm-24.github.io/article-preview-component/)
+- Live Site URL: [solution url for live site preview](https://denislav-dimov.github.io/article-preview-component/)
 
 ## My process
 
