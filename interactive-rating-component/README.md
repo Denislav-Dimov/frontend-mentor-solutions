@@ -2,7 +2,7 @@
 
 This is a solution to the [Interactive rating component challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/interactive-rating-component-koxpeBUmI). Frontend Mentor challenges help you improve your coding skills by building realistic projects. 
 
-[![Live Preview](https://img.shields.io/badge/Live%20Preview-Visit%20Site-blue?style=for-the-badge&logo=google-chrome&logoColor=white)](https://dorm-24.github.io/interactive-rating-component/)
+[![Live Preview](https://img.shields.io/badge/Live%20Preview-Visit%20Site-blue?style=for-the-badge&logo=google-chrome&logoColor=white)](https://denislav-dimov.github.io/interactive-rating-component/)
 
 ## Table of contents
 
@@ -29,4 +29,4 @@ Users should be able to:
 ### Links
 
 - Solution URL: https://www.frontendmentor.io/solutions/solution-with-nothing-special-7wS2ldajTG
-- Live Site URL: https://dorm-24.github.io/interactive-rating-component/
+- Live Site URL: https://denislav-dimov.github.io/interactive-rating-component/
