@@ -25,8 +25,8 @@ Users should be able to:
 
 ### Links
 
--   Solution URL: https://github.com/Dorm-24/Four-card-feature-section
--   Live Site URL: https://dorm-24.github.io/Four-card-feature-section/
+-   Solution URL: https://www.frontendmentor.io/solutions/solution-using-css-grid-fz35IwHxCB
+-   Live Site URL: https://denislav-dimov.github.io/Four-card-feature-section/
 
 ## Built with
 
