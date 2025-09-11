@@ -30,7 +30,7 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: 
+- Solution URL: https://www.frontendmentor.io/solutions/responsive-tip-calculator-with-grid-uBVM3txqQv
 - Live Site URL: https://denislav-dimov.github.io/tip-calculator-app/
 
 ## My process
