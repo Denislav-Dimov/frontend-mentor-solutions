@@ -2,7 +2,7 @@
 
 This is a solution to the [Interactive comments section challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/interactive-comments-section-iG1RugEG9). Frontend Mentor challenges help you improve your coding skills by building realistic projects. 
 
-[![Live Preview](https://img.shields.io/badge/Live%20Preview-Visit%20Site-blue?style=for-the-badge&logo=google-chrome&logoColor=white)](https://dorm-24.github.io/interactive-comments-section/)
+[![Live Preview](https://img.shields.io/badge/Live%20Preview-Visit%20Site-blue?style=for-the-badge&logo=google-chrome&logoColor=white)](https://denislav-dimov.github.io/interactive-comments-section/)
 
 ## Table of contents
 
@@ -34,7 +34,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: https://www.frontendmentor.io/solutions/solution-with-vanilla-javascript-and-all-bonus-requirements-Gg_7rfaxA_
-- Live Site URL: https://dorm-24.github.io/interactive-comments-section/
+- Live Site URL: https://denislav-dimov.github.io/interactive-comments-section/
 
 ## My process
 
