@@ -1,19 +1,58 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Frontend Mentor | Stats preview card component</title>
 
-  <link rel="icon" href="./public/favicon-32x32.png" />
+  <link rel="icon" href="./src/images/favicon-32x32.png">
 
-  <link rel="stylesheet" href="./src/styles.css">
+  <link rel="stylesheet" href="./src/tailwind.css">
 
   <!-- font -->
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lexend+Deca:wght@100..900&display=swap"
+    rel="stylesheet">
 </head>
-<body>
-
+<body class="bg-primary-navy-950 font-primary text-neutral-300 font-light">
+  <main class="grid place-items-center min-h-screen mx-4 my-12 md:my-0">
+    <article class="flex flex-col md:grid grid-cols-2 w-full max-w-sm md:max-w-5xl bg-primary-blue-950 rounded-lg overflow-hidden text-center md:text-left">
+      <!-- image section -->
+      <picture class="bg-primary-purple-500 order-1 md:order-2">
+        <source media="(min-width: 768px)" srcset="./src/images/image-header-desktop.jpg">
+        <img
+          src="./src/images/image-header-mobile.jpg"
+          alt=""
+          class="h-full mix-blend-multiply opacity-[75%]">
+      </picture>
+      <!-- content section -->
+      <div class="px-8 py-10 md:p-16 order-2 md:order-1 flex flex-col">
+        <h1 class="text-4xl/tight font-bold mb-5">
+          Get <span class="text-primary-purple-500">insights</span> that help your business grow.
+        </h1>
+        <p class="text-neutral-200 opacity-70 text-[15px]/relaxed mb-4">
+          Discover the benefits of data analytics and make better decisions regarding revenue, customer
+          experience, and overall efficiency.
+        </p>
+        <div class="mt-10 space-y-5 md:mt-auto md:space-y-0 md:flex md:gap-16">
+          <p>
+            <span class="block text-2xl font-bold">10k+</span>
+            <span class="uppercase text-xs tracking-widest text-neutral-100 opacity-70">companies</span>
+          </p>
+          <p>
+            <span class="block text-2xl font-bold">314</span>
+            <span class="uppercase text-xs tracking-widest text-neutral-100 opacity-70">templates</span>
+          </p>
+          <p>
+            <span class="block text-2xl font-bold">12M+</span>
+            <span class="uppercase text-xs tracking-widest text-neutral-100 opacity-70">queries</span>
+          </p>
+        </div>
+      </div>
+    </article>
+  </main>
 </body>
 </html>
