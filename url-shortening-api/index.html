@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,8 +10,176 @@
 
   <link rel="stylesheet" href="./src/tailwind.css">
   <script src="./src/app.js" defer></script>
-</head>
-<body>
 
+  <!-- font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- fontawesome -->
+  <script src="https://kit.fontawesome.com/e3a28620b7.js" crossorigin="anonymous"></script>
+</head>
+<body class="font-primary font-light text-lg bg-white text-neutral-gray-950">
+  <header class="relative flex justify-between items-center max-w-7xl px-6 mx-auto max-md:px-0 max-md:mx-6 mt-12">
+    <div class="flex justify-center items-center gap-8">
+      <a href="#">
+        <img src="./src/images/logo.svg" alt="Shortly Logo">
+      </a>
+
+      <!-- desktop navigation -->
+      <nav class="max-md:hidden">
+        <ul class="flex gap-6 justify-center items-center text-neutral-gray-500 font-bold">
+          <li class="hover:opacity-70 duration-200"><a href="#">Features</a></li>
+          <li class="hover:opacity-70 duration-200"><a href="#">Pricing</a></li>
+          <li class="hover:opacity-70 duration-200"><a href="#">Resources</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- desktop navigation -->
+    <div class="max-md:hidden flex gap-8 justify-center items-center">
+      <a href="#">
+        <p class="hover:opacity-70 duration-200 text-neutral-gray-500 font-bold">Login</p>
+      </a>
+      <a href="#">
+        <button class="bg-primary-blue text-white hover:opacity-80 duration-200 px-6 py-2 rounded-4xl cursor-pointer">
+          Sign Up
+        </button>
+      </a>
+    </div>
+
+    <!-- mobile navigation -->
+    <button id="navBtn" class="md:hidden text-3xl cursor-pointer text-neutral-gray-400">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div id="navMenu" class="hidden bg-primary-purple font-bold text-center text-white text-xl absolute top-[165%] w-full rounded-lg py-10 px-8 z-10">
+      <ul class="flex flex-col gap-8 justify-center items-center pb-10">
+        <li class="hover:opacity-70 duration-200"><a href="#">Features</a></li>
+        <li class="hover:opacity-70 duration-200"><a href="#">Pricing</a></li>
+        <li class="hover:opacity-70 duration-200"><a href="#">Resources</a></li>
+      </ul>
+
+      <hr class="pb-10 opacity-20">
+
+      <a href="#">
+        <p class="hover:opacity-70 duration-200 mb-8">Login</p>
+      </a>
+      <a href="#">
+        <button class="bg-primary-blue hover:opacity-80 duration-200 w-full py-4 rounded-4xl cursor-pointer">
+          Sign Up
+        </button>
+      </a>
+    </div>
+  </header>
+  <main class="mt-6 lg:mt-24">
+    <section class="max-lg:text-center overflow-hidden lg:flex flex-row-reverse items-start">
+      <!-- column 2 -->
+      <img
+        src="./src/images/illustration-working.svg"
+        alt=""
+        class="translate-x-8 max-lg:max-w-[125%] lg:translate-x-30" />
+
+      <!-- column 1 -->
+      <div class="lg:pl-content-column lg:ml-6 mb-48 md:mb-64">
+        <h1 class="max-lg:mx-6 mt-8 lg:mt-0 text-4xl lg:text-[5.125rem]/tight font-bold">
+          More than just shorter links
+        </h1>
+
+        <p class="max-lg:mx-6 mt-4 lg:mt-1 text-neutral-gray-500 lg:text-2xl">
+          Build your brand's recognition and get detailed insights
+          on how your links are performing.
+        </p>
+
+        <a href="#">
+          <button class="max-lg:mx-6 mt-8 bg-primary-blue hover:opacity-80 duration-200 text-white font-bold py-3 px-10 rounded-3xl cursor-pointer">
+            Get Started
+          </button>
+        </a>
+      </div>
+    </section>
+
+    <section class="bg-neutral-gray-600">
+      <div class="relative max-w-7xl px-6 pb-16 mx-auto max-md:px-0 max-md:mx-6">
+        <!-- link input -->
+        <div class="absolute md:flex items-center gap-4 -top-24 md:-top-16 bg-primary-purple rounded-xl w-full px-8 py-10 overflow-hidden">
+          <picture>
+            <source srcset="./src/images/bg-shorten-desktop.svg" media="(min-width: 768px)">
+            <img
+              src="./src/images/bg-shorten-mobile.svg"
+              alt=""
+              class="absolute top-0 right-0 z-10 md:w-full" />
+          </picture>
+
+          <input
+            type="text"
+            placeholder="Shorten a link here..."
+            id="input"
+            class="bg-white text-base px-4 py-2.5 w-full rounded-sm focus:outline-primary-blue [&.error]:placeholder:text-secondary-red [&.error]:outline-secondary-red [&.error]:outline-2 relative z-20" />
+
+          <p id="errorMessage" class="italic text-secondary-red mt-1 text-xs absolute z-20 md:bottom-5 md:left-12"></p>
+
+          <button id="shortenBtn" class="bg-primary-blue w-full md:max-w-fit max-md:mt-8 text-white text-sm font-bold hover:opacity-80 duration-200 rounded-md cursor-pointer py-3 px-8 relative z-20">
+            Shorten It!
+          </button>
+        </div>
+
+        <h2 class="text-center font-bold text-3xl md:text-4xl pt-48">
+          Advanced Statistics
+        </h2>
+
+        <p class="text-center mt-4 max-md:px-4 md:max-w-xl mx-auto text-lg text-neutral-gray-500 mb-24">
+          Track how your links are performing across the web with our
+          advanced statistics dashboard.
+        </p>
+
+        <div class="grid md:grid-cols-3 md:gap-8 relative">
+          <!-- desktop -->
+          <div class="bg-primary-blue absolute w-full h-2 top-7/12 max-md:hidden"></div>
+
+          <!-- stats 1 -->
+          <div class="relative bg-white p-10 text-center md:text-left flex flex-col max-md:items-center rounded-lg md:hover:-translate-y-1 md:duration-200">
+            <div class="absolute top-[-2.8rem] bg-primary-purple rounded-full p-6">
+              <img src="./src/images/icon-brand-recognition.svg" alt="">
+            </div>
+            <h3 class="font-bold text-2xl mt-10">Brand Recognition</h3>
+            <p class="mt-4 text-base text-neutral-gray-500">
+              Boost your brand recognition with each click. Generic links don’t
+              mean a thing. Branded links help instil confidence in your content.
+            </p>
+          </div>
+
+          <!-- mobile -->
+          <div class="bg-primary-blue h-24 w-2 mx-auto md:hidden"></div>
+
+          <!-- stats 2 -->
+          <div class="relative md:top-2/12 bg-white p-10 text-center md:text-left flex flex-col max-md:items-center rounded-lg md:hover:-translate-y-1 md:duration-200">
+            <div class="absolute top-[-2.8rem] bg-primary-purple rounded-full p-6">
+              <img src="./src/images/icon-detailed-records.svg" alt="">
+            </div>
+            <h3 class="font-bold text-2xl mt-10">Detailed Records</h3>
+            <p class="mt-4 text-base text-neutral-gray-500">
+              Gain insights into who is clicking your links. Knowing when and where
+              people engage with your content helps inform better decisions.
+            </p>
+          </div>
+
+          <!-- mobile -->
+          <div class="bg-primary-blue h-24 w-2 mx-auto md:hidden"></div>
+
+          <!-- stats 3 -->
+          <div class="relative md:top-4/12 bg-white p-10 text-center md:text-left flex flex-col max-md:items-center rounded-lg md:hover:-translate-y-1 md:duration-200">
+            <div class="absolute top-[-2.8rem] bg-primary-purple rounded-full p-6">
+              <img src="./src/images/icon-fully-customizable.svg" alt="">
+            </div>
+            <h3 class="font-bold text-2xl mt-10">Fully Customizable</h3>
+            <p class="mt-4 text-base text-neutral-gray-500">
+              Improve brand awareness and content discoverability through customizable
+              links, supercharging audience engagement.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 </body>
 </html>

@@ -1,3 +1,20 @@
 @import "tailwindcss";
 
-@theme {}
+@theme {
+  --color-primary-blue: hsl(180, 66%, 49%);
+  --color-primary-purple: hsl(257, 27%, 26%);
+
+  --color-secondary-red: hsl(0, 87%, 67%);
+
+  --color-neutral-gray-400: hsl(0, 0%, 75%);
+  --color-neutral-gray-500: hsl(257, 7%, 63%);
+  --color-neutral-gray-600: hsl(231, 25%, 95%);
+  --color-neutral-gray-900: hsl(255, 11%, 22%);
+  --color-neutral-gray-950: hsl(260, 8%, 14%);
+
+  --font-primary: 'Poppins', sans-serif;
+  --font-weight-light: 500;
+  --font-weight-bold: 700;
+
+  --spacing-content-column: calc((100% - 80rem) / 2);
+}
