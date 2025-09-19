@@ -116,7 +116,10 @@ shortenBtn.addEventListener('click', async () => {
 });
 
 async function getNewUrl(newUrl) {
-  const response = await fetch('/shorten', {
+  // Use proxy in dev, real API in gh pages
+  const apiUrl = import.meta.env.DEV ? '/shorten' : 'https://cleanuri.com/api/v1/shorten';
+
+  const response = await fetch(apiUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({ url: newUrl }),
