@@ -32,7 +32,7 @@ Users should be able to:
 
 ### Links
 
-- Solution URL:
+- Solution URL: https://cleanuri.com/VrbGL4 <!-- the link was too long ;) -->
 - Live Site URL: https://denislav-dimov.github.io/url-shortening-api/
 
 ## My process
