@@ -117,8 +117,8 @@ shortenBtn.addEventListener('click', async () => {
 
 async function getNewUrl(newUrl) {
   const response = await
-    fetch("https://corsproxy.io/?" + encodeURIComponent("https://cleanuri.com/api/v1/shorten"), {
-      method: "POST",
+    fetch('https://corsproxy.io/?' + encodeURIComponent('https://cleanuri.com/api/v1/shorten'), {
+      method: 'POST',
       body: new URLSearchParams({ url: newUrl })
     });
 
