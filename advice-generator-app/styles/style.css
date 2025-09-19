@@ -79,7 +79,7 @@ main {
   border-radius: 50%;
   width: 4.5rem;
   height: 4.5rem;
-  animation: spin 2s linear infinite;
+  animation: spin 1300ms linear infinite;
 }
 
 @keyframes spin {

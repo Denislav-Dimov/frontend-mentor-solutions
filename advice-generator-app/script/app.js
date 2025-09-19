@@ -19,17 +19,16 @@ async function getData() {
     showLoadingScreen();
 
     const response = await fetch(API_URL);
-
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
-
-    return await response.json();
-
+    const data = await response.json();
+    
+    return data;
   } catch (error) {
     console.error(`Error when fetching: ${error.message}`);
   } finally {
-    hideLoadingScreen();
+    await hideLoadingScreen();
   }
 }
 
@@ -40,8 +39,9 @@ function showLoadingScreen() {
   card.replaceChild(loading, adviceText);
 }
 
-function hideLoadingScreen() {
-  if (!card.contains(loading)) return;
+async function hideLoadingScreen() {
+  // wait 1 second
+  await new Promise(resolve => setTimeout(resolve, 1000));
 
   card.replaceChild(adviceText, loading);
 }
