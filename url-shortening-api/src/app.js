@@ -116,14 +116,11 @@ shortenBtn.addEventListener('click', async () => {
 });
 
 async function getNewUrl(newUrl) {
-  // Use proxy in dev, real API in gh pages
-  const apiUrl = import.meta.env.DEV ? '/shorten' : 'https://cleanuri.com/api/v1/shorten';
-
-  const response = await fetch(apiUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ url: newUrl }),
-  });
+  const response = await
+    fetch("https://corsproxy.io/?" + encodeURIComponent("https://cleanuri.com/api/v1/shorten"), {
+      method: "POST",
+      body: new URLSearchParams({ url: longUrl }),
+    });
 
   if (!response.ok) {
     throw new Error(`Request failed: ${response.status}`);
