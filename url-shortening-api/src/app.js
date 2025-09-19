@@ -119,7 +119,7 @@ async function getNewUrl(newUrl) {
   const response = await
     fetch("https://corsproxy.io/?" + encodeURIComponent("https://cleanuri.com/api/v1/shorten"), {
       method: "POST",
-      body: new URLSearchParams({ url: longUrl }),
+      body: new URLSearchParams({ url: newUrl })
     });
 
   if (!response.ok) {
