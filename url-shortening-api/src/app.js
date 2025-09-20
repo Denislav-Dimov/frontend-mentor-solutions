@@ -14,6 +14,7 @@ document.addEventListener('click', e => {
 const input = document.getElementById('input');
 const errorMsg = document.getElementById('errorMessage');
 const shortenBtn = document.getElementById('shortenBtn');
+const shortenForm = document.getElementById('shortenForm');
 const urlContainer = document.getElementById('urlContainer');
 let urls = [];
 const LOCALSTORAGE_KEY = 'Shortly';
@@ -79,7 +80,9 @@ urlContainer.addEventListener('click', e => {
   }
 });
 
-shortenBtn.addEventListener('click', async () => {
+shortenForm.addEventListener('submit', async e => {
+  e.preventDefault();
+
   clearError();
 
   const url = input.value.trim();
