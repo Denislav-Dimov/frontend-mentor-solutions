@@ -20,17 +20,47 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+
+  <!-- font awesome -->
+  <script src="https://kit.fontawesome.com/e3a28620b7.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <main>
-    <section class="card">
+    <button class="menu-btn-open" onclick="toggleMenu()">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <section id="menuBackground" class="menu-background">
+      <aside class="menu" id="menu">
+        <nav class="menu-navigation">
+          <div class="navigation-buttons">
+            <button class="menu-btn" id="menuBtnHistory">
+              <i class="fa-regular fa-clock icon"></i>
+            </button>
+            <button class="menu-btn" id="menuBtnFavourite">
+              <i class="fa-regular fa-star icon"></i>
+            </button>
+          </div>
+          <button class="menu-btn-close" onclick="toggleMenu()">
+            <i class="fa-solid fa-close"></i>
+          </button>
+        </nav>
+
+        <div class="menu-content-wrapper">
+          <h2 class="menu-current" id="currentState"></h2>
+          <div class="menu-content-container" id="menuContent"></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="card" id="card">
       <h1><span class="spaced">advice</span> # <span id="adviceNumber" class="spaced">0</span></h1>
 
       <p id="adviceText"></p>
 
       <picture>
-        <source srcset="./images/pattern-divider-desktop.svg" media="(width >= 568px)" />
-        <img src="./images/pattern-divider-mobile.svg" alt="" />
+        <source srcset="./images/pattern-divider-desktop.svg" media="(width >= 568px)">
+        <img src="./images/pattern-divider-mobile.svg" alt="">
       </picture>
 
       <button onclick="generateAdvice()">

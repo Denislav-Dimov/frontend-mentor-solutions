@@ -24,10 +24,14 @@ Users should be able to:
 - View the optimal layout for the app depending on their device's screen size
 - See hover states for all interactive elements on the page
 - Generate a new piece of advice by clicking the dice icon
+#### Bonus by me
+- View the history of generated advices saved in local storage
+- Add and view favourited advices saved in local storage
 
 ### Screenshot
 
-![](./design/screenshot.png)
+![](./design/screenshot1.png)
+![](./design/screenshot2.png)
 
 ### Links
 
