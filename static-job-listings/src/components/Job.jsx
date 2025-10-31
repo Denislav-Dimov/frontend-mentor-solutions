@@ -1,9 +1,12 @@
-export default function Job({ job }) {
+export default function Job({ job, addFilter }) {
   function Role({ content }) {
     return (
-      <span className="bg-secondary-green-50 text-primary-green-400 font-bold text-lg px-2.5 py-space-primary rounded-md">
+      <button
+        onClick={() => addFilter(content)}
+        className="bg-secondary-green-50 text-primary-green-400 hover:bg-primary-green-400 hover:text-secondary-green-50 duration-200 font-bold text-lg px-2.5 py-space-primary rounded-md cursor-pointer"
+      >
         {content}
-      </span>
+      </button>
     );
   }
 
@@ -39,7 +42,7 @@ export default function Job({ job }) {
             </div>
           </div>
 
-          <p className="my-2.5 md:my-1.5 font-bold text-lg md:text-2xl">
+          <p className="my-2.5 md:my-1.5 font-bold text-lg md:text-2xl hover:text-primary-green-400 duration-200 cursor-pointer">
             {job.position}
           </p>
 
