@@ -27,7 +27,7 @@ export default function App() {
   return (
     <>
       <header className="bg-primary-green-400 h-[25vh] bg-[url(../../public/images/bg-header-mobile.svg)] md:bg-[url(../../public/images/bg-header-desktop.svg)] bg-no-repeat bg-cover"></header>
-      <main className="grid gap-12 px-6 py-10">
+      <main className="grid gap-12 px-6 py-12 md:py-20 max-w-7xl mx-auto">
         {jobs && jobs.map((job) => <Job job={job} key={job.id} />)}
       </main>
     </>
