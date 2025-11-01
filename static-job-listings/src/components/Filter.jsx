@@ -1,4 +1,4 @@
-export default function Filter({ filters, removeFilter, clearFiltes }) {
+export default function Filter({ filters, removeFilter, clearFilters }) {
   function Role({ content }) {
     return (
       <div className="flex rounded-md overflow-hidden">
@@ -27,7 +27,7 @@ export default function Filter({ filters, removeFilter, clearFiltes }) {
         ))}
       </div>
       <button
-        onClick={() => clearFiltes()}
+        onClick={() => clearFilters()}
         className="text-secondary-gray-400 text-lg font-bold mr-1.5 hover:text-primary-green-400 hover:underline duration-200 cursor-pointer"
       >
         Clear

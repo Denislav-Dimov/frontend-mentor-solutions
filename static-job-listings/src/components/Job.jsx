@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function Job({ job, addFilter }) {
   function Role({ content }) {
     return (
@@ -30,21 +32,24 @@ export default function Job({ job, addFilter }) {
             </p>
             <div className="flex gap-2.5">
               {job.new && (
-                <p className="uppercase text-secondary-green-50 bg-primary-green-400 px-2.5 py-space-primary rounded-2xl text-base/tight md:text-sm font-bold grid">
+                <p className="uppercase text-secondary-green-50 bg-primary-green-400 px-2.5 py-space-primary rounded-2xl text-base/tight md:text-sm font-bold">
                   new!
                 </p>
               )}
               {job.featured && (
-                <p className="uppercase text-secondary-green-50 bg-secondary-gray-900 px-2.5 py-space-primary rounded-2xl text-base/tight md:text-sm font-bold grid">
+                <p className="uppercase text-secondary-green-50 bg-secondary-gray-900 px-2.5 py-space-primary rounded-2xl text-base/tight md:text-sm font-bold">
                   featured
                 </p>
               )}
             </div>
           </div>
 
-          <p className="my-2.5 md:my-1.5 font-bold text-lg md:text-2xl hover:text-primary-green-400 duration-200 cursor-pointer">
+          <Link
+            to={`/job-offers/${encodeURIComponent(job.company)}/${encodeURIComponent(job.position)}`}
+            className="block my-2.5 md:my-1.5 font-bold text-lg md:text-2xl hover:text-primary-green-400 duration-200 cursor-pointer"
+          >
             {job.position}
-          </p>
+          </Link>
 
           <div className="text-secondary-gray-400 flex items-center text-xl">
             <p>{job.postedAt}</p>

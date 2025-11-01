@@ -25,7 +25,7 @@ Frontend Mentor challenges help you improve your coding skills by building reali
 
 - [Overview](#overview)
   - [The Challenge](#the-challenge)
-  - [Screenshots](#screenshots)
+  - [Preview](#preview)
   - [Links](#links)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
@@ -45,11 +45,12 @@ Users should be able to:
 - View the optimal layout for their device's screen size
 - See hover states for all interactive elements
 - Filter job listings based on selected categories
+- **Bonus by myself**
+  - Navigate from the listings to individual job-offer pages
 
-### Screenshots
+### Preview
 
-![Home page](./public/screenshots/home-page.png)
-![Job offer page]()
+![Demo of the website](./public/preview/demo.gif)
 
 ### Links
 
@@ -95,7 +96,7 @@ Then open your browser at http://localhost:5173.
 
 This was my first React project that I decided to build.
 I learned how to manage state effectively and how to render dynamic components.
-I also practiced passing props between components and using conditional rendering for filtering.
+I also practiced passing props between components, using conditional rendering for filtering and how to implement dynamic routing for the individual job-offer pages.
 
 ### License
 
