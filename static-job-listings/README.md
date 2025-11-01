@@ -21,7 +21,7 @@ Frontend Mentor challenges help you improve your coding skills by building reali
   <img src="https://img.shields.io/badge/View_Website-181717?style=for-the-badge&logo=vercel&logoColor=white" alt="View Website" />
 </a>
 
-## 📑 Table of Contents
+## Table of Contents
 
 - [Overview](#overview)
   - [The Challenge](#the-challenge)
@@ -31,7 +31,10 @@ Frontend Mentor challenges help you improve your coding skills by building reali
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Usage](#usage)
-- [What I Learned](#what-i-learned)
+- [About](#about)
+  - [What I Learned](#what-i-learned)
+  - [License](#license)
+  - [Author](#author)
 
 ## Overview
 
@@ -86,8 +89,19 @@ npm run dev
 
 Then open your browser at http://localhost:5173.
 
-## What I Learned
+## About
+
+### What I Learned
 
 This was my first React project that I decided to build.
 I learned how to manage state effectively and how to render dynamic components.
 I also practiced passing props between components and using conditional rendering for filtering.
+
+### License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+### Author
+
+- GitHub - [@Denislav-Dimov](https://github.com/Denislav-Dimov)
+- Frontend Mentor - [@Denislav-Dimov](https://www.frontendmentor.io/profile/Denislav-Dimov)
