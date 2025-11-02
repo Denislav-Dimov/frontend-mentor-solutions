@@ -10,6 +10,7 @@ This is a solution to the [FAQ accordion challenge on Frontend Mentor](https://w
 
 ![HTML5](https://img.shields.io/badge/-HTML5-000?logo=html5)
 ![CSS3](https://img.shields.io/badge/-CSS3-000?logo=css3)
+![Markdown](https://img.shields.io/badge/-JavaScript-000?logo=javascript)
 ![Markdown](https://img.shields.io/badge/-Markdown-000?logo=markdown)
 
 <a href="https://Denislav-Dimov.github.io/faq-accordion/">
