@@ -44,8 +44,8 @@ Users should be able to:
 
 ### Links
 
-- Solution URL:
-- Live Site URL:
+- Solution URL: https://www.frontendmentor.io/solutions/faq-accordion-eXi9_soIwe
+- Live Site URL: https://denislav-dimov.github.io/faq-accordion/
 
 ## About
 
