@@ -54,9 +54,7 @@ Users should be able to:
 
 ### Links
 
-<!-- will be added later -->
-
-- Solution URL:
+- Solution URL: https://www.frontendmentor.io/solutions/job-listings-with-dynamic-job-offer-pages-qWBTEYCw5g
 - Live Site URL: https://denislav-dimov-static-job-listings.vercel.app/
 
 ## Getting Started
