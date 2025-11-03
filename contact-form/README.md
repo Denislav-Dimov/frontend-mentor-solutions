@@ -16,7 +16,7 @@ This is a solution to the [Contact form challenge on Frontend Mentor](https://ww
 ![Markdown](https://img.shields.io/badge/-Markdown-000?logo=markdown)
 
 <!-- add later -->
-<a href="">
+<a href="https://denislav-dimov-contact-form.netlify.app/">
   <img src="https://img.shields.io/badge/View_Website-181717?style=for-the-badge&logo=netlify&logoColor=00C7B7" alt="View Website" />
 </a>
 
@@ -60,7 +60,7 @@ Users should be able to:
 <!-- add later -->
 
 - Solution URL:
-- Live Site URL:
+- Live Site URL: https://denislav-dimov-contact-form.netlify.app/
 
 ## Getting Started
 
@@ -78,8 +78,8 @@ Make sure you have the following installed:
 Clone this repository and install dependencies.
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/REPO-NAME.git
-cd REPO-NAME
+git clone https://github.com/Denislav-Dimov/contact-form.git
+cd contact-form
 npm install
 ```
 
