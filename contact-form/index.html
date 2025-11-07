@@ -12,6 +12,8 @@
     <title>Frontend Mentor | Contact form</title>
     <link rel="stylesheet" href="./src/style.css" />
     <script src="./src/app.js" defer></script>
+    <!-- email validator -->
+    <script src="https://unpkg.com/validator@latest/validator.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -19,9 +21,196 @@
       rel="stylesheet"
     />
   </head>
-  <body class="bg-primary-green-200 font-bold text-sec">
-    <main class="min-h-screen grid place-items-center">
-      <form action="/" id="form" class=""></form>
+  <body class="bg-primary-green-200 font-normal text-sec">
+    <main class="min-h-screen grid place-items-center mx-4 py-10">
+      <section
+        class="bg-secondary-white p-6 sm:p-8 w-full max-w-3xl rounded-2xl"
+      >
+        <h1 class="text-secondary-grey-900 text-2xl font-bold mb-6">
+          Contact Us
+        </h1>
+        <form action="/" id="form" class="grid gap-6">
+          <div class="flex sm:items-baseline max-sm:flex-col gap-6">
+            <div class="grid gap-2 sm:flex-1">
+              <div class="grid gap-3">
+                <label
+                  for="firstName"
+                  class="text-sm after:content-['*'] after:text-primary-green-600 after:ml-2"
+                  >First Name</label
+                >
+                <input
+                  type="text"
+                  autocomplete="name"
+                  name="firstName"
+                  id="firstName"
+                  aria-describedby="errorFName"
+                  class="border border-secondary-grey-500 rounded-lg py-3 px-5 focus:outline focus:outline-secondary-grey-500 active:outline active:outline-secondary-grey-500 hover:outline hover:outline-secondary-grey-500 duration-200"
+                />
+              </div>
+              <span
+                id="errorFName"
+                class="hidden text-sm text-primary-red"
+                aria-live="polite"
+              ></span>
+            </div>
+
+            <div class="grid gap-2 sm:flex-1">
+              <div class="grid gap-3">
+                <label
+                  for="lastName"
+                  class="text-sm after:content-['*'] after:text-primary-green-600 after:ml-2"
+                  >Last Name</label
+                >
+                <input
+                  type="text"
+                  autocomplete="additional-name"
+                  name="lastName"
+                  id="lastName"
+                  aria-describedby="errorLName"
+                  class="border border-secondary-grey-500 rounded-lg py-3 px-5 focus:outline focus:outline-secondary-grey-500 active:outline active:outline-secondary-grey-500 hover:outline hover:outline-secondary-grey-500 duration-200"
+                />
+              </div>
+              <span
+                id="errorLName"
+                class="hidden text-sm text-primary-red"
+                aria-live="polite"
+              ></span>
+            </div>
+          </div>
+
+          <div class="grid gap-2">
+            <div class="grid gap-3">
+              <label
+                for="email"
+                class="text-sm after:content-['*'] after:text-primary-green-600 after:ml-2"
+                >Email Address</label
+              >
+              <!-- I can't add custom message with the type="email" -->
+              <input
+                type="text"
+                autocomplete="email"
+                name="email"
+                id="email"
+                aria-describedby="errorEmail"
+                class="border border-secondary-grey-500 rounded-lg py-3 px-5 focus:outline focus:outline-secondary-grey-500 active:outline active:outline-secondary-grey-500 hover:outline hover:outline-secondary-grey-500 duration-200"
+              />
+            </div>
+            <span
+              id="errorEmail"
+              class="hidden text-sm text-primary-red"
+              aria-live="polite"
+            ></span>
+          </div>
+
+          <div class="grid gap-4">
+            <div class="grid gap-4">
+              <p
+                class="text-sm after:content-['*'] after:text-primary-green-600 after:ml-2"
+              >
+                Query Type
+              </p>
+              <div
+                class="flex max-sm:flex-col gap-6"
+                role="radiogroup"
+                aria-describedby="errorQuery"
+              >
+                <label
+                  class="sm:flex-1 flex items-center gap-1 border border-secondary-grey-500 rounded-lg py-2.5 px-5 cursor-pointer has-checked:bg-primary-green-50 has-checked:border-primary-green-600 has-checked:bg-primary-green-200"
+                >
+                  <input
+                    type="radio"
+                    name="queryType"
+                    id="generalEnquiry"
+                    class="accent-primary-green-600 size-4 mr-2"
+                  />
+                  General Enquiry
+                </label>
+                <label
+                  class="sm:flex-1 flex items-center gap-1 border border-secondary-grey-500 rounded-lg py-2.5 px-5 cursor-pointer has-checked:bg-primary-green-50 has-checked:border-primary-green-600 has-checked:bg-primary-green-200"
+                >
+                  <input
+                    type="radio"
+                    name="queryType"
+                    id="supportRequest"
+                    class="accent-primary-green-600 size-4 mr-2"
+                  />
+                  Support Request
+                </label>
+              </div>
+            </div>
+            <span
+              id="errorQuery"
+              class="hidden text-sm text-primary-red"
+              aria-live="polite"
+            ></span>
+          </div>
+
+          <div class="grid gap-2">
+            <div class="grid gap-3">
+              <label
+                for="message"
+                class="text-sm after:content-['*'] after:text-primary-green-600 after:ml-2"
+                >Message</label
+              >
+              <textarea
+                name="message"
+                id="message"
+                aria-describedby="errorMessage"
+                class="resize-none h-56 sm:h-28 border border-secondary-grey-500 rounded-lg py-3 px-5 focus:outline focus:outline-primary-green-600 active:outline active:outline-primary-green-600"
+              ></textarea>
+            </div>
+            <span
+              id="errorMessage"
+              class="hidden text-sm text-primary-red"
+              aria-live="polite"
+            ></span>
+          </div>
+
+          <div class="grid gap-2 my-3">
+            <div class="flex items-center gap-5">
+              <input
+                type="checkbox"
+                name="consent"
+                id="consent"
+                aria-describedby="errorConsent"
+                class="appearance-none size-4.5 border-2 border-gray-400 bg-center checked:bg-[url('/public/images/icon-checkbox-check.svg')] checked:border-0 cursor-pointer"
+              />
+              <label
+                for="consent"
+                class="text-sm after:content-['*'] after:text-primary-green-600 after:ml-1.5 cursor-pointer"
+                >I consent to being contacted by the team</label
+              >
+            </div>
+            <span
+              id="errorConsent"
+              class="hidden text-sm text-primary-red"
+              aria-live="polite"
+            ></span>
+          </div>
+
+          <button
+            id="submit"
+            class="bg-primary-green-600 text-primary-green-200 sm:text-lg p-3.5 rounded-lg hover:bg-secondary-grey-900 duration-200 cursor-pointer"
+            type="submit"
+          >
+            Submit
+          </button>
+        </form>
+      </section>
     </main>
+    <section
+      id="successPopup"
+      class="opacity-0 fixed -top-18 left-1/2 -translate-1/2 space-y-2 w-[calc(100%-4rem)] max-w-md bg-secondary-grey-900 text-secondary-white rounded-xl p-6 duration-400"
+      aria-live="assertive"
+      role="alert"
+    >
+      <div class="flex items-center gap-2">
+        <img src="./images/icon-success-check.svg" alt="" />
+        <h2>Message Sent!</h2>
+      </div>
+      <p class="opacity-70 text-sm">
+        Thanks for completing the form. We'll be in touch soon!
+      </p>
+    </section>
   </body>
 </html>
