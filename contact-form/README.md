@@ -15,8 +15,8 @@ This is a solution to the [Contact form challenge on Frontend Mentor](https://ww
 ![npm](https://img.shields.io/badge/-npm-000?logo=npm)
 ![Markdown](https://img.shields.io/badge/-Markdown-000?logo=markdown)
 
-<a href="https://denislav-dimov-contact-form.netlify.app/">
-  <img src="https://img.shields.io/badge/View_Website-181717?style=for-the-badge&logo=netlify&logoColor=00C7B7" alt="View Website" />
+<a href="https://denislav-dimov-contact-form.vercel.app/">
+  <img src="https://img.shields.io/badge/View_Website-181717?style=for-the-badge&logo=vercel&logoColor=white" alt="View Website" />
 </a>
 
 ## Table of Contents
@@ -57,7 +57,7 @@ Users should be able to:
 <!-- add later -->
 
 - Solution URL:
-- Live Site URL: https://denislav-dimov-contact-form.netlify.app/
+- Live Site URL: https://denislav-dimov-contact-form.vercel.app/
 
 ## Getting Started
 
