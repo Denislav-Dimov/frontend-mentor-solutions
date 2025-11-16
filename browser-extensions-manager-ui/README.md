@@ -16,7 +16,7 @@ This is a solution to the [Browser extensions manager UI challenge on Frontend M
 ![JSON](https://img.shields.io/badge/-JSON-000?logo=json)
 ![Markdown](https://img.shields.io/badge/-Markdown-000?logo=markdown)
 
-<a href="">
+<a href="https://denislav-dimov-browser-extensions-manager-ui.vercel.app/">
   <img src="https://img.shields.io/badge/View_Website-181717?style=for-the-badge&logo=vercel&logoColor=white" alt="View Website" />
 </a>
 
@@ -33,7 +33,6 @@ This is a solution to the [Browser extensions manager UI challenge on Frontend M
 - [About](#about)
   - [License](#license)
   - [Author](#author)
-  - [Acknowledgment](#acknowledgment)
 
 ## Overview
 
@@ -50,12 +49,12 @@ Users should be able to:
 
 ### Preview
 
-![](./demo.gif)
+![](./public/preview/demo.gif)
 
 ### Links
 
 - Solution URL:
-- Live Site URL:
+- Live Site URL: https://denislav-dimov-browser-extensions-manager-ui.vercel.app/
 
 ## Getting Started
 
@@ -98,7 +97,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - GitHub - [@Denislav-Dimov](https://github.com/Denislav-Dimov)
 - Frontend Mentor - [@Denislav-Dimov](https://www.frontendmentor.io/profile/Denislav-Dimov)
-
-### Acknowledgment
-
-I will add something later (maybe)

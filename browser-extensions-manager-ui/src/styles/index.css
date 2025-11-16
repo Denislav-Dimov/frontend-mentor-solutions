@@ -1,7 +1,52 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
+  --color-*: initial;
+  --color-neutral-900: hsl(227, 75%, 14%);
+  --color-neutral-800: hsl(226, 25%, 17%);
+  --color-neutral-700: hsl(225, 23%, 24%);
+  --color-neutral-600: hsl(226, 11%, 37%);
+  --color-neutral-300: hsl(0, 0%, 78%);
+  --color-neutral-200: hsl(217, 61%, 90%);
+  --color-neutral-100: hsl(0, 0%, 93%);
+  --color-neutral-0: hsl(200, 60%, 99%);
+  --color-red-400: hsl(3, 86%, 64%);
+  --color-red-500: hsl(3, 71%, 56%);
+  --color-red-700: hsl(3, 77%, 44%);
+  --font-family: 'Noto Sans', arial;
+  --font-weight-light: 400;
+  --font-weight-semibold: 500;
+  --font-weight-bold: 700;
+
+  --animate-fade-in: fade-in 1s;
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+      transform: translateY(-1rem);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+:root {
+  --light-gradient: 180deg, #ebf2fc 0%, #eef8f9 100%;
+  --dark-gradient: 180deg, #040918 0%, #091540 100%;
 }
 
 @layer base {
+  body {
+    @apply font-family font-light min-h-screen bg-linear-(--light-gradient) dark:bg-linear-(--dark-gradient) text-neutral-900 dark:text-neutral-0;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply bg-neutral-0 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 outline-2 outline-transparent outline-offset-2 focus-visible:outline-red-400 dark:focus-visible:bg-neutral-600 hover:bg-neutral-100 hover:text-neutral-600 dark:hover:text-neutral-0 dark:hover:bg-neutral-600 rounded-3xl py-2 px-4 duration-200 cursor-pointer;
+  }
 }
