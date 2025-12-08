@@ -1,66 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
-
-  <title>Frontend Mentor | Todo app</title>
-
-  <link rel="stylesheet" href="./styles/style.css">
-  <script src="./script/app.js" defer></script>
-
-  <!-- fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-
-</head>
-<body>
-  <section class="hero"></section>
-
-  <main>
-    <section class="wrapper">
-      <div class="flex-title">
-        <h1>Todo</h1>
-        <button class="theme-switch" id="themeSwitch">
-          <img src="images/icon-sun.svg" alt="">
-        </button>
-      </div>
-
-      <div class="error-msg hidden" id="errorMsg">Enter a task</div>
-      <div class="input-container">
-        <button class="check-box" id="submitBtn" type="submit"></button>
-        <input type="text" name="todo" id="input" placeholder="Create a new todo...">
-      </div>
-
-      <section class="tasks-wrapper">
-        <div id="tasksContainer">
-
-        </div>
-
-        <div class="record">
-          <p><span id="counter">0</span> items left</p>
-          <div class="filters">
-            <p class="filter-option" data-filter="all">All</p>
-            <p class="filter-option" data-filter="active">Active</p>
-            <p class="filter-option" data-filter="completed">Completed</p>
-          </div>
-          <p class="clear-completed" id="clearCompleted">Clear Completed</p>
-        </div>
-      </section>
-
-      <div class="filters mobile-only">
-        <p class="filter-option" data-filter="all">All</p>
-        <p class="filter-option" data-filter="active">Active</p>
-        <p class="filter-option" data-filter="completed">Completed</p>
-      </div>
-
-      <div class="bottom-text">
-        <p>Drag and drop to reorder list</p>
-      </div>
-    </section>
-  </main>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png" />
+    <title>Frontend Mentor | Todo app</title>
+    <script type="module" src="./src/main.tsx"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
