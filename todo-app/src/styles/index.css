@@ -1,1 +1,39 @@
 @import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-*: initial;
+
+  --color-primary-blue-500: hsl(220, 98%, 61%);
+  --color-primary-red: hsl(0, 66%, 54%);
+
+  --color-light-gray-50: hsl(0, 0%, 98%);
+  --color-light-purple-300: hsl(234, 39%, 85%);
+  --color-light-gray-300: hsl(233, 11%, 84%);
+  --color-light-gray-600: hsl(236, 9%, 61%);
+  --color-light-navy-850: hsl(235, 19%, 35%);
+
+  --color-dark-navy-950: hsl(235, 21%, 11%);
+  --color-dark-navy-900: hsl(235, 24%, 19%);
+  --color-dark-purple-300: hsl(234, 39%, 85%);
+  --color-dark-purple-100: hsl(236, 33%, 92%);
+  --color-dark-purple-600: hsl(235, 16%, 43%);
+  --color-dark-purple-700: hsl(233, 14%, 35%);
+  --color-dark-purple-800: hsl(237, 14%, 26%);
+  --color-dark-gray-600: hsl(236, 9%, 61%);
+
+  --shadow-light: 0 35px 50px -15px rgba(0, 0, 0, 0.125);
+  --shadow-dark: 0 35px 50px -15px rgba(194, 195, 214, 0.6);
+
+  --font-family-primary: 'Josefin Sans', arial;
+  --font-weight-*: initial;
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+}
+
+@layer base {
+  body {
+    @apply bg-light-gray-300 text-dark-navy-950 font-family-primary font-normal mx-6;
+  }
+}
