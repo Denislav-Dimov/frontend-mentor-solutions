@@ -3,11 +3,11 @@ import AuthProvider from './context/AuthProvider';
 import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+import ProtectedRoute from './components/ProtectedRoute';
 import bgMobileLight from './assets/bg-mobile-light.jpg';
 import bgDesktopLight from './assets/bg-desktop-light.jpg';
-import bgMobileDark from './assets/bg-mobile-dark.jpg';
-import bgDesktopDark from './assets/bg-desktop-dark.jpg';
-import ProtectedRoute from './components/ProtectedRoute';
+// import bgMobileDark from './assets/bg-mobile-dark.jpg';
+// import bgDesktopDark from './assets/bg-desktop-dark.jpg';
 
 export default function App() {
   return (
