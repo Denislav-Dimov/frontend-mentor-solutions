@@ -23,6 +23,8 @@
   --color-dark-purple-800: hsl(237, 14%, 26%);
   --color-dark-gray-600: hsl(236, 9%, 61%);
 
+  --color-overlay-navy-900: hsla(235, 24%, 19%, 0.3);
+
   --shadow-light: 0 35px 50px -15px rgba(0, 0, 0, 0.125);
   --shadow-dark: 0 35px 50px -15px rgba(194, 195, 214, 0.6);
 
@@ -30,10 +32,35 @@
   --font-weight-*: initial;
   --font-weight-normal: 400;
   --font-weight-bold: 700;
+
+  --animate-fade-in: fadeIn 300ms ease-out;
+  --animate-slide-up: slideUp 300ms ease-out;
 }
 
 @layer base {
   body {
-    @apply bg-light-gray-300 text-dark-navy-950 font-family-primary font-normal mx-6;
+    @apply bg-light-gray-300 text-light-navy-850 dark:text-dark-navy-950 font-family-primary font-normal mx-6;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

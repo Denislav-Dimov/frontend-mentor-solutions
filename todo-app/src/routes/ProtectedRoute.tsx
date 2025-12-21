@@ -9,7 +9,7 @@ export default function ProtectedRoute({ children }: PropsWithChildren) {
     return null;
   }
 
-  if (!currentUser) {
+  if (!currentUser || !currentUser.emailVerified) {
     return <Navigate to="/sign-in" replace />;
   }
 
