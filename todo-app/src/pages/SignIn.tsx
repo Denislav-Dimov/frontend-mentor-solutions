@@ -3,6 +3,8 @@ import { Link, Navigate } from 'react-router-dom';
 import Title from '../components/Title';
 import googleIcon from '../assets/google.svg';
 import closeIcon from '../assets/icon-cross.svg';
+import eyeIcon from '../assets/eye.svg';
+import eyeOffIcon from '../assets/eye-off.svg';
 import isValidEmail from '../utils/isValidEmail';
 import {
   doSignInWithEmailAndPassword,
@@ -23,6 +25,7 @@ export default function SignIn() {
   const [showResetPopup, setShowResetPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
   const [isResettingPassword, setIsResettingPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const [showVerificationPopup, setShowVerificationPopup] = useState(false);
   const [verificationEmail, setVerificationEmail] = useState('');
@@ -253,7 +256,7 @@ export default function SignIn() {
   return (
     <section className="mx-auto max-w-lg w-full space-y-8">
       {showResetPopup && (
-        <section className="fixed inset-0 z-50 h-screen grid place-items-center bg-overlay-navy-900 animate-fade-in">
+        <section className="fixed inset-0 z-50 px-5 h-screen grid place-items-center bg-overlay-navy-900 animate-fade-in">
           <div className="bg-light-gray-50 flex flex-col items-end justify-start gap-5 rounded-lg p-8 max-w-sm w-full text-center animate-slide-up">
             <button
               onClick={() => setShowResetPopup(false)}
@@ -268,7 +271,7 @@ export default function SignIn() {
       )}
 
       {showVerificationPopup && (
-        <section className="fixed inset-0 z-50 h-screen grid place-items-center bg-overlay-navy-900 animate-fade-in">
+        <section className="fixed inset-0 z-50 px-5 h-screen grid place-items-center bg-overlay-navy-900 animate-fade-in">
           <div className="bg-light-gray-50 flex flex-col items-end justify-start gap-5 rounded-lg p-8 max-w-sm w-full text-center animate-slide-up">
             <button
               onClick={() => {
@@ -302,7 +305,7 @@ export default function SignIn() {
           </h2>
 
           <div className="space-y-6 mb-8">
-            <div className="relative">
+            <div className="relative group">
               <input
                 type="text"
                 id="email"
@@ -322,11 +325,11 @@ export default function SignIn() {
               <p ref={emailErrorRef} className="mt-1 text-sm text-primary-red"></p>
             </div>
 
-            <div className="relative">
+            <div className="relative group duration-500">
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 id="password"
-                className="peer block w-full rounded-md border border-light-gray-300 bg-white px-4 py-3 text-light-navy-850 focus:border-primary-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                className="peer block w-full rounded-md border border-light-gray-300 bg-white pl-4 pr-12 py-3 text-light-navy-850 focus:border-primary-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                 placeholder=""
                 ref={passwordRef}
                 disabled={isResettingPassword || isSigningIn}
@@ -338,6 +341,19 @@ export default function SignIn() {
               >
                 Password
               </label>
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-4 md:opacity-0 group-hover:opacity-100 cursor-pointer hover:opacity-70 disabled:opacity-50 disabled:cursor-not-allowed duration-300"
+                disabled={isResettingPassword || isSigningIn}
+              >
+                <img
+                  src={showPassword ? eyeOffIcon : eyeIcon}
+                  alt="Toggle password visibility"
+                  className="w-5 h-5"
+                />
+              </button>
 
               <p ref={passwordErrorRef} className="mt-1 text-sm text-primary-red"></p>
 
