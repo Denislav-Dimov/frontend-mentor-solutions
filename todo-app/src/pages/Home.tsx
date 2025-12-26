@@ -1,4 +1,4 @@
-import { doSignOut } from '../services/auth';
+import { doSignOut } from '../features/auth';
 
 export default function Home() {
   return (

@@ -10,8 +10,8 @@ import {
   doSendPasswordResetEmail,
   doSignInWithGoogle,
   doSendEmailVerification,
-} from '../services/auth';
-import useAuth from '../hooks/useAuth';
+} from '../features/auth';
+import { useAuth } from '../features/auth';
 
 export default function SignIn() {
   const emailRef = useRef<HTMLInputElement | null>(null);

@@ -1,4 +1,4 @@
-import useTheme from '../hooks/useTheme';
+import { useTheme } from '../features/theme';
 
 type EyeIconType = {
   showPassword: boolean;

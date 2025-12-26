@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 
-export default function ProtectedRoute() {
+export default function AuthGuard() {
   const { currentUser, loading } = useAuth();
 
   if (loading) {

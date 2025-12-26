@@ -8,8 +8,8 @@ import {
   doCreateUserWithEmailAndPassword,
   doSendEmailVerification,
   doSignOut,
-} from '../services/auth';
-import useAuth from '../hooks/useAuth';
+} from '../features/auth';
+import { useAuth } from '../features/auth';
 
 export default function SignUp() {
   const emailRef = useRef<HTMLInputElement | null>(null);

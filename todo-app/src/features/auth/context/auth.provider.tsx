@@ -1,7 +1,7 @@
 import { useEffect, useState, type PropsWithChildren } from 'react';
 import { type User, onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../config/firebase';
-import AuthContext from './AuthContext';
+import { auth } from '../../../config/firebase';
+import AuthContext from './auth.context';
 
 export default function AuthProvider({ children }: PropsWithChildren) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);

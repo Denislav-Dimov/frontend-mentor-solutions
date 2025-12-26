@@ -1,5 +1,5 @@
 import { useState, useEffect, type PropsWithChildren } from 'react';
-import ThemeContext from './ThemeContext';
+import ThemeContext from './theme.context';
 
 export default function ThemeProvider({ children }: PropsWithChildren) {
   const [isDark, setIsDark] = useState(() => {

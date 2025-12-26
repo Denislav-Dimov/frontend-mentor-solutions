@@ -1,6 +1,6 @@
 import moonIcon from '../assets/icon-moon.svg';
 import sunIcon from '../assets/icon-sun.svg';
-import useTheme from '../hooks/useTheme';
+import { useTheme } from '../features/theme';
 
 type TitleProps = {
   title: string;

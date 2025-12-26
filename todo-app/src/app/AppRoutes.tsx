@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import ProtectedRoute from './ProtectedRoute';
+import { AuthGuard } from '../features/auth';
 import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
 import Home from '../pages/Home';
@@ -10,7 +10,7 @@ export default function AppRoutes() {
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="/sign-up" element={<SignUp />} />
 
-      <Route element={<ProtectedRoute />}>
+      <Route element={<AuthGuard />}>
         <Route path="/" element={<Home />} />
       </Route>
 
