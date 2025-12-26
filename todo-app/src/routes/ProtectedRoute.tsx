@@ -1,8 +1,7 @@
-import { type PropsWithChildren } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 
-export default function ProtectedRoute({ children }: PropsWithChildren) {
+export default function ProtectedRoute() {
   const { currentUser, loading } = useAuth();
 
   if (loading) {
@@ -13,5 +12,5 @@ export default function ProtectedRoute({ children }: PropsWithChildren) {
     return <Navigate to="/sign-in" replace />;
   }
 
-  return <>{children}</>;
+  return <Outlet />;
 }

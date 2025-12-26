@@ -2,8 +2,7 @@ import { useRef, useState, type FormEvent } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import Title from '../components/Title';
 import closeIcon from '../assets/icon-cross.svg';
-import eyeIcon from '../assets/eye.svg';
-import eyeOffIcon from '../assets/eye-off.svg';
+import EyeButton from '../components/EyeButton';
 import isValidEmail from '../utils/isValidEmail';
 import {
   doCreateUserWithEmailAndPassword,
@@ -20,10 +19,14 @@ export default function SignUp() {
   const passwordErrorRef = useRef<HTMLInputElement | null>(null);
   const confirmPasswordErrorRef = useRef<HTMLInputElement | null>(null);
   const authErrorRef = useRef<HTMLInputElement | null>(null);
+
   const [isRegistering, setIsRegistering] = useState(false);
+
   const { currentUser, loading } = useAuth();
+
   const [showVerificationPopup, setShowVerificationPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState('');
+  const [verificationPopupMessage, setVerificationPopupMessage] = useState('');
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -75,7 +78,7 @@ export default function SignUp() {
 
         if (user) {
           await doSendEmailVerification(user);
-          setPopupMessage(
+          setVerificationPopupMessage(
             'Verification email sent! Please check your inbox and verify your email before signing in.'
           );
           setShowVerificationPopup(true);
@@ -110,14 +113,14 @@ export default function SignUp() {
     <>
       {showVerificationPopup && (
         <section className="fixed inset-0 z-50 px-5 h-screen grid place-items-center bg-overlay-navy-900 animate-fade-in">
-          <div className="bg-light-gray-50 flex flex-col items-end justify-start gap-5 rounded-lg p-8 max-w-sm w-full text-center animate-slide-up">
+          <div className="bg-light-gray-50 dark:bg-dark-navy-900 flex flex-col items-end justify-start gap-5 rounded-lg p-8 max-w-sm w-full text-center animate-slide-up">
             <button
               onClick={() => setShowVerificationPopup(false)}
-              className="text-light-navy-850 hover:opacity-80 duration-200 cursor-pointer"
+              className="text-light-navy-850 dark:text-dark-purple-100 hover:opacity-80 duration-200 cursor-pointer"
             >
               <img src={closeIcon} alt="close icon" />
             </button>
-            <p>{popupMessage}</p>
+            <p>{verificationPopupMessage}</p>
           </div>
         </section>
       )}
@@ -128,9 +131,9 @@ export default function SignUp() {
         <form
           onSubmit={handleSubmit}
           action=""
-          className="bg-light-gray-50 shadow-light px-6 py-5 rounded-lg"
+          className="bg-light-gray-50 dark:bg-dark-navy-900 shadow-light dark:shadow-dark px-6 py-5 rounded-lg"
         >
-          <h2 className="text-2xl md:text-3xl text-light-navy-850 font-bold mb-5 text-center">
+          <h2 className="text-2xl md:text-3xl text-light-navy-850 dark:text-dark-purple-100 font-bold mb-5 text-center">
             Create a New Account
           </h2>
 
@@ -139,14 +142,14 @@ export default function SignUp() {
               <input
                 type="text"
                 id="email"
-                className="peer block w-full rounded-md border border-light-gray-300 bg-white px-4 py-3 text-light-navy-850 focus:border-primary-blue-500 focus:ring-0 focus:outline-none"
+                className="peer block w-full rounded-md border border-light-gray-300 dark:border-dark-purple-800 bg-white dark:bg-dark-navy-900 px-4 py-3 text-light-navy-850 dark:text-dark-purple-100 focus:border-primary-blue-500 focus:ring-0 focus:outline-none"
                 placeholder=""
                 ref={emailRef}
               />
 
               <label
                 htmlFor="email"
-                className="bg-light-gray-50 text-sm absolute left-2.5 -top-3 bg-white px-1.5 text-light-gray-600 duration-200 peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg peer-focus:-top-3 peer-focus:text-sm peer-focus:text-primary-blue-500 pointer-events-none"
+                className="bg-light-gray-50 text-sm absolute left-2.5 -top-3 bg-white dark:bg-dark-navy-900 px-1.5 text-light-gray-600 dark:text-dark-purple-600 duration-200 peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg peer-focus:-top-3 peer-focus:text-sm peer-focus:text-primary-blue-500 pointer-events-none"
               >
                 Email
               </label>
@@ -158,29 +161,22 @@ export default function SignUp() {
               <input
                 type={showPassword ? 'text' : 'password'}
                 id="password"
-                className="peer block w-full rounded-md border border-light-gray-300 bg-white pl-4 pr-12 py-3 text-light-navy-850 focus:border-primary-blue-500 focus:ring-0 focus:outline-none"
+                className="peer block w-full rounded-md border border-light-gray-300 dark:border-dark-purple-800 bg-white dark:bg-dark-navy-900 pl-4 pr-12 py-3 text-light-navy-850 dark:text-dark-purple-100 focus:border-primary-blue-500 focus:ring-0 focus:outline-none"
                 placeholder=""
                 ref={passwordRef}
               />
 
               <label
                 htmlFor="password"
-                className="bg-light-gray-50 text-sm absolute left-2.5 -top-3 bg-white px-1.5 text-light-gray-600 duration-200 peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg peer-focus:-top-3 peer-focus:text-sm peer-focus:text-primary-blue-500 pointer-events-none"
+                className="bg-light-gray-50 text-sm absolute left-2.5 -top-3 bg-white dark:bg-dark-navy-900 px-1.5 text-light-gray-600 dark:text-dark-purple-600 duration-200 peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg peer-focus:-top-3 peer-focus:text-sm peer-focus:text-primary-blue-500 pointer-events-none"
               >
                 Password
               </label>
 
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-4 md:opacity-0 group-hover:opacity-100 cursor-pointer hover:opacity-70 duration-300"
-              >
-                <img
-                  src={showPassword ? eyeOffIcon : eyeIcon}
-                  alt="Toggle password visibility"
-                  className="w-5 h-5"
-                />
-              </button>
+              <EyeButton
+                showPassword={showPassword}
+                handleClick={() => setShowPassword(prev => !prev)}
+              />
 
               <p ref={passwordErrorRef} className="mt-1 text-sm text-primary-red"></p>
             </div>
@@ -189,29 +185,22 @@ export default function SignUp() {
               <input
                 type={showConfirmPassword ? 'text' : 'password'}
                 id="confirmPassword"
-                className="peer block w-full rounded-md border border-light-gray-300 bg-white pl-4 pr-12 py-3 text-light-navy-850 focus:border-primary-blue-500 focus:ring-0 focus:outline-none"
+                className="peer block w-full rounded-md border border-light-gray-300 dark:border-dark-purple-800 bg-white dark:bg-dark-navy-900 pl-4 pr-12 py-3 text-light-navy-850 dark:text-dark-purple-100 focus:border-primary-blue-500 focus:ring-0 focus:outline-none"
                 placeholder=""
                 ref={confirmPasswordRef}
               />
 
               <label
                 htmlFor="confirmPassword"
-                className="bg-light-gray-50 text-sm absolute left-2.5 -top-3 bg-white px-1.5 text-light-gray-600 duration-200 peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg peer-focus:-top-3 peer-focus:text-sm peer-focus:text-primary-blue-500 pointer-events-none"
+                className="bg-light-gray-50 text-sm absolute left-2.5 -top-3 bg-white dark:bg-dark-navy-900 px-1.5 text-light-gray-600 dark:text-dark-purple-600 duration-200 peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg peer-focus:-top-3 peer-focus:text-sm peer-focus:text-primary-blue-500 pointer-events-none"
               >
                 Confirm Password
               </label>
 
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-4 top-4 md:opacity-0 group-hover:opacity-100 cursor-pointer hover:opacity-70 duration-300"
-              >
-                <img
-                  src={showConfirmPassword ? eyeOffIcon : eyeIcon}
-                  alt="Toggle password visibility"
-                  className="w-5 h-5"
-                />
-              </button>
+              <EyeButton
+                showPassword={showConfirmPassword}
+                handleClick={() => setShowConfirmPassword(prev => !prev)}
+              />
 
               <p
                 ref={confirmPasswordErrorRef}
@@ -223,18 +212,18 @@ export default function SignUp() {
           <button
             type="submit"
             disabled={loading || isRegistering}
-            className="mb-4 w-full p-2 bg-primary-blue-500 hover:opacity-70 disabled:bg-light-gray-300 disabled:hover:opacity-100 text-light-gray-50 font-bold duration-200 rounded-md cursor-pointer"
+            className="mb-4 w-full p-2 bg-primary-blue-500 hover:opacity-70 disabled:bg-light-gray-300 dark:disabled:bg-dark-purple-700 disabled:hover:opacity-100 text-light-gray-50 font-bold duration-200 rounded-md cursor-pointer"
           >
             Sign Up
           </button>
 
           <p ref={authErrorRef} className="mb-4 text-sm text-primary-red"></p>
 
-          <p className="text-center text-light-gray-600">
+          <p className="text-center text-light-gray-600 dark:text-dark-purple-600">
             Already have an account?{' '}
             <Link
               to="/sign-in"
-              className="text-light-navy-850 font-bold hover:text-primary-blue-500 duration-200"
+              className="text-light-navy-850 dark:text-dark-purple-100 font-bold hover:text-primary-blue-500 duration-200"
             >
               Sign in
             </Link>

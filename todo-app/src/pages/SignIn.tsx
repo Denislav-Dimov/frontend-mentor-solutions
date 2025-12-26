@@ -3,8 +3,7 @@ import { Link, Navigate } from 'react-router-dom';
 import Title from '../components/Title';
 import googleIcon from '../assets/google.svg';
 import closeIcon from '../assets/icon-cross.svg';
-import eyeIcon from '../assets/eye.svg';
-import eyeOffIcon from '../assets/eye-off.svg';
+import EyeButton from '../components/EyeButton';
 import isValidEmail from '../utils/isValidEmail';
 import {
   doSignInWithEmailAndPassword,
@@ -20,11 +19,16 @@ export default function SignIn() {
   const emailErrorRef = useRef<HTMLInputElement | null>(null);
   const passwordErrorRef = useRef<HTMLInputElement | null>(null);
   const authErrorRef = useRef<HTMLInputElement | null>(null);
+
   const [isSigningIn, setIsSigningIn] = useState(false);
+
   const { currentUser, loading } = useAuth();
-  const [showResetPopup, setShowResetPopup] = useState(false);
+
   const [popupMessage, setPopupMessage] = useState('');
+
+  const [showResetPopup, setShowResetPopup] = useState(false);
   const [isResettingPassword, setIsResettingPassword] = useState(false);
+
   const [showPassword, setShowPassword] = useState(false);
 
   const [showVerificationPopup, setShowVerificationPopup] = useState(false);
@@ -257,11 +261,11 @@ export default function SignIn() {
     <section className="mx-auto max-w-lg w-full space-y-8">
       {showResetPopup && (
         <section className="fixed inset-0 z-50 px-5 h-screen grid place-items-center bg-overlay-navy-900 animate-fade-in">
-          <div className="bg-light-gray-50 flex flex-col items-end justify-start gap-5 rounded-lg p-8 max-w-sm w-full text-center animate-slide-up">
+          <div className="bg-light-gray-50 dark:bg-dark-navy-900 flex flex-col items-end justify-start gap-5 rounded-lg p-8 max-w-sm w-full text-center animate-slide-up">
             <button
               onClick={() => setShowResetPopup(false)}
               disabled={isResettingPassword}
-              className="text-light-navy-850 hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed duration-200 cursor-pointer"
+              className="text-light-navy-850 dark:text-dark-purple-100 hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed duration-200 cursor-pointer"
             >
               <img src={closeIcon} alt="close icon" />
             </button>
@@ -272,13 +276,13 @@ export default function SignIn() {
 
       {showVerificationPopup && (
         <section className="fixed inset-0 z-50 px-5 h-screen grid place-items-center bg-overlay-navy-900 animate-fade-in">
-          <div className="bg-light-gray-50 flex flex-col items-end justify-start gap-5 rounded-lg p-8 max-w-sm w-full text-center animate-slide-up">
+          <div className="bg-light-gray-50 dark:bg-dark-navy-900 flex flex-col items-end justify-start gap-5 rounded-lg p-8 max-w-sm w-full text-center animate-slide-up">
             <button
               onClick={() => {
                 setShowVerificationPopup(false);
               }}
               disabled={isResettingPassword}
-              className="text-light-navy-850 hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed duration-200 cursor-pointer"
+              className="text-light-navy-850 dark:text-dark-purple-100 hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed duration-200 cursor-pointer"
             >
               <img src={closeIcon} alt="close icon" />
             </button>
@@ -287,7 +291,7 @@ export default function SignIn() {
               <button
                 onClick={handleResendVerificationEmail}
                 disabled={isResettingPassword}
-                className="w-full p-2 bg-primary-blue-500 hover:opacity-70 disabled:bg-light-gray-300 disabled:hover:opacity-100 text-light-gray-50 font-bold duration-200 rounded-md cursor-pointer"
+                className="w-full p-2 bg-primary-blue-500 hover:opacity-70 disabled:bg-light-gray-300 dark:disabled:bg-dark-purple-700 disabled:hover:opacity-100 text-light-gray-50 font-bold duration-200 rounded-md cursor-pointer"
               >
                 {isResettingPassword ? 'Resending...' : 'Resend Verification Email'}
               </button>
@@ -298,9 +302,9 @@ export default function SignIn() {
 
       <Title title="sign-in" />
 
-      <div className="bg-light-gray-50 shadow-light px-6 py-5 rounded-lg">
+      <div className="bg-light-gray-50 dark:bg-dark-navy-900 shadow-light dark:shadow-dark px-6 py-5 rounded-lg">
         <form onSubmit={handleSubmit}>
-          <h2 className="text-2xl md:text-3xl text-light-navy-850 font-bold mb-5 text-center">
+          <h2 className="text-2xl md:text-3xl text-light-navy-850 dark:text-dark-purple-100 font-bold mb-5 text-center">
             Welcome Back!
           </h2>
 
@@ -309,7 +313,7 @@ export default function SignIn() {
               <input
                 type="text"
                 id="email"
-                className="peer block w-full rounded-md border border-light-gray-300 bg-white px-4 py-3 text-light-navy-850 focus:border-primary-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                className="peer block w-full rounded-md border border-light-gray-300 dark:border-dark-purple-800 bg-white dark:bg-dark-navy-900 px-4 py-3 text-light-navy-850 dark:text-dark-purple-100 focus:border-primary-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                 placeholder=""
                 ref={emailRef}
                 disabled={isResettingPassword || isSigningIn}
@@ -317,7 +321,7 @@ export default function SignIn() {
 
               <label
                 htmlFor="email"
-                className="bg-light-gray-50 text-sm absolute left-2.5 -top-3 bg-white px-1.5 text-light-gray-600 duration-200 peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg peer-focus:-top-3 peer-focus:text-sm peer-focus:text-primary-blue-500 pointer-events-none"
+                className="bg-light-gray-50 dark:bg-dark-navy-900 text-sm absolute left-2.5 -top-3 bg-white px-1.5 text-light-gray-600 dark:text-dark-purple-600 duration-200 peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg peer-focus:-top-3 peer-focus:text-sm peer-focus:text-primary-blue-500 pointer-events-none"
               >
                 Email
               </label>
@@ -329,7 +333,7 @@ export default function SignIn() {
               <input
                 type={showPassword ? 'text' : 'password'}
                 id="password"
-                className="peer block w-full rounded-md border border-light-gray-300 bg-white pl-4 pr-12 py-3 text-light-navy-850 focus:border-primary-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                className="peer block w-full rounded-md border border-light-gray-300 dark:border-dark-purple-800 bg-white dark:bg-dark-navy-900 pl-4 pr-12 py-3 text-light-navy-850 dark:text-dark-purple-100 focus:border-primary-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                 placeholder=""
                 ref={passwordRef}
                 disabled={isResettingPassword || isSigningIn}
@@ -337,23 +341,15 @@ export default function SignIn() {
 
               <label
                 htmlFor="password"
-                className="bg-light-gray-50 text-sm absolute left-2.5 -top-3 bg-white px-1.5 text-light-gray-600 duration-200 peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg peer-focus:-top-3 peer-focus:text-sm peer-focus:text-primary-blue-500 pointer-events-none"
+                className="bg-light-gray-50 dark:bg-dark-navy-900 text-sm absolute left-2.5 -top-3 bg-white px-1.5 text-light-gray-600 dark:text-dark-purple-600 duration-200 peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg peer-focus:-top-3 peer-focus:text-sm peer-focus:text-primary-blue-500 pointer-events-none"
               >
                 Password
               </label>
 
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-4 md:opacity-0 group-hover:opacity-100 cursor-pointer hover:opacity-70 disabled:opacity-50 disabled:cursor-not-allowed duration-300"
-                disabled={isResettingPassword || isSigningIn}
-              >
-                <img
-                  src={showPassword ? eyeOffIcon : eyeIcon}
-                  alt="Toggle password visibility"
-                  className="w-5 h-5"
-                />
-              </button>
+              <EyeButton
+                showPassword={showPassword}
+                handleClick={() => setShowPassword(prev => !prev)}
+              />
 
               <p ref={passwordErrorRef} className="mt-1 text-sm text-primary-red"></p>
 
@@ -361,7 +357,7 @@ export default function SignIn() {
                 type="button"
                 onClick={handleResetPassword}
                 disabled={isResettingPassword || isSigningIn}
-                className="mt-2 text-sm text-light-gray-600 hover:text-primary-blue-500 disabled:opacity-50 disabled:cursor-not-allowed duration-200 cursor-pointer"
+                className="mt-2 text-sm text-light-gray-600 dark:text-dark-purple-600 hover:text-primary-blue-500 disabled:opacity-50 disabled:cursor-not-allowed duration-200 cursor-pointer"
               >
                 {isResettingPassword ? 'Sending...' : 'Forgot password?'}
               </button>
@@ -371,18 +367,18 @@ export default function SignIn() {
           <button
             type="submit"
             disabled={loading || isSigningIn || isResettingPassword}
-            className="mb-4 w-full p-2 bg-primary-blue-500 hover:opacity-70 disabled:bg-light-gray-300 disabled:hover:opacity-100 text-light-gray-50 font-bold duration-200 rounded-md cursor-pointer"
+            className="mb-4 w-full p-2 bg-primary-blue-500 hover:opacity-70 disabled:bg-light-gray-300 dark:disabled:bg-dark-purple-700 disabled:hover:opacity-100 text-light-gray-50 font-bold duration-200 rounded-md cursor-pointer"
           >
             Sign In
           </button>
 
           <p ref={authErrorRef} className="mb-4 text-sm text-primary-red"></p>
 
-          <p className="text-center text-light-gray-600">
+          <p className="text-center text-light-gray-600 dark:text-dark-purple-600">
             Don't have an account?{' '}
             <Link
               to="/sign-up"
-              className={`text-light-navy-850 font-bold hover:text-primary-blue-500 duration-200 ${
+              className={`text-light-navy-850 dark:text-dark-purple-100 font-bold hover:text-primary-blue-500 duration-200 ${
                 isResettingPassword || isSigningIn ? 'pointer-events-none opacity-50' : ''
               }`}
             >
@@ -391,8 +387,8 @@ export default function SignIn() {
           </p>
 
           <div className="relative my-8">
-            <hr className="text-light-gray-300" />
-            <p className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-light-gray-50 px-2 text-xl font-bold text-light-navy-850">
+            <hr className="text-light-gray-300 dark:text-dark-purple-800" />
+            <p className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-light-gray-50 dark:bg-dark-navy-900 px-2 text-xl font-bold text-light-navy-850 dark:text-dark-purple-100">
               OR
             </p>
           </div>
@@ -402,7 +398,7 @@ export default function SignIn() {
           type="button"
           onClick={handleClickForGoogle}
           disabled={loading || isSigningIn || isResettingPassword}
-          className="w-full flex gap-3 justify-center items-center border border-light-gray-300 rounded-lg p-2.5 cursor-pointer hover:opacity-50 disabled:opacity-100 duration-200"
+          className="w-full flex gap-3 justify-center items-center border border-light-gray-300 dark:border-dark-purple-800 rounded-lg p-2.5 cursor-pointer hover:opacity-50 disabled:opacity-100 duration-200"
         >
           <img src={googleIcon} alt="Google icon" className="size-6" />
           Continue with Google

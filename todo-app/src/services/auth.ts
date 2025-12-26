@@ -33,8 +33,8 @@ export async function doSendPasswordResetEmail(email: string) {
 
 export async function doSignInWithGoogle() {
   const provider = new GoogleAuthProvider();
-  const result = await signInWithPopup(auth, provider);
-  return result;
+  const { user } = await signInWithPopup(auth, provider);
+  return user;
 }
 
 export async function doSignOut() {
