@@ -8,6 +8,8 @@ import {
   doSendEmailVerification,
   doSendPasswordResetEmail,
   doSignOut,
+  doReauthenticateWithCredential,
+  doDeleteUser
 } from './services/auth.service';
 
 export {
@@ -20,4 +22,6 @@ export {
   doSendEmailVerification,
   doSendPasswordResetEmail,
   doSignOut,
+  doReauthenticateWithCredential,
+  doDeleteUser
 };

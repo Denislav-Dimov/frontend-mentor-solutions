@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import moonIcon from '../assets/icon-moon.svg';
 import sunIcon from '../assets/icon-sun.svg';
 import { Settings, LogOut, UserX } from 'lucide-react';
 import { useTheme } from '../features/theme';
-import { doSignOut } from '../features/auth';
+import { useAuth, doDeleteUser, doSignOut, doSignInWithGoogle } from '../features/auth';
 import useOutsideClick from '../hooks/useOutsideClick';
 
 type TitleProps = {
@@ -15,8 +16,11 @@ export default function Title({ title, isHomePage = false }: TitleProps) {
   const [showPopup, setShowPopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const showDeletePopupRef = useOutsideClick(() => setShowDeletePopup(false));
+  const [isDeleting, setIsDeleting] = useState(false);
   const { isDark, toggleDark } = useTheme();
+  const { currentUser } = useAuth();
   const firstButtonRef = useRef<HTMLButtonElement | null>(null);
+  const navigate = useNavigate();
 
   // for keyboard navigation
   useEffect(() => {
@@ -25,14 +29,42 @@ export default function Title({ title, isHomePage = false }: TitleProps) {
     }
   }, [showPopup]);
 
+  const handleDeleteUser = async () => {
+    if (currentUser) {
+      setIsDeleting(true);
+
+      try {
+        await doDeleteUser(currentUser);
+      } catch (error: unknown) {
+        if (typeof error === 'object' && error !== null && 'code' in error) {
+          const err = error as { code: string; message?: string };
+          if (err.code === 'auth/requires-recent-login') {
+            if (currentUser.providerData && currentUser.providerData.length > 0) {
+              const signInMethod = currentUser.providerData[0].providerId;
+
+              if (signInMethod === 'google.com') {
+                await doSignInWithGoogle();
+                await doDeleteUser(currentUser);
+              }
+            } else {
+              navigate('/reauthenticate');
+            }
+          }
+        }
+      } finally {
+        setIsDeleting(false);
+      }
+    }
+  };
+
   return (
     <section className="relative flex justify-between items-center gap-4">
-      <h1 className="uppercase text-3xl text-light-gray-50 dark:text-dark-purple-100 font-bold tracking-[0.35em] text-shadow-md">
+      <h1 className="uppercase text-3xl text-light-gray-50 dark:text-dark-purple-100 font-bold tracking-[0.35em] text-shadow-md break-all">
         {title}
       </h1>
 
       {showPopup && (
-        <div className="absolute top-full mt-1 right-0 bg-light-gray-50 dark:bg-dark-navy-900 px-6 py-5 space-y-4 rounded-md shadow-light dark:shadow-dark animate-slide-down">
+        <div className="absolute top-full w-60 mt-1 right-0 bg-light-gray-50 dark:bg-dark-navy-900 px-6 py-5 space-y-4 rounded-md shadow-light dark:shadow-dark animate-slide-down">
           <div className="flex items-center justify-between gap-4 text-lg">
             Theme
             <button
@@ -65,6 +97,9 @@ export default function Title({ title, isHomePage = false }: TitleProps) {
               <UserX strokeWidth={3} />
             </button>
           </div>
+          <p className="text-light-navy-850/60 dark:text-dark-purple-100/60 italic wrap-break-word">
+            {currentUser?.email}
+          </p>
         </div>
       )}
 
@@ -77,14 +112,15 @@ export default function Title({ title, isHomePage = false }: TitleProps) {
             <p>Are you sure you want to delete your account?</p>
             <div className="grid grid-cols-2 gap-4 w-full">
               <button
-                onClick={() => {}}
-                className="bg-light-gray-300 dark:bg-dark-navy-950 text-primary-red font-bold w-full p-2.5 rounded-lg hover:opacity-80 duration-200 cursor-pointer"
+                onClick={handleDeleteUser}
+                disabled={isDeleting}
+                className="bg-light-gray-300 dark:bg-dark-navy-950 text-primary-red font-bold w-full p-2.5 rounded-lg hover:opacity-80 duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Delete
               </button>
               <button
                 onClick={() => setShowDeletePopup(false)}
-                className="bg-light-gray-300 dark:bg-dark-navy-950 font-bold w-full p-2.5 rounded-lg hover:opacity-80 duration-200 cursor-pointer"
+                className="bg-light-gray-300 dark:bg-dark-navy-950 font-bold w-full p-2.5 rounded-lg hover:opacity-80 duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Cancel
               </button>

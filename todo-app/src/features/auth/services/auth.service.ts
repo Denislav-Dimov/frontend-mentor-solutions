@@ -6,8 +6,12 @@ import {
   signInWithPopup,
   sendPasswordResetEmail,
   sendEmailVerification,
+  deleteUser,
   type User,
+  signOut,
+  reauthenticateWithCredential,
 } from 'firebase/auth';
+import { EmailAuthProvider } from 'firebase/auth/web-extension';
 
 export async function doCreateUserWithEmailAndPassword(email: string, password: string) {
   return createUserWithEmailAndPassword(auth, email, password);
@@ -38,5 +42,21 @@ export async function doSignInWithGoogle() {
 }
 
 export async function doSignOut() {
-  return auth.signOut();
+  return signOut(auth);
+}
+
+export async function doDeleteUser(user: User) {
+  return deleteUser(user);
+}
+export async function doReauthenticateWithCredential(
+  currentUser: User,
+  password: string
+) {
+  if (!currentUser.email) {
+    throw { code: 'auth/user-not-found' };
+  }
+
+  const credential = EmailAuthProvider.credential(currentUser.email, password);
+
+  return reauthenticateWithCredential(currentUser, credential);
 }
