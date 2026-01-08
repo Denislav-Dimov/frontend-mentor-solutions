@@ -10,6 +10,7 @@ import {
   doSignOut,
 } from '../features/auth';
 import { useAuth } from '../features/auth';
+import useOutsideClick from '../hooks/useOutsideClick';
 
 export default function SignUp() {
   const emailRef = useRef<HTMLInputElement | null>(null);
@@ -26,6 +27,7 @@ export default function SignUp() {
 
   const [showVerificationPopup, setShowVerificationPopup] = useState(false);
   const [verificationPopupMessage, setVerificationPopupMessage] = useState('');
+  const showVerificationPopupRef = useOutsideClick(() => setShowVerificationPopup(false));
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -113,7 +115,10 @@ export default function SignUp() {
     <>
       {showVerificationPopup && (
         <section className="fixed inset-0 z-50 px-5 h-screen grid place-items-center bg-overlay-navy-900 animate-fade-in">
-          <div className="bg-light-gray-50 dark:bg-dark-navy-900 flex flex-col items-end justify-start gap-5 rounded-lg p-8 max-w-sm w-full text-center animate-slide-up">
+          <div
+            ref={showVerificationPopupRef}
+            className="bg-light-gray-50 dark:bg-dark-navy-900 flex flex-col items-end justify-start gap-5 rounded-lg p-8 max-w-sm w-full text-center animate-slide-up"
+          >
             <button
               onClick={() => setShowVerificationPopup(false)}
               className="text-light-navy-850 dark:text-dark-purple-100 hover:opacity-80 duration-200 cursor-pointer"
@@ -142,6 +147,7 @@ export default function SignUp() {
               <input
                 type="text"
                 id="email"
+                autoComplete="email"
                 className="peer block w-full rounded-md border border-light-gray-300 dark:border-dark-purple-800 bg-white dark:bg-dark-navy-900 px-4 py-3 text-light-navy-850 dark:text-dark-purple-100 focus:border-primary-blue-500 focus:ring-0 focus:outline-none"
                 placeholder=""
                 ref={emailRef}
@@ -161,6 +167,7 @@ export default function SignUp() {
               <input
                 type={showPassword ? 'text' : 'password'}
                 id="password"
+                autoComplete="new-password"
                 className="peer block w-full rounded-md border border-light-gray-300 dark:border-dark-purple-800 bg-white dark:bg-dark-navy-900 pl-4 pr-12 py-3 text-light-navy-850 dark:text-dark-purple-100 focus:border-primary-blue-500 focus:ring-0 focus:outline-none"
                 placeholder=""
                 ref={passwordRef}
@@ -185,6 +192,7 @@ export default function SignUp() {
               <input
                 type={showConfirmPassword ? 'text' : 'password'}
                 id="confirmPassword"
+                autoComplete="new-password"
                 className="peer block w-full rounded-md border border-light-gray-300 dark:border-dark-purple-800 bg-white dark:bg-dark-navy-900 pl-4 pr-12 py-3 text-light-navy-850 dark:text-dark-purple-100 focus:border-primary-blue-500 focus:ring-0 focus:outline-none"
                 placeholder=""
                 ref={confirmPasswordRef}

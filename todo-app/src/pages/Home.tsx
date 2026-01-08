@@ -1,10 +1,9 @@
-import { doSignOut } from '../features/auth';
+import Title from '../components/Title';
 
 export default function Home() {
   return (
-    <main>
-      <div>Home</div>
-      <button onClick={doSignOut}>Sign Out</button>
+    <main className="w-full max-w-lg">
+      <Title title="todo" isHomePage={true} />
     </main>
   );
 }

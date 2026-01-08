@@ -12,6 +12,7 @@ import {
   doSendEmailVerification,
 } from '../features/auth';
 import { useAuth } from '../features/auth';
+import useOutsideClick from '../hooks/useOutsideClick';
 
 export default function SignIn() {
   const emailRef = useRef<HTMLInputElement | null>(null);
@@ -26,6 +27,7 @@ export default function SignIn() {
 
   const [popupMessage, setPopupMessage] = useState('');
 
+  const showResetPopupRef = useOutsideClick(() => setShowResetPopup(false));
   const [showResetPopup, setShowResetPopup] = useState(false);
   const [isResettingPassword, setIsResettingPassword] = useState(false);
 
@@ -33,6 +35,7 @@ export default function SignIn() {
 
   const [showVerificationPopup, setShowVerificationPopup] = useState(false);
   const [verificationEmail, setVerificationEmail] = useState('');
+  const showVerificationPopupRef = useOutsideClick(() => setShowVerificationPopup(false));
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -261,7 +264,10 @@ export default function SignIn() {
     <section className="mx-auto max-w-lg w-full space-y-8">
       {showResetPopup && (
         <section className="fixed inset-0 z-50 px-5 h-screen grid place-items-center bg-overlay-navy-900 animate-fade-in">
-          <div className="bg-light-gray-50 dark:bg-dark-navy-900 flex flex-col items-end justify-start gap-5 rounded-lg p-8 max-w-sm w-full text-center animate-slide-up">
+          <div
+            ref={showResetPopupRef}
+            className="bg-light-gray-50 dark:bg-dark-navy-900 flex flex-col items-end justify-start gap-5 rounded-lg p-8 max-w-sm w-full text-center animate-slide-up"
+          >
             <button
               onClick={() => setShowResetPopup(false)}
               disabled={isResettingPassword}
@@ -276,11 +282,12 @@ export default function SignIn() {
 
       {showVerificationPopup && (
         <section className="fixed inset-0 z-50 px-5 h-screen grid place-items-center bg-overlay-navy-900 animate-fade-in">
-          <div className="bg-light-gray-50 dark:bg-dark-navy-900 flex flex-col items-end justify-start gap-5 rounded-lg p-8 max-w-sm w-full text-center animate-slide-up">
+          <div
+            ref={showVerificationPopupRef}
+            className="bg-light-gray-50 dark:bg-dark-navy-900 flex flex-col items-end justify-start gap-5 rounded-lg p-8 max-w-sm w-full text-center animate-slide-up"
+          >
             <button
-              onClick={() => {
-                setShowVerificationPopup(false);
-              }}
+              onClick={() => setShowVerificationPopup(false)}
               disabled={isResettingPassword}
               className="text-light-navy-850 dark:text-dark-purple-100 hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed duration-200 cursor-pointer"
             >
@@ -313,6 +320,7 @@ export default function SignIn() {
               <input
                 type="text"
                 id="email"
+                autoComplete="username"
                 className="peer block w-full rounded-md border border-light-gray-300 dark:border-dark-purple-800 bg-white dark:bg-dark-navy-900 px-4 py-3 text-light-navy-850 dark:text-dark-purple-100 focus:border-primary-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                 placeholder=""
                 ref={emailRef}
@@ -333,6 +341,7 @@ export default function SignIn() {
               <input
                 type={showPassword ? 'text' : 'password'}
                 id="password"
+                autoComplete="new-password"
                 className="peer block w-full rounded-md border border-light-gray-300 dark:border-dark-purple-800 bg-white dark:bg-dark-navy-900 pl-4 pr-12 py-3 text-light-navy-850 dark:text-dark-purple-100 focus:border-primary-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                 placeholder=""
                 ref={passwordRef}

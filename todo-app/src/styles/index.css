@@ -39,11 +39,12 @@
 
   --animate-fade-in: fadeIn 300ms ease-out;
   --animate-slide-up: slideUp 300ms ease-out;
+  --animate-slide-down: slideDown 300ms ease-out;
 }
 
 @layer base {
   body {
-    @apply bg-light-gray-50 dark:bg-dark-navy-950 text-light-navy-850 dark:text-dark-purple-100 font-family-primary font-normal mx-6;
+    @apply bg-light-gray-50 dark:bg-dark-navy-950 text-light-navy-850 dark:text-dark-purple-100 font-family-primary font-normal mx-6 transition; 
   }
 
   html.dark input:-webkit-autofill,
@@ -76,6 +77,18 @@
   from {
     opacity: 0;
     transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
   }
 
   to {
