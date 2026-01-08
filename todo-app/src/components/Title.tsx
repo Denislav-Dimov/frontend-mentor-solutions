@@ -4,6 +4,7 @@ import sunIcon from '../assets/icon-sun.svg';
 import { Settings, LogOut, UserX } from 'lucide-react';
 import { useTheme } from '../features/theme';
 import { doSignOut } from '../features/auth';
+import useOutsideClick from '../hooks/useOutsideClick';
 
 type TitleProps = {
   title: string;
@@ -13,6 +14,7 @@ type TitleProps = {
 export default function Title({ title, isHomePage = false }: TitleProps) {
   const [showPopup, setShowPopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const showDeletePopupRef = useOutsideClick(() => setShowDeletePopup(false));
   const { isDark, toggleDark } = useTheme();
   const firstButtonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -68,7 +70,10 @@ export default function Title({ title, isHomePage = false }: TitleProps) {
 
       {showDeletePopup && (
         <section className="fixed inset-0 z-50 px-5 h-screen grid place-items-center bg-overlay-navy-900 animate-fade-in">
-          <div className="bg-light-gray-50 dark:bg-dark-navy-900 flex flex-col items-end justify-start gap-5 rounded-lg p-8 max-w-sm w-full text-center text-lg animate-slide-up">
+          <div
+            ref={showDeletePopupRef}
+            className="bg-light-gray-50 dark:bg-dark-navy-900 flex flex-col items-end justify-start gap-5 rounded-lg p-8 max-w-sm w-full text-center text-lg animate-slide-up"
+          >
             <p>Are you sure you want to delete your account?</p>
             <div className="grid grid-cols-2 gap-4 w-full">
               <button
