@@ -1,25 +1,30 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useState } from 'react';
+import { FirebaseError } from 'firebase/app';
 import { Link, Navigate } from 'react-router-dom';
 import Title from '../components/Title';
 import googleIcon from '../assets/google.svg';
 import closeIcon from '../assets/icon-cross.svg';
-import EyeButton from '../components/EyeButton';
-import isValidEmail from '../utils/isValidEmail';
 import {
   doSignInWithEmailAndPassword,
   doSendPasswordResetEmail,
   doSignInWithGoogle,
   doSendEmailVerification,
+  useAuth,
+  validateEmail,
+  validatePassword,
+  mapSignInError,
+  mapSignInGoogleError,
 } from '../features/auth';
-import { useAuth } from '../features/auth';
 import useOutsideClick from '../hooks/useOutsideClick';
+import InputEmail from '../components/form/InputEmail';
+import InputPassword from '../components/form/InputPassword';
 
 export default function SignIn() {
-  const emailRef = useRef<HTMLInputElement | null>(null);
-  const passwordRef = useRef<HTMLInputElement | null>(null);
-  const emailErrorRef = useRef<HTMLInputElement | null>(null);
-  const passwordErrorRef = useRef<HTMLInputElement | null>(null);
-  const authErrorRef = useRef<HTMLInputElement | null>(null);
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [authError, setAuthError] = useState('');
 
   const [isSigningIn, setIsSigningIn] = useState(false);
 
@@ -31,90 +36,50 @@ export default function SignIn() {
   const [showResetPopup, setShowResetPopup] = useState(false);
   const [isResettingPassword, setIsResettingPassword] = useState(false);
 
-  const [showPassword, setShowPassword] = useState(false);
-
   const [showVerificationPopup, setShowVerificationPopup] = useState(false);
   const [verificationEmail, setVerificationEmail] = useState('');
   const showVerificationPopupRef = useOutsideClick(() => setShowVerificationPopup(false));
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    emailErrorRef.current!.innerText = '';
-    passwordErrorRef.current!.innerText = '';
-    authErrorRef.current!.innerText = '';
-    setShowVerificationPopup(false);
+    if (isSigningIn) return;
 
-    const emailValue = emailRef.current?.value.trim();
-    const passwordValue = passwordRef.current?.value.trim();
+    setEmailError('');
+    setPasswordError('');
+    setAuthError('');
 
-    if (!emailValue) {
-      emailErrorRef.current!.innerText = 'Enter an email';
+    const emailValue = email.trim();
+    const passwordValue = password.trim();
+
+    const emailValid = validateEmail(emailValue);
+    const passwordValid = validatePassword(passwordValue);
+
+    if (emailValid || passwordValid) {
+      setEmailError(emailValid);
+      setPasswordError(passwordValid);
       return;
     }
 
-    if (!isValidEmail(emailValue)) {
-      emailErrorRef.current!.innerText = 'Enter a valid email';
-      return;
-    }
+    setIsSigningIn(true);
 
-    if (!passwordValue) {
-      passwordErrorRef.current!.innerText = 'Enter a password';
-      return;
-    }
+    try {
+      await doSignInWithEmailAndPassword(emailValue, passwordValue);
+    } catch (error) {
+      if (!(error instanceof FirebaseError)) return;
 
-    if (passwordValue.length < 6) {
-      passwordErrorRef.current!.innerText = 'Password must be at least 6 characters';
-      return;
-    }
-
-    if (!isSigningIn) {
-      setIsSigningIn(true);
-      try {
-        await doSignInWithEmailAndPassword(emailValue, passwordValue);
-        authErrorRef.current!.innerText = '';
-      } catch (error: unknown) {
-        if (typeof error === 'object' && error !== null && 'code' in error) {
-          const err = error as { code: string; message?: string };
-          switch (err.code) {
-            case 'auth/user-not-found':
-            case 'auth/wrong-password':
-            case 'auth/invalid-credential':
-              authErrorRef.current!.innerText =
-                'Invalid email or password. Please try again.';
-              break;
-            case 'auth/invalid-email':
-              authErrorRef.current!.innerText =
-                'The email address is not valid. Please enter a valid email.';
-              break;
-            case 'auth/user-disabled':
-              authErrorRef.current!.innerText =
-                'This account has been disabled. Please contact support.';
-              break;
-            case 'auth/too-many-requests':
-              authErrorRef.current!.innerText =
-                'Too many failed login attempts. Please try again later.';
-              break;
-            case 'auth/email-not-verified':
-              setVerificationEmail(emailValue);
-              setPopupMessage(
-                'Your email is not verified. Please verify your email to continue.'
-              );
-              setShowVerificationPopup(true);
-              break;
-            default:
-              console.error('Firebase Auth Error:', err.code, err.message);
-              authErrorRef.current!.innerText =
-                err.message || 'An unexpected error occurred. Please try again.';
-          }
-        } else {
-          console.error('Unknown Error:', error);
-          authErrorRef.current!.innerText =
-            'An unexpected error occurred. Please try again.';
-        }
-      } finally {
-        setIsSigningIn(false);
+      if (error.code === 'auth/email-not-verified') {
+        setVerificationEmail(emailValue);
+        setPopupMessage(
+          'Your email is not verified. Please verify your email to continue'
+        );
+        setShowVerificationPopup(true);
+        return;
       }
+
+      setAuthError(mapSignInError(error.code));
+    } finally {
+      setIsSigningIn(false);
     }
   }
 
@@ -132,9 +97,8 @@ export default function SignIn() {
           'Could not find a user to re-send verification. Please try logging in again.'
         );
       }
-    } catch (error: unknown) {
-      console.error('Error re-sending verification email:', error);
-      const message = error instanceof Error ? error.message : 'Unknown error';
+    } catch (error) {
+      const message = error instanceof FirebaseError ? error.message : 'Unknown error';
       setPopupMessage(`Failed to re-send verification email: ${message}`);
     } finally {
       setIsResettingPassword(false);
@@ -142,23 +106,17 @@ export default function SignIn() {
   }
 
   async function handleResetPassword() {
-    authErrorRef.current!.innerText = '';
-    emailErrorRef.current!.innerText = '';
-    setShowVerificationPopup(false);
+    if (isResettingPassword) return;
 
-    const emailValue = emailRef.current?.value.trim();
+    setAuthError('');
+    setEmailError('');
 
-    if (!emailValue) {
-      emailErrorRef.current!.innerText = 'Enter an email';
-      return;
-    }
+    const emailValue = email.trim();
 
-    if (!isValidEmail(emailValue)) {
-      emailErrorRef.current!.innerText = 'Enter a valid email';
-      return;
-    }
+    const emailValid = validateEmail(emailValue);
 
-    if (isResettingPassword) {
+    if (emailValid) {
+      setEmailError(emailValid);
       return;
     }
 
@@ -169,90 +127,30 @@ export default function SignIn() {
       setPopupMessage(
         `A password reset link has been sent to ${emailValue}. Please check your inbox.`
       );
-      emailRef.current!.value = '';
-      passwordRef.current!.value = '';
       setShowResetPopup(true);
+      setPassword('');
     } catch (error) {
-      let errorMessage: string;
-
-      if (error instanceof Error && 'code' in error) {
-        switch (error.code) {
-          case 'auth/invalid-email':
-            errorMessage = 'The email address is not valid.';
-            break;
-          case 'auth/user-not-found':
-            errorMessage =
-              'No account found with this email address. Please check your email.';
-            break;
-          case 'auth/too-many-requests':
-            errorMessage = 'Too many requests. Please try again later.';
-            break;
-          case 'auth/network-request-failed':
-            errorMessage = 'Network error. Please check your internet connection.';
-            break;
-          default:
-            errorMessage =
-              'An unexpected error occurred during password reset. Please try again.';
-        }
-
-        setPopupMessage(errorMessage);
-      } else {
-        console.error('Unknown Error:', error);
-        errorMessage = 'An unexpected error occurred. Please try again.';
+      if (error instanceof FirebaseError) {
+        setAuthError(mapSignInError(error.code));
       }
-
-      authErrorRef.current!.innerText = errorMessage;
     } finally {
       setIsResettingPassword(false);
     }
   }
 
   async function handleClickForGoogle() {
-    if (!isSigningIn) {
-      setIsSigningIn(true);
-      try {
-        await doSignInWithGoogle();
-      } catch (error) {
-        if (error instanceof Error && 'code' in error) {
-          if (error.code) {
-            switch (error.code) {
-              case 'auth/popup-closed-by-user':
-                authErrorRef.current!.innerText =
-                  'Sign-in popup closed. Please try again.';
-                break;
-              case 'auth/cancelled-popup-request':
-                authErrorRef.current!.innerText =
-                  'Sign-in popup request was cancelled. Please try again.';
-                break;
-              case 'auth/popup-blocked':
-                authErrorRef.current!.innerText =
-                  'Popup blocked by your browser. Please allow popups for this site and try again.';
-                break;
-              case 'auth/operation-not-allowed':
-                authErrorRef.current!.innerText =
-                  'Google sign-in is not enabled. Please contact support.';
-                break;
-              case 'auth/account-exists-with-different-credential':
-                authErrorRef.current!.innerText =
-                  'An account with this email already exists. Please sign in with your email and password instead.';
-                break;
-              case 'auth/unauthorized-domain':
-                authErrorRef.current!.innerText =
-                  'Your domain is not authorized for this operation. Please check Firebase settings.';
-                break;
-              default:
-                authErrorRef.current!.innerText = `An unknown authentication error occurred: ${error.message}`;
-                console.error('Firebase Auth Error:', error);
-                break;
-            }
-          } else {
-            authErrorRef.current!.innerText = `An unexpected error occurred: ${error.message}`;
-            console.error('General Error:', error);
-          }
-        }
-      } finally {
-        setIsSigningIn(false);
+    if (isSigningIn) return;
+
+    setIsSigningIn(true);
+
+    try {
+      await doSignInWithGoogle();
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        setAuthError(mapSignInGoogleError(error.code));
       }
+    } finally {
+      setIsSigningIn(false);
     }
   }
 
@@ -316,57 +214,21 @@ export default function SignIn() {
           </h2>
 
           <div className="space-y-6 mb-8">
-            <div className="relative group">
-              <input
-                type="text"
-                id="email"
-                autoComplete="username"
-                className="peer block w-full rounded-md border border-light-gray-300 dark:border-dark-purple-800 bg-white dark:bg-dark-navy-900 px-4 py-3 text-light-navy-850 dark:text-dark-purple-100 focus:border-primary-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-                placeholder=""
-                ref={emailRef}
-                disabled={isResettingPassword || isSigningIn}
+            <InputEmail email={email} setEmail={setEmail} emailError={emailError} />
+
+            <div className="space-y-2">
+              <InputPassword
+                label="Password"
+                password={password}
+                setPassword={setPassword}
+                passwordError={passwordError}
               />
-
-              <label
-                htmlFor="email"
-                className="bg-light-gray-50 dark:bg-dark-navy-900 text-sm absolute left-2.5 -top-3 bg-white px-1.5 text-light-gray-600 dark:text-dark-purple-600 duration-200 peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg peer-focus:-top-3 peer-focus:text-sm peer-focus:text-primary-blue-500 pointer-events-none"
-              >
-                Email
-              </label>
-
-              <p ref={emailErrorRef} className="mt-1 text-sm text-primary-red"></p>
-            </div>
-
-            <div className="relative group duration-500">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                id="password"
-                autoComplete="new-password"
-                className="peer block w-full rounded-md border border-light-gray-300 dark:border-dark-purple-800 bg-white dark:bg-dark-navy-900 pl-4 pr-12 py-3 text-light-navy-850 dark:text-dark-purple-100 focus:border-primary-blue-500 focus:ring-0 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-                placeholder=""
-                ref={passwordRef}
-                disabled={isResettingPassword || isSigningIn}
-              />
-
-              <label
-                htmlFor="password"
-                className="bg-light-gray-50 dark:bg-dark-navy-900 text-sm absolute left-2.5 -top-3 bg-white px-1.5 text-light-gray-600 dark:text-dark-purple-600 duration-200 peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg peer-focus:-top-3 peer-focus:text-sm peer-focus:text-primary-blue-500 pointer-events-none"
-              >
-                Password
-              </label>
-
-              <EyeButton
-                showPassword={showPassword}
-                handleClick={() => setShowPassword(prev => !prev)}
-              />
-
-              <p ref={passwordErrorRef} className="mt-1 text-sm text-primary-red"></p>
 
               <button
                 type="button"
                 onClick={handleResetPassword}
                 disabled={isResettingPassword || isSigningIn}
-                className="mt-2 text-sm text-light-gray-600 dark:text-dark-purple-600 hover:text-primary-blue-500 disabled:opacity-50 disabled:cursor-not-allowed duration-200 cursor-pointer"
+                className="text-sm text-light-gray-600 dark:text-dark-purple-600 hover:text-primary-blue-500 disabled:opacity-50 disabled:cursor-not-allowed duration-200 cursor-pointer"
               >
                 {isResettingPassword ? 'Sending...' : 'Forgot password?'}
               </button>
@@ -378,10 +240,10 @@ export default function SignIn() {
             disabled={loading || isSigningIn || isResettingPassword}
             className="mb-4 w-full p-2 bg-primary-blue-500 hover:opacity-70 disabled:bg-light-gray-300 dark:disabled:bg-dark-purple-700 disabled:hover:opacity-100 text-light-gray-50 font-bold duration-200 rounded-md cursor-pointer"
           >
-            Sign In
+            {isSigningIn ? 'Signing In...' : 'Sign In'}
           </button>
 
-          <p ref={authErrorRef} className="mb-4 text-sm text-primary-red"></p>
+          <p className="mb-4 text-sm text-primary-red">{authError}</p>
 
           <p className="text-center text-light-gray-600 dark:text-dark-purple-600">
             Don't have an account?{' '}

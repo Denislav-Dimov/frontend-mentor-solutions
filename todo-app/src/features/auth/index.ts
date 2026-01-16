@@ -9,8 +9,19 @@ import {
   doSendPasswordResetEmail,
   doSignOut,
   doReauthenticateWithCredential,
-  doDeleteUser
+  doDeleteUser,
 } from './services/auth.service';
+import {
+  validateEmail,
+  validatePassword,
+  validateConfirmPassword,
+} from './validation/validate';
+import {
+  mapSignInError,
+  mapSignInGoogleError,
+  mapSignUpError,
+  mapReauthenticateError,
+} from './validation/firebaseErrors';
 
 export {
   AuthProvider,
@@ -23,5 +34,12 @@ export {
   doSendPasswordResetEmail,
   doSignOut,
   doReauthenticateWithCredential,
-  doDeleteUser
+  doDeleteUser,
+  validateEmail,
+  validatePassword,
+  validateConfirmPassword,
+  mapSignInError,
+  mapSignInGoogleError,
+  mapSignUpError,
+  mapReauthenticateError,
 };

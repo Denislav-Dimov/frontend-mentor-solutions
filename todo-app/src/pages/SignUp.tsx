@@ -1,109 +1,99 @@
-import { useRef, useState, type FormEvent } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { useState } from 'react';
+import { FirebaseError } from 'firebase/app';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import Title from '../components/Title';
 import closeIcon from '../assets/icon-cross.svg';
-import EyeButton from '../components/EyeButton';
-import isValidEmail from '../utils/isValidEmail';
 import {
   doCreateUserWithEmailAndPassword,
   doSendEmailVerification,
   doSignOut,
+  useAuth,
+  validateEmail,
+  validatePassword,
+  validateConfirmPassword,
+  mapSignUpError,
 } from '../features/auth';
-import { useAuth } from '../features/auth';
+import InputEmail from '../components/form/InputEmail';
+import InputPassword from '../components/form/InputPassword';
 import useOutsideClick from '../hooks/useOutsideClick';
 
 export default function SignUp() {
-  const emailRef = useRef<HTMLInputElement | null>(null);
-  const passwordRef = useRef<HTMLInputElement | null>(null);
-  const confirmPasswordRef = useRef<HTMLInputElement | null>(null);
-  const emailErrorRef = useRef<HTMLInputElement | null>(null);
-  const passwordErrorRef = useRef<HTMLInputElement | null>(null);
-  const confirmPasswordErrorRef = useRef<HTMLInputElement | null>(null);
-  const authErrorRef = useRef<HTMLInputElement | null>(null);
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  const [authError, setAuthError] = useState('');
 
   const [isRegistering, setIsRegistering] = useState(false);
 
   const { currentUser, loading } = useAuth();
 
+  const navigate = useNavigate();
+
   const [showVerificationPopup, setShowVerificationPopup] = useState(false);
   const [verificationPopupMessage, setVerificationPopupMessage] = useState('');
-  const showVerificationPopupRef = useOutsideClick(() => setShowVerificationPopup(false));
+  const showVerificationPopupRef = useOutsideClick(() => {
+    if (showVerificationPopup) {
+      setShowVerificationPopup(false);
+      navigate('/sign-in');
+    }
+  });
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    emailErrorRef.current!.innerText = '';
-    passwordErrorRef.current!.innerText = '';
-    confirmPasswordErrorRef.current!.innerText = '';
-    authErrorRef.current!.innerText = '';
+    if (isRegistering) return;
 
-    const emailValue = emailRef.current?.value.trim();
-    const passwordValue = passwordRef.current?.value.trim();
-    const confirmPasswordValue = confirmPasswordRef.current?.value.trim();
+    setEmailError('');
+    setPasswordError('');
+    setConfirmPasswordError('');
+    setAuthError('');
 
-    if (!emailValue) {
-      emailErrorRef.current!.innerText = 'Enter an email';
+    const emailValue = email.trim();
+    const passwordValue = password.trim();
+    const confirmPasswordValue = confirmPassword.trim();
+
+    const emailValid = validateEmail(emailValue);
+    const passwordValid = validatePassword(passwordValue);
+    const confirmPasswordValid = validateConfirmPassword(
+      passwordValue,
+      confirmPasswordValue
+    );
+
+    if (emailValid || passwordValid || confirmPasswordValid) {
+      setEmailError(emailValid);
+      setPasswordError(passwordValid);
+      setConfirmPasswordError(confirmPasswordValid);
       return;
     }
 
-    if (!isValidEmail(emailValue)) {
-      emailErrorRef.current!.innerText = 'Enter a valid email';
-      return;
-    }
+    setIsRegistering(true);
 
-    if (!passwordValue) {
-      passwordErrorRef.current!.innerText = 'Enter a password';
-      return;
-    }
+    try {
+      const { user } = await doCreateUserWithEmailAndPassword(emailValue, passwordValue);
 
-    if (passwordValue.length < 6) {
-      passwordErrorRef.current!.innerText = 'Password must be at least 6 characters';
-      return;
-    }
-
-    if (confirmPasswordValue !== passwordValue) {
-      confirmPasswordErrorRef.current!.innerText =
-        'Confirm password must match the password';
-      return;
-    }
-
-    if (!isRegistering) {
-      setIsRegistering(true);
-      try {
-        const { user } = await doCreateUserWithEmailAndPassword(
-          emailValue,
-          passwordValue
+      if (!user) {
+        setAuthError(
+          'Registration successful, but unable to send verification email. Please try signing in and follow the instructions'
         );
-
-        if (user) {
-          await doSendEmailVerification(user);
-          setVerificationPopupMessage(
-            'Verification email sent! Please check your inbox and verify your email before signing in.'
-          );
-          setShowVerificationPopup(true);
-          await doSignOut();
-          setIsRegistering(false);
-        } else {
-          authErrorRef.current!.innerText =
-            'Registration successful, but unable to send verification email. Please try signing in and follow the instructions.';
-        }
-      } catch (error) {
-        setIsRegistering(false);
-        if (error instanceof Error && 'code' in error) {
-          if (error.code === 'auth/email-already-in-use') {
-            authErrorRef.current!.innerText = 'Email already in use';
-          } else if (error.code === 'auth/weak-password') {
-            authErrorRef.current!.innerText = 'Password is too weak';
-          } else {
-            authErrorRef.current!.innerText = 'An error occurred. Please try again.';
-          }
-        } else {
-          authErrorRef.current!.innerText = 'An error occurred. Please try again.';
-        }
+        return;
       }
+
+      await doSendEmailVerification(user);
+
+      setVerificationPopupMessage(
+        'Verification email sent! Please check your inbox and verify your email before signing in.'
+      );
+      setShowVerificationPopup(true);
+      await doSignOut();
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        setAuthError(mapSignUpError(error.code));
+      }
+    } finally {
+      setIsRegistering(false);
     }
   }
 
@@ -120,7 +110,10 @@ export default function SignUp() {
             className="bg-light-gray-50 dark:bg-dark-navy-900 flex flex-col items-end justify-start gap-5 rounded-lg p-8 max-w-sm w-full text-center animate-slide-up"
           >
             <button
-              onClick={() => setShowVerificationPopup(false)}
+              onClick={() => {
+                setShowVerificationPopup(false);
+                navigate('/sign-in');
+              }}
               className="text-light-navy-850 dark:text-dark-purple-100 hover:opacity-80 duration-200 cursor-pointer"
             >
               <img src={closeIcon} alt="close icon" />
@@ -143,78 +136,21 @@ export default function SignUp() {
           </h2>
 
           <div className="space-y-6 mb-8">
-            <div className="relative">
-              <input
-                type="text"
-                id="email"
-                autoComplete="email"
-                className="peer block w-full rounded-md border border-light-gray-300 dark:border-dark-purple-800 bg-white dark:bg-dark-navy-900 px-4 py-3 text-light-navy-850 dark:text-dark-purple-100 focus:border-primary-blue-500 focus:ring-0 focus:outline-none"
-                placeholder=""
-                ref={emailRef}
-              />
+            <InputEmail email={email} setEmail={setEmail} emailError={emailError} />
 
-              <label
-                htmlFor="email"
-                className="bg-light-gray-50 text-sm absolute left-2.5 -top-3 bg-white dark:bg-dark-navy-900 px-1.5 text-light-gray-600 dark:text-dark-purple-600 duration-200 peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg peer-focus:-top-3 peer-focus:text-sm peer-focus:text-primary-blue-500 pointer-events-none"
-              >
-                Email
-              </label>
+            <InputPassword
+              label="Password"
+              password={password}
+              setPassword={setPassword}
+              passwordError={passwordError}
+            />
 
-              <p ref={emailErrorRef} className="mt-1 text-sm text-primary-red"></p>
-            </div>
-
-            <div className="relative group duration-500">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                id="password"
-                autoComplete="new-password"
-                className="peer block w-full rounded-md border border-light-gray-300 dark:border-dark-purple-800 bg-white dark:bg-dark-navy-900 pl-4 pr-12 py-3 text-light-navy-850 dark:text-dark-purple-100 focus:border-primary-blue-500 focus:ring-0 focus:outline-none"
-                placeholder=""
-                ref={passwordRef}
-              />
-
-              <label
-                htmlFor="password"
-                className="bg-light-gray-50 text-sm absolute left-2.5 -top-3 bg-white dark:bg-dark-navy-900 px-1.5 text-light-gray-600 dark:text-dark-purple-600 duration-200 peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg peer-focus:-top-3 peer-focus:text-sm peer-focus:text-primary-blue-500 pointer-events-none"
-              >
-                Password
-              </label>
-
-              <EyeButton
-                showPassword={showPassword}
-                handleClick={() => setShowPassword(prev => !prev)}
-              />
-
-              <p ref={passwordErrorRef} className="mt-1 text-sm text-primary-red"></p>
-            </div>
-
-            <div className="relative group duration-500">
-              <input
-                type={showConfirmPassword ? 'text' : 'password'}
-                id="confirmPassword"
-                autoComplete="new-password"
-                className="peer block w-full rounded-md border border-light-gray-300 dark:border-dark-purple-800 bg-white dark:bg-dark-navy-900 pl-4 pr-12 py-3 text-light-navy-850 dark:text-dark-purple-100 focus:border-primary-blue-500 focus:ring-0 focus:outline-none"
-                placeholder=""
-                ref={confirmPasswordRef}
-              />
-
-              <label
-                htmlFor="confirmPassword"
-                className="bg-light-gray-50 text-sm absolute left-2.5 -top-3 bg-white dark:bg-dark-navy-900 px-1.5 text-light-gray-600 dark:text-dark-purple-600 duration-200 peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg peer-focus:-top-3 peer-focus:text-sm peer-focus:text-primary-blue-500 pointer-events-none"
-              >
-                Confirm Password
-              </label>
-
-              <EyeButton
-                showPassword={showConfirmPassword}
-                handleClick={() => setShowConfirmPassword(prev => !prev)}
-              />
-
-              <p
-                ref={confirmPasswordErrorRef}
-                className="mt-1 text-sm text-primary-red"
-              ></p>
-            </div>
+            <InputPassword
+              label="Confirm Password"
+              password={confirmPassword}
+              setPassword={setConfirmPassword}
+              passwordError={confirmPasswordError}
+            />
           </div>
 
           <button
@@ -222,10 +158,10 @@ export default function SignUp() {
             disabled={loading || isRegistering}
             className="mb-4 w-full p-2 bg-primary-blue-500 hover:opacity-70 disabled:bg-light-gray-300 dark:disabled:bg-dark-purple-700 disabled:hover:opacity-100 text-light-gray-50 font-bold duration-200 rounded-md cursor-pointer"
           >
-            Sign Up
+            {isRegistering ? 'Signing Up...' : 'Sign Up'}
           </button>
 
-          <p ref={authErrorRef} className="mb-4 text-sm text-primary-red"></p>
+          <p className="mb-4 text-sm text-primary-red">{authError}</p>
 
           <p className="text-center text-light-gray-600 dark:text-dark-purple-600">
             Already have an account?{' '}

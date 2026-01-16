@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FirebaseError } from 'firebase/app';
 import moonIcon from '../assets/icon-moon.svg';
 import sunIcon from '../assets/icon-sun.svg';
 import { Settings, LogOut, UserX } from 'lucide-react';
@@ -29,33 +30,36 @@ export default function Title({ title, isHomePage = false }: TitleProps) {
     }
   }, [showPopup]);
 
-  const handleDeleteUser = async () => {
-    if (currentUser) {
-      setIsDeleting(true);
+  async function handleDeleteUser() {
+    if (!currentUser || isDeleting) return;
 
-      try {
-        await doDeleteUser(currentUser);
-      } catch (error: unknown) {
-        if (typeof error === 'object' && error !== null && 'code' in error) {
-          const err = error as { code: string; message?: string };
-          if (err.code === 'auth/requires-recent-login') {
-            if (currentUser.providerData && currentUser.providerData.length > 0) {
-              const signInMethod = currentUser.providerData[0].providerId;
+    setIsDeleting(true);
 
-              if (signInMethod === 'google.com') {
-                await doSignInWithGoogle();
-                await doDeleteUser(currentUser);
-              }
-            } else {
+    try {
+      await doDeleteUser(currentUser);
+    } catch (error) {
+      console.log(error);
+
+      if (error instanceof FirebaseError) {
+        if (error.code === 'auth/requires-recent-login') {
+          if (currentUser.providerData && currentUser.providerData.length > 0) {
+            const signInMethod = currentUser.providerData[0].providerId;
+
+            if (signInMethod === 'password') {
               navigate('/reauthenticate');
+            }
+
+            if (signInMethod === 'google.com') {
+              await doSignInWithGoogle();
+              await doDeleteUser(currentUser);
             }
           }
         }
-      } finally {
-        setIsDeleting(false);
       }
+    } finally {
+      setIsDeleting(false);
     }
-  };
+  }
 
   return (
     <section className="relative flex justify-between items-center gap-4">
