@@ -1,4 +1,4 @@
-import isValidEmail from '../../../utils/isValidEmail';
+import isValidEmail from '../utils/isValidEmail';
 
 export function validateEmail(email: string) {
   if (!email) return 'Enter an email';
