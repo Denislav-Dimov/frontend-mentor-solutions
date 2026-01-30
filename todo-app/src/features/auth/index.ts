@@ -1,7 +1,7 @@
-import AuthProvider from './context/auth.provider';
-import useAuth from './hooks/useAuth';
-import AuthGuard from './components/AuthGuard';
-import {
+export { default as AuthProvider } from './context/auth.provider';
+export { default as useAuth } from './hooks/useAuth';
+export { default as AuthGuard } from './components/AuthGuard';
+export {
   doCreateUserWithEmailAndPassword,
   doSignInWithEmailAndPassword,
   doSignInWithGoogle,
@@ -11,35 +11,14 @@ import {
   doReauthenticateWithCredential,
   doDeleteUser,
 } from './services/auth.service';
-import {
+export {
   validateEmail,
   validatePassword,
   validateConfirmPassword,
 } from './validation/validate';
-import {
+export {
   mapSignInError,
   mapSignInGoogleError,
   mapSignUpError,
   mapReauthenticateError,
 } from './validation/firebaseErrors';
-
-export {
-  AuthProvider,
-  useAuth,
-  AuthGuard,
-  doCreateUserWithEmailAndPassword,
-  doSignInWithEmailAndPassword,
-  doSignInWithGoogle,
-  doSendEmailVerification,
-  doSendPasswordResetEmail,
-  doSignOut,
-  doReauthenticateWithCredential,
-  doDeleteUser,
-  validateEmail,
-  validatePassword,
-  validateConfirmPassword,
-  mapSignInError,
-  mapSignInGoogleError,
-  mapSignUpError,
-  mapReauthenticateError,
-};

@@ -68,7 +68,7 @@ export default function Title({ title, isHomePage = false }: TitleProps) {
       </h1>
 
       {showPopup && (
-        <div className="absolute top-full w-60 mt-1 right-0 bg-light-gray-50 dark:bg-dark-navy-900 px-6 py-5 space-y-4 rounded-md shadow-light dark:shadow-dark animate-slide-down">
+        <div className="absolute z-50 top-full w-60 mt-1 right-0 bg-light-gray-50 dark:bg-dark-navy-900 px-6 py-5 space-y-4 rounded-md shadow-light dark:shadow-dark animate-slide-down">
           <div className="flex items-center justify-between gap-4 text-lg">
             Theme
             <button
@@ -136,7 +136,7 @@ export default function Title({ title, isHomePage = false }: TitleProps) {
       {isHomePage ? (
         <button
           onClick={() => setShowPopup(prev => !prev)}
-          className="cursor-pointer md:hover:opacity-60 duration-300 min-w-fit"
+          className="cursor-pointer md:hover:opacity-60 duration-300 min-w-fit text-light-gray-50"
         >
           <Settings className="size-8" />
         </button>
