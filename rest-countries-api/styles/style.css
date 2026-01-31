@@ -1,0 +1,29 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-*: initial;
+  /* dark mode text & light mode elements */
+  --color-white: hsl(0, 100%, 100%);
+
+  --color-dark-blue-950: hsl(207, 26%, 17%); /* background */
+  --color-dark-blue-900: hsl(209, 23%, 22%); /* elements */
+
+  --color-light-grey-950: hsl(200, 15%, 8%); /* text */
+  --color-light-grey-400: hsl(0, 0%, 50%); /* input */
+  --color-light-grey-50: hsl(0, 0%, 99%); /* background */
+
+  --font-nunito-sans: var(--font-nunito-sans);
+
+  --font-weight-*: initial;
+  --font-weight-light: 300;
+  --font-weight-normal: 600;
+  --font-weight-bold: 800;
+}
+
+@layer base {
+  body {
+    @apply font-nunito-sans font-normal;
+  }
+}
