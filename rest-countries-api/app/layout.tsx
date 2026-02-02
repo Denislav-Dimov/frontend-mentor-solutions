@@ -1,6 +1,7 @@
 import { type Metadata } from 'next';
 import { Nunito_Sans } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
+import Header from '@/components/ui/Header';
 import '../styles/style.css';
 
 const nunitoSans = Nunito_Sans({
@@ -25,6 +26,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${nunitoSans.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Header />
+
           {children}
         </ThemeProvider>
       </body>
