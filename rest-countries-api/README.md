@@ -12,7 +12,7 @@ This is a solution to the [REST Countries API with color theme switcher challeng
 ![TypeScript](https://img.shields.io/badge/-TypeScript-000?logo=typescript)
 ![TailwindCSS](https://img.shields.io/badge/-TailwindCSS-000?logo=tailwindcss)
 
-<a href="">
+<a href="https://dd-rest-countries-api.vercel.app/">
   <img src="https://img.shields.io/badge/View_Website-181717?style=for-the-badge&logo=vercel&logoColor=white" alt="View Website" />
 </a>
 
@@ -53,7 +53,7 @@ Users should be able to:
 ### Links
 
 - Solution URL:
-- Live Site URL:
+- Live Site URL: https://dd-rest-countries-api.vercel.app/
 
 ## Getting Started
 
