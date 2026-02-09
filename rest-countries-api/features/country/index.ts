@@ -1,5 +1,6 @@
 export { default as SearchInput } from './components/SearchInput';
 export { default as FilterRegion } from './components/FilterRegion';
 export type { Country, CountryDetails } from './types/country.type';
-export { default as CountryList } from './components/CountryList';
-export { default as CountryDetailsPage } from './components/CountryDetailsPage';
+export { default as CountryCard } from './components/CountryCard';
+export { default as fetchCountries } from './api/fetchCountries';
+export { default as fetchCountry } from './api/fetchCountry';

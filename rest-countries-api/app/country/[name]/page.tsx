@@ -1,5 +1,4 @@
-import { Suspense } from 'react';
-import { CountryDetailsPage } from '@/features/country';
+import { type Country, fetchCountry } from '@/features/country';
 
 type CountryProps = {
   params: Promise<{ name: string }>;
@@ -8,12 +7,12 @@ type CountryProps = {
 export default async function Country({ params }: CountryProps) {
   const { name } = await params;
 
+  const country: Country = await fetchCountry(name);
+
   return (
-    <section>
-      {/* TODO add skeleton loading */}
-      <Suspense fallback={<p className="text-2xl text-center mt-12">Loading...</p>}>
-        <CountryDetailsPage name={name} />
-      </Suspense>
-    </section>
+    <div className="text-center mt-12">
+      <h2>{country.name.common}</h2>
+      <p>{country.capital}</p>
+    </div>
   );
 }

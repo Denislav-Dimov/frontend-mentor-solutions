@@ -1,12 +1,12 @@
-import fetchCountries from '../api/fetchCountries';
-import CountryCard from './CountryCard';
+import { fetchCountries, CountryCard } from '@/features/country';
 
-type CountryListProps = {
-  search?: string;
-  region?: string;
+type HomeProps = {
+  searchParams: Promise<{ search?: string; region?: string }>;
 };
 
-export default async function CountryList({ search, region }: CountryListProps) {
+export default async function Home({ searchParams }: HomeProps) {
+  const { search, region } = await searchParams;
+
   const countries = await fetchCountries(search, region);
 
   if (countries.length === 0) {
