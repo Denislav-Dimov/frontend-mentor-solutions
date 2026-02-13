@@ -1,7 +1,7 @@
 import { type Metadata } from 'next';
 import { Nunito_Sans } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
-import Header from '@/components/ui/Header';
+import Header from '@/components/Header';
 import '../styles/style.css';
 
 const nunitoSans = Nunito_Sans({

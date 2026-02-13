@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import ChevronIcon from '@/components/icons/ChevronIcon';
+import { ChevronDown } from 'lucide-react';
 
 const regions = ['All', 'Africa', 'Americas', 'Asia', 'Europe', 'Oceania'];
 
@@ -37,13 +37,14 @@ export default function FilterRegion() {
         className="flex items-center gap-6 px-6 py-5 bg-white dark:bg-dark-blue-900 rounded-md shadow cursor-pointer"
       >
         <span>{region === regions[0] ? 'Filter by Region' : region}</span>
-        <ChevronIcon
-          className={`size-5 fill-light-grey-400 dark:fill-white min-w-fit transition-all ${isOpen && 'rotate-180'}`}
+
+        <ChevronDown
+          className={`size-5 text-light-grey-950 dark:text-white min-w-fit transition-all ${isOpen && 'rotate-180'}`}
         />
       </button>
 
       {isOpen && (
-        <ul className="absolute w-full z-10 mt-1 py-3 bg-white dark:bg-dark-blue-900 rounded-md shadow">
+        <ul className="absolute w-full z-10 mt-1 py-3 bg-white dark:bg-dark-blue-900 rounded-md shadow animate-fade-in-fast">
           {regions.map(region => (
             <li
               key={region}

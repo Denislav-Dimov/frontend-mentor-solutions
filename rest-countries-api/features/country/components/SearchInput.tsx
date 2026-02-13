@@ -1,8 +1,8 @@
 'use client';
 
-import SearchIcon from '@/components/icons/SearchIcon';
 import { useState, useEffect } from 'react';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
+import { Search } from 'lucide-react';
 
 export default function SearchInput() {
   const pathname = usePathname();
@@ -35,7 +35,7 @@ export default function SearchInput() {
 
   return (
     <div className="w-full max-w-lg flex items-center gap-6 px-8 md:px-6 py-3.5 rounded-md bg-white dark:bg-dark-blue-900 shadow">
-      <SearchIcon className="size-5 fill-light-grey-400 dark:fill-white min-w-fit" />
+      <Search className="size-5 text-light-grey-400 dark:text-white min-w-fit" />
 
       <input
         type="text"

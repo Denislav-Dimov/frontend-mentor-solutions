@@ -14,7 +14,7 @@ export default async function Home({ searchParams }: HomeProps) {
   }
 
   return (
-    <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center gap-8 md:gap-16 animate-fade-in">
+    <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center gap-8 md:gap-16 animate-fade-in-slow">
       {countries.map(country => (
         <CountryCard {...country} key={country.name.common} />
       ))}

@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import { type Country, fetchCountry } from '@/features/country';
 
 type CountryProps = {
@@ -8,6 +9,8 @@ export default async function Country({ params }: CountryProps) {
   const { name } = await params;
 
   const country: Country = await fetchCountry(name);
+
+  if (!country) notFound();
 
   return (
     <div className="text-center mt-12">

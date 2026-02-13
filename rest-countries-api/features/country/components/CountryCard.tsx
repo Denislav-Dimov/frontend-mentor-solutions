@@ -35,7 +35,9 @@ export default function CountryCard({
           </p>
           <p>
             Capital:{' '}
-            <span className="text-light-grey-400 dark:text-white/80">{capital}</span>
+            <span className="text-light-grey-400 dark:text-white/80">
+              {capital ?? 'No capital'}
+            </span>
           </p>
         </div>
       </Link>

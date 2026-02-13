@@ -2,7 +2,7 @@ export type Country = {
   name: {
     common: string;
   };
-  capital: string;
+  capital: string[];
   region: string;
   flags: {
     png: string;

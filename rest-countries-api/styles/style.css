@@ -21,7 +21,8 @@
   --font-weight-normal: 600;
   --font-weight-bold: 800;
 
-  --animate-fade-in: fade-in 800ms ease-out;
+  --animate-fade-in-slow: fade-in 800ms ease-out;
+  --animate-fade-in-fast: fade-in 200ms ease-in;
 }
 
 @layer base {
