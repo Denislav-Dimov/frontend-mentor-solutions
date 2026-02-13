@@ -1,9 +1,12 @@
 import { Country } from '../types/country.type';
+import { cacheLife } from 'next/cache';
 
 export default async function fetchCountry(name: string) {
-  const res = await fetch(`https://restcountries.com/v3.1/name/${name}?fullText=true`, {
-    next: { revalidate: 3600 },
-  });
+  'use cache';
+
+  cacheLife('days');
+
+  const res = await fetch(`https://restcountries.com/v3.1/name/${name}?fullText=true`);
 
   const data = await res.json();
 

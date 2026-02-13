@@ -1,9 +1,17 @@
 import { notFound } from 'next/navigation';
-import { type Country, fetchCountry } from '@/features/country';
+import { type Country, fetchCountry, fetchCountries } from '@/features/country';
 
 type CountryProps = {
   params: Promise<{ name: string }>;
 };
+
+export async function generateStaticParams() {
+  const countries = await fetchCountries();
+  
+  return countries.map(country => ({
+    name: country.name.common,
+  }));
+}
 
 export default async function Country({ params }: CountryProps) {
   const { name } = await params;
