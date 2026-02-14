@@ -1,6 +1,7 @@
 import { type Metadata } from 'next';
 import { Nunito_Sans } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import Header from '@/components/Header';
 import '../styles/style.css';
 
@@ -26,9 +27,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${nunitoSans.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Header />
+          <NuqsAdapter>
+            <Header />
 
-          {children}
+            {children}
+          </NuqsAdapter>
         </ThemeProvider>
       </body>
     </html>

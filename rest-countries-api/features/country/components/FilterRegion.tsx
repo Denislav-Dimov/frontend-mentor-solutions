@@ -1,33 +1,21 @@
 'use client';
 
 import { useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useQueryState } from 'nuqs';
 import { ChevronDown } from 'lucide-react';
 
 const regions = ['All', 'Africa', 'Americas', 'Asia', 'Europe', 'Oceania'];
 
 export default function FilterRegion() {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const { replace } = useRouter();
-  const key = 'region';
-
   const [isOpen, setIsOpen] = useState(false);
-  const [region, setRegion] = useState(regions[0]);
+  const [region, setRegion] = useQueryState('region', {
+    defaultValue: regions[0],
+    shallow: false,
+  });
 
   function handleOption(selectedRegion: string) {
     setIsOpen(false);
     setRegion(selectedRegion);
-
-    const params = new URLSearchParams(searchParams.toString());
-
-    if (selectedRegion === regions[0]) {
-      params.delete(key);
-    } else {
-      params.set(key, selectedRegion);
-    }
-
-    replace(`${pathname}?${params.toString()}`, { scroll: false });
   }
 
   return (
