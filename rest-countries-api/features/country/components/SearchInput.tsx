@@ -30,3 +30,9 @@ export default function SearchInput() {
     </div>
   );
 }
+
+export function SearchInputSkeleton() {
+  return (
+    <div className="h-15 w-full max-w-120 animate-pulse rounded-md bg-light-grey-400/20 dark:bg-dark-blue-900/50" />
+  );
+}
