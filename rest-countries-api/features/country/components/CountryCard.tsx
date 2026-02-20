@@ -13,6 +13,7 @@ export default function CountryCard({
   return (
     <div className="max-w-70 w-full text-sm rounded-md overflow-hidden bg-white dark:bg-dark-blue-900 shadow cursor-pointer transition-all duration-300 md:hover:scale-[1.03]">
       <Link href={`/country/${name.common}`}>
+        {/* FIXME add svg and fix its size */}
         <Image
           src={flags.png}
           alt={flags.alt ?? name.common}
@@ -36,7 +37,7 @@ export default function CountryCard({
           <p>
             Capital:{' '}
             <span className="text-light-grey-400 dark:text-white/80">
-              {capital ?? 'No capital'}
+              {capital?.[0] ?? 'N/A'}
             </span>
           </p>
         </div>

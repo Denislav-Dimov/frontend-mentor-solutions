@@ -50,6 +50,6 @@ export default function FilterRegion() {
 
 export function FilterRegionSkeleton() {
   return (
-    <div className="h-15 w-full max-w-48 animate-pulse rounded-md bg-light-grey-400/20 dark:bg-dark-blue-900/50 md:ml-auto" />
+    <div className="h-15 w-full max-w-48 animate-pulse rounded-md bg-light-grey-400/10 dark:bg-dark-blue-900/50 md:ml-auto" />
   );
 }
