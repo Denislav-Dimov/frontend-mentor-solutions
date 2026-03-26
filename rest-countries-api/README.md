@@ -52,7 +52,7 @@ Users should be able to:
 
 ### Links
 
-- Solution URL:
+- Solution URL: https://www.frontendmentor.io/solutions/rest-countries---nextjs-typescript-tailwindcss-hdFyZmT9MR
 - Live Site URL: https://dd-rest-countries-api.vercel.app/
 
 ## Getting Started
