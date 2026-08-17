@@ -1,0 +1,29 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-*: initial;
+  --font-*: initial;
+
+  --color-neutral-900: hsl(243, 96%, 9%);
+  --color-neutral-800: hsl(243, 27%, 20%);
+  --color-neutral-700: hsl(243, 23%, 24%);
+  --color-neutral-600: hsl(243, 23%, 30%);
+  --color-neutral-300: hsl(240, 6%, 70%);
+  --color-neutral-200: hsl(250, 6%, 84%);
+  --color-neutral-0: hsl(0, 0%, 100%);
+  --color-orange-500: hsl(28, 100%, 52%);
+  --color-blue-500: hsl(233, 67%, 56%);
+  --color-blue-700: hsl(248, 70%, 36%);
+
+  --font-weight-light: 300;
+  --font-weight-normal: 500;
+  --font-weight-medium: 600;
+  --font-weight-bold: 700;
+
+  --font-family-primary: var(--font-dm-sans);
+  --font-family-secondary: var(--font-bricolage-grotesque);
+}
+
+body {
+  @apply font-family-primary text-neutral-0 bg-neutral-900 text-lg font-normal;
+}
