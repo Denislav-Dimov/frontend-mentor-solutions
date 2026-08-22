@@ -9,6 +9,7 @@
 yarn.debug.log*
 yarn.error.log*
 npm-debug.log*
+*.tsbuildinfo
 
 .env
 .env.local

@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
-import { useWeather } from '../context/WeatherContextProvider';
+import { useUnit } from '../../context/UnitContextProvider';
 
 const units = [
   { title: 'Temperature', metric: 'Celsius (°C)', imperial: 'Fahrenheit (°F)' },
@@ -12,7 +12,7 @@ const units = [
 
 export function Units() {
   const [open, setOpen] = useState(false);
-  const { currentUnit, setUnit } = useWeather();
+  const { currentUnit, setUnit } = useUnit();
   const isMetric = currentUnit === 'metric';
 
   return (

@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { DM_Sans, Bricolage_Grotesque } from 'next/font/google';
 import './globals.css';
-import { WeatherProvider } from '@/features/weather';
 
 const dmSans = DM_Sans({
   variable: '--font-dm-sans',
@@ -30,9 +29,7 @@ export default function RootLayout({
       lang="en"
       className={`${dmSans.variable} ${bricolageGrotesque.variable} antialiased`}
     >
-      <body>
-        <WeatherProvider>{children}</WeatherProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

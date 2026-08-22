@@ -1,5 +1,3 @@
-import { DAYS_OF_THE_WEEK } from "./constants";
-
 export type Unit = 'metric' | 'imperial';
 
 export type LocationCoords = { latitude: number; longitude: number };
@@ -9,4 +7,6 @@ export type Location = LocationCoords & {
   city: string;
 };
 
-export type Day = (typeof DAYS_OF_THE_WEEK)[number];
+export type { Forecast } from './api/schemas/forecastSchema';
+
+export type { WmoWeatherCode } from './api/schemas/wmoWeatherCodeSchema';

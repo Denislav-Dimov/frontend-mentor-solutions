@@ -22,8 +22,50 @@
 
   --font-family-primary: var(--font-dm-sans);
   --font-family-secondary: var(--font-bricolage-grotesque);
+
+  @keyframes pulse {
+    50% {
+      opacity: 0.75;
+    }
+  }
+
+  @keyframes bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
+  --animate-bounce: bounce 1.5s infinite ease-in-out;
 }
 
 body {
   @apply font-family-primary text-neutral-0 bg-neutral-900 text-lg font-normal;
+}
+
+.weather-scrollbar {
+  scrollbar-color: var(--color-neutral-600) var(--color-neutral-800);
+  scrollbar-width: thin;
+}
+
+.weather-scrollbar::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.weather-scrollbar::-webkit-scrollbar-track {
+  background: var(--color-neutral-800);
+}
+
+.weather-scrollbar::-webkit-scrollbar-thumb {
+  border: 2px solid var(--color-neutral-800);
+  border-radius: 9999px;
+  background: var(--color-neutral-600);
+}
+
+.weather-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neutral-300);
 }
