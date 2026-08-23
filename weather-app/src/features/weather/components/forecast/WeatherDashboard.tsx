@@ -104,7 +104,7 @@ export function WeatherDashboard({ forecast, location, unit }: Props) {
                 />
                 <div className="flex w-full justify-between text-base">
                   <span>{forecast.daily.temperature_2m_max[i]}</span>
-                  <span>{forecast.daily.temperature_2m_max[i]}</span>
+                  <span>{forecast.daily.temperature_2m_min[i]}</span>
                 </div>
               </div>
             ))}

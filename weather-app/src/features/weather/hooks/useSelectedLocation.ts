@@ -24,13 +24,18 @@ export function useSelectedLocation() {
         }
 
         setLocation({
-          country: data.countryName ?? data.locality,
-          city: data.city,
+          country: data.countryName,
+          city: data.city || data.locality,
           latitude: data.latitude,
           longitude: data.longitude,
         });
       } catch (error) {
-        console.error(error);
+        if (cancelled || hasManualSelectionRef.current) {
+          return;
+        }
+
+        console.error('Unable to determine the current location. Using the default location.', error);
+        setLocation(DEFAULT_LOCATION);
       } finally {
         if (!cancelled && !hasManualSelectionRef.current) {
           setLocationLoading(false);

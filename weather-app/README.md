@@ -48,11 +48,11 @@ Users should be able to:
 
 ### Preview
 
-![](./design/preview.png)
+![](./design/solution-preview.png)
 
 ### Links
 
-- Solution URL:
+- Solution URL: https://www.frontendmentor.io/solutions/weather-app---nextjs-typescript-dLa8BR96fp
 - Live Site URL: https://denislav-dimov-weather-app.vercel.app/
 
 ## Getting Started
