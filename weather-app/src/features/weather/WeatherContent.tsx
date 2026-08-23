@@ -5,21 +5,41 @@ import { WeatherDashboard } from './components/forecast/WeatherDashboard';
 import { WeatherError } from './components/states/WeatherError';
 import { WeatherLoading } from './components/states/WeatherLoading';
 import { useUnit } from './context/UnitContextProvider';
+import { useLocationSearch } from './hooks/useLocationSearch';
 import { useOpenMeteo } from './hooks/useOpenMeteo';
 import { useSelectedLocation } from './hooks/useSelectedLocation';
+import type { LocationSearchResult } from './types';
 
 export function WeatherContent() {
   const { currentUnit } = useUnit();
-  const { location, locationLoading } = useSelectedLocation();
-  const { forecast, error, retry } = useOpenMeteo({
+  const { location, locationLoading, selectLocation } = useSelectedLocation();
+  const { query, state, updateQuery, search, resetSearch } = useLocationSearch();
+  const { forecast, forecastUnit, error, retry } = useOpenMeteo({
     coordinates: location,
     unit: currentUnit,
     enabled: !locationLoading,
   });
 
+  function handleLocationSelect(result: LocationSearchResult) {
+    selectLocation({
+      city: result.name,
+      country: result.country ?? result.admin1 ?? '',
+      latitude: result.latitude,
+      longitude: result.longitude,
+    });
+    resetSearch();
+  }
+
   if (forecast === null && error) {
     return <WeatherError onRetry={retry} />;
   }
+
+  const weatherContent =
+    locationLoading || forecast === null ? (
+      <WeatherLoading />
+    ) : (
+      <WeatherDashboard forecast={forecast} location={location} unit={forecastUnit} />
+    );
 
   return (
     <>
@@ -28,13 +48,15 @@ export function WeatherContent() {
       </h1>
 
       <section className="space-y-8 md:space-y-12">
-        <SearchInput />
+        <SearchInput
+          query={query}
+          state={state}
+          onQueryChange={updateQuery}
+          onSubmit={search}
+          onSelect={handleLocationSelect}
+        />
 
-        {locationLoading || (forecast === null && error === null) ? (
-          <WeatherLoading />
-        ) : (
-          <WeatherDashboard forecast={forecast!} location={location} unit={currentUnit} />
-        )}
+        {state.status !== 'empty' && weatherContent}
       </section>
     </>
   );

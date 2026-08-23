@@ -9,4 +9,6 @@ export type Location = LocationCoords & {
 
 export type { Forecast } from './api/schemas/forecastSchema';
 
+export type { LocationSearchResult } from './api/schemas/locationSearchSchema';
+
 export type { WmoWeatherCode } from './api/schemas/wmoWeatherCodeSchema';

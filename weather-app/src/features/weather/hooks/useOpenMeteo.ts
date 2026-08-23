@@ -10,12 +10,24 @@ type Options = {
   enabled?: boolean;
 };
 
+type ForecastResult = {
+  coordinatesKey: string;
+  unit: Unit;
+  forecast: Forecast;
+};
+
+type ForecastFailure = {
+  coordinatesKey: string;
+  error: Error;
+};
+
 export function useOpenMeteo({ coordinates, unit, enabled = true }: Options) {
-  const [forecast, setForecast] = useState<Forecast | null>(null);
-  const [error, setError] = useState<Error | null>(null);
+  const [result, setResult] = useState<ForecastResult | null>(null);
+  const [failure, setFailure] = useState<ForecastFailure | null>(null);
   const controllerRef = useRef<AbortController | null>(null);
 
   const { latitude, longitude } = coordinates;
+  const coordinatesKey = `${latitude}:${longitude}`;
 
   const loadForecast = useCallback(async () => {
     if (!enabled) {
@@ -26,6 +38,7 @@ export function useOpenMeteo({ coordinates, unit, enabled = true }: Options) {
 
     const controller = new AbortController();
     controllerRef.current = controller;
+    setFailure(null);
 
     try {
       const data = await getForecast({
@@ -36,19 +49,21 @@ export function useOpenMeteo({ coordinates, unit, enabled = true }: Options) {
       });
 
       if (!controller.signal.aborted) {
-        setError(null);
-        setForecast(data);
+        setResult({ coordinatesKey, unit, forecast: data });
       }
     } catch (error) {
-      if (!controller.signal.aborted && error instanceof Error) {
-        setError(error);
+      if (!controller.signal.aborted) {
+        setFailure({
+          coordinatesKey,
+          error: error instanceof Error ? error : new Error('Failed to fetch weather data'),
+        });
       }
     } finally {
       if (controllerRef.current === controller) {
         controllerRef.current = null;
       }
     }
-  }, [enabled, latitude, longitude, unit]);
+  }, [coordinatesKey, enabled, latitude, longitude, unit]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -58,9 +73,17 @@ export function useOpenMeteo({ coordinates, unit, enabled = true }: Options) {
   }, [loadForecast]);
 
   function retry() {
-    setError(null);
     void loadForecast();
   }
 
-  return { forecast, error, retry };
+  const currentResult = result?.coordinatesKey === coordinatesKey ? result : null;
+  const error =
+    currentResult === null && failure?.coordinatesKey === coordinatesKey ? failure.error : null;
+
+  return {
+    forecast: currentResult?.forecast ?? null,
+    forecastUnit: currentResult?.unit ?? unit,
+    error,
+    retry,
+  };
 }

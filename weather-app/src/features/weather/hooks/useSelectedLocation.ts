@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import reverseGeocode from '../api/reverseGeocode';
 import { DEFAULT_LOCATION } from '../constants';
 import getBrowserCoordinates from '../services/getBrowserCoordinates';
@@ -9,6 +9,7 @@ import { Location } from '../types';
 export function useSelectedLocation() {
   const [location, setLocation] = useState<Location>(DEFAULT_LOCATION);
   const [locationLoading, setLocationLoading] = useState(true);
+  const hasManualSelectionRef = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -18,7 +19,7 @@ export function useSelectedLocation() {
         const coordinates = await getBrowserCoordinates();
         const data = await reverseGeocode(coordinates);
 
-        if (cancelled) {
+        if (cancelled || hasManualSelectionRef.current) {
           return;
         }
 
@@ -31,7 +32,7 @@ export function useSelectedLocation() {
       } catch (error) {
         console.error(error);
       } finally {
-        if (!cancelled) {
+        if (!cancelled && !hasManualSelectionRef.current) {
           setLocationLoading(false);
         }
       }
@@ -44,5 +45,11 @@ export function useSelectedLocation() {
     };
   }, []);
 
-  return { location, locationLoading };
+  function selectLocation(nextLocation: Location) {
+    hasManualSelectionRef.current = true;
+    setLocation(nextLocation);
+    setLocationLoading(false);
+  }
+
+  return { location, locationLoading, selectLocation };
 }

@@ -55,7 +55,7 @@ export function WeatherDashboard({ forecast, location, unit }: Props) {
           <div className="absolute top-1/2 flex w-full -translate-y-1/2 flex-wrap items-center justify-center gap-4 px-6 max-sm:text-center md:justify-between">
             <div className="space-y-3">
               <p className="text-[1.75rem] font-bold">
-                {location.city}, {location.country}
+                {location.country ? `${location.city}, ${location.country}` : location.city}
               </p>
               <p className="opacity-80">{formatDate(forecast.current.time)}</p>
             </div>

@@ -53,7 +53,7 @@ export function Units() {
             <div className="space-y-1" key={unit.title}>
               <p className="px-2 pt-2 text-sm text-neutral-300">{unit.title}</p>
 
-              <button
+              <div
                 className={`${isMetric && 'flex items-center justify-between gap-2.5 bg-neutral-700'} w-full rounded-lg px-2 py-2.5 text-left transition`}
               >
                 {unit.metric}
@@ -66,8 +66,8 @@ export function Units() {
                     className="size-4"
                   />
                 )}
-              </button>
-              <button
+              </div>
+              <div
                 className={`${!isMetric && 'flex items-center justify-between gap-2.5 bg-neutral-700'} w-full rounded-lg px-2 py-2.5 text-left transition`}
               >
                 {unit.imperial}
@@ -80,7 +80,7 @@ export function Units() {
                     className="size-4"
                   />
                 )}
-              </button>
+              </div>
             </div>
           ))}
         </div>

@@ -75,7 +75,7 @@ export function HourlyForecast({ dailyTime, hourly }: Props) {
                 />
                 {formatHour(hour)}
               </div>
-              {hourly.temperature_2m[i]}
+              {`${hourly.temperature_2m[i]}°`}
             </div>
           );
         })}
