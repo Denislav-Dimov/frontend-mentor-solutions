@@ -43,6 +43,13 @@
   --animate-bounce: bounce 1.5s infinite ease-in-out;
 }
 
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-neutral-0);
+    outline-offset: 2px;
+  }
+}
+
 body {
   @apply font-family-primary text-neutral-0 bg-neutral-900 text-lg font-normal;
 }

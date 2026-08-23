@@ -87,7 +87,7 @@ export function SearchInput({ query, state, onQueryChange, onSubmit, onSelect }:
                         onSelect(result);
                         inputRef.current?.focus();
                       }}
-                      className="focus-visible:outline-neutral-0 w-full cursor-pointer rounded-lg px-2 py-2.5 text-left text-base transition hover:bg-neutral-700 focus-visible:outline-2 focus-visible:outline-offset-2"
+                      className="w-full cursor-pointer rounded-lg px-2 py-2.5 text-left text-base transition hover:bg-neutral-700"
                     >
                       <span className="block">{result.name}</span>
                       {getLocationDetails(result) && (
@@ -114,7 +114,7 @@ export function SearchInput({ query, state, onQueryChange, onSubmit, onSelect }:
 
         <button
           type="submit"
-          className="focus-visible:outline-neutral-0 cursor-pointer rounded-xl bg-blue-500 px-6 py-4 transition hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2"
+          className="cursor-pointer rounded-xl bg-blue-500 px-6 py-4 transition hover:bg-blue-700 focus-visible:outline-blue-500"
         >
           Search
         </button>
