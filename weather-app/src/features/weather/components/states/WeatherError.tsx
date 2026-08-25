@@ -10,7 +10,7 @@ export function WeatherError({ onRetry }: Props) {
   return (
     <section className="mt-16 flex flex-col items-center justify-center gap-6 pt-10 text-center">
       <Image src="/assets/images/icon-error.svg" alt="" width={48} height={48} />
-      <h2 className="font-family-secondary text-[3.25rem]">Something went wrong</h2>
+      <h1 className="font-family-secondary text-[3.25rem]">Something went wrong</h1>
       <p className="max-w-lg text-xl text-neutral-200">
         We couldn’t connect to the server (API error). Please try again in a few moments.
       </p>

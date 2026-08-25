@@ -1,8 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useId } from 'react';
 import { useUnit } from '../../context/UnitContextProvider';
+import { useDismissibleDropdown } from '../../hooks/useDismissibleDropdown';
 
 const units = [
   { title: 'Temperature', metric: 'Celsius (°C)', imperial: 'Fahrenheit (°F)' },
@@ -11,14 +12,18 @@ const units = [
 ];
 
 export function Units() {
-  const [open, setOpen] = useState(false);
+  const { open, setOpen, containerRef } = useDismissibleDropdown();
+  const dropdownId = useId();
   const { currentUnit, setUnit } = useUnit();
   const isMetric = currentUnit === 'metric';
 
   return (
-    <>
+    <div ref={containerRef} className="relative">
       <button
-        onClick={() => setOpen(!open)}
+        type="button"
+        aria-expanded={open}
+        aria-controls={dropdownId}
+        onClick={() => setOpen(prev => !prev)}
         className="flex cursor-pointer items-center gap-2 rounded-lg bg-neutral-800 px-4 py-3 transition hover:bg-neutral-700"
       >
         <Image
@@ -39,7 +44,8 @@ export function Units() {
       </button>
 
       <div
-        className={`${open ? 'visible translate-y-0 opacity-100' : 'invisible -translate-y-1 opacity-0'} absolute top-14 right-0 z-50 w-full max-w-50 space-y-1 rounded-xl border border-neutral-600 bg-neutral-800 px-2 py-1.5 transition`}
+        id={dropdownId}
+        className={`${open ? 'visible translate-y-0 opacity-100' : 'invisible -translate-y-1 opacity-0'} absolute top-14 right-0 z-50 w-50 space-y-1 rounded-xl border border-neutral-600 bg-neutral-800 px-2 py-1.5 transition`}
       >
         <button
           onClick={() => setUnit(isMetric ? 'imperial' : 'metric')}
@@ -85,6 +91,6 @@ export function Units() {
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 }

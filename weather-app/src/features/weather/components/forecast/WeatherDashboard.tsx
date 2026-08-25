@@ -87,7 +87,7 @@ export function WeatherDashboard({ forecast, location, unit }: Props) {
         </div>
 
         <div className="mt-8 space-y-5 md:mt-12">
-          <p className="text-xl">Daily forecast</p>
+          <h2 className="text-xl">Daily forecast</h2>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-4">
             {forecast.daily.time.map((date, i) => (
               <div

@@ -1,10 +1,11 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { Forecast } from '../../types';
 import { formatHour, formatWeekday } from '../../lib/utils';
 import { WMO_WEATHER } from '../../lib/wmoWeather';
+import { useDismissibleDropdown } from '../../hooks/useDismissibleDropdown';
 
 type Props = {
   dailyTime: Forecast['daily']['time'];
@@ -12,17 +13,21 @@ type Props = {
 };
 
 export function HourlyForecast({ dailyTime, hourly }: Props) {
-  const [open, setOpen] = useState(false);
+  const { open, setOpen, containerRef } = useDismissibleDropdown();
+  const dropdownId = useId();
   const [selectedDate, setSelectedDate] = useState(dailyTime[0]);
   const activeDate = dailyTime.includes(selectedDate) ? selectedDate : dailyTime[0];
 
   return (
     <div className="flex w-full flex-col rounded-[1.25rem] bg-neutral-800 p-6 xl:absolute xl:inset-0">
-      <div className="relative flex flex-none items-center justify-between">
-        <p className="text-lg font-medium sm:text-xl">Hourly forecast</p>
+      <div ref={containerRef} className="relative flex flex-none items-center justify-between">
+        <h2 className="text-lg font-medium sm:text-xl">Hourly forecast</h2>
 
         <button
-          onClick={() => setOpen(!open)}
+          type="button"
+          aria-expanded={open}
+          aria-controls={dropdownId}
+          onClick={() => setOpen(prev => !prev)}
           className="flex cursor-pointer items-center gap-2 rounded-lg bg-neutral-600 px-4 py-2 text-base"
         >
           {formatWeekday(activeDate, 'long')}
@@ -36,6 +41,7 @@ export function HourlyForecast({ dailyTime, hourly }: Props) {
         </button>
 
         <div
+          id={dropdownId}
           className={`${open ? 'visible translate-y-0 opacity-100' : 'invisible -translate-y-1 opacity-0'} absolute top-14 right-0 w-full max-w-50 space-y-1 rounded-xl border border-neutral-600 bg-neutral-800 p-2 transition`}
         >
           {dailyTime.map(date => (
