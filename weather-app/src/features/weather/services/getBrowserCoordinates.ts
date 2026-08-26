@@ -14,6 +14,7 @@ export default function getBrowserCoordinates(): Promise<LocationCoords> {
           longitude: position.coords.longitude,
         }),
       err => reject(err),
+      { timeout: 8000, maximumAge: 300_000 },
     );
   });
 }
