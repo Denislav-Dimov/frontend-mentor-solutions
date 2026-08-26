@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState, PropsWithChildren } from 'react';
 
-export function WeatherQueryProvider({ children }: PropsWithChildren) {
+export function QueryProvider({ children }: PropsWithChildren) {
   const [queryClient] = useState(() => new QueryClient());
 
   return (
