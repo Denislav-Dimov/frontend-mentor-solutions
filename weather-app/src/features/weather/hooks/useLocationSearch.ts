@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { searchLocations } from '../api/searchLocations';
 import type { LocationSearchResult } from '../types';
 
@@ -13,14 +14,23 @@ export type LocationSearchState =
 
 export function useLocationSearch() {
   const [query, setQuery] = useState('');
-  const [state, setState] = useState<LocationSearchState>({ status: 'idle' });
-  const controllerRef = useRef<AbortController | null>(null);
+  const [submittedQuery, setSubmittedQuery] = useState<string | null>(null);
+
+  const { data, error, isPending, refetch } = useQuery({
+    queryKey: ['location-search', submittedQuery],
+    queryFn: ({ signal }) =>
+      searchLocations({
+        query: submittedQuery ?? '',
+        signal,
+      }),
+    enabled: submittedQuery !== null,
+    retry: false,
+    staleTime: Infinity,
+    placeholderData: previousData => previousData,
+  });
 
   function updateQuery(value: string) {
-    controllerRef.current?.abort();
-    controllerRef.current = null;
     setQuery(value);
-    setState({ status: 'idle' });
   }
 
   async function search() {
@@ -30,43 +40,32 @@ export function useLocationSearch() {
       return;
     }
 
-    controllerRef.current?.abort();
-
-    const controller = new AbortController();
-    controllerRef.current = controller;
-    setState({ status: 'searching' });
-
-    try {
-      const results = await searchLocations({
-        query: queryValue,
-        signal: controller.signal,
-      });
-
-      if (!controller.signal.aborted) {
-        setState(results.length > 0 ? { status: 'results', results } : { status: 'empty' });
-      }
-    } catch (error) {
-      if (!controller.signal.aborted) {
-        setState({
-          status: 'error',
-          error: error instanceof Error ? error : new Error('Failed to search for locations'),
-        });
-      }
-    } finally {
-      if (controllerRef.current === controller) {
-        controllerRef.current = null;
-      }
+    if (queryValue === submittedQuery) {
+      await refetch();
+      return;
     }
+
+    setSubmittedQuery(queryValue);
   }
 
   function resetSearch() {
-    controllerRef.current?.abort();
-    controllerRef.current = null;
     setQuery('');
-    setState({ status: 'idle' });
+    setSubmittedQuery(null);
   }
 
-  useEffect(() => () => controllerRef.current?.abort(), []);
+  let state: LocationSearchState;
+
+  if (submittedQuery === null) {
+    state = { status: 'idle' };
+  } else if (isPending) {
+    state = { status: 'searching' };
+  } else if (error) {
+    state = { status: 'error', error };
+  } else if (data.length === 0) {
+    state = { status: 'empty' };
+  } else {
+    state = { status: 'results', results: data };
+  }
 
   return {
     query,

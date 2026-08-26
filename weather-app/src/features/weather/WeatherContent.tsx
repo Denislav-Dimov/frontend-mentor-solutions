@@ -37,6 +37,10 @@ export function WeatherContent() {
   const weatherContent =
     locationLoading || forecast === null ? (
       <WeatherLoading />
+    ) : state.status === 'empty' ? (
+      <p role="status" className="mt-12 text-center text-[1.75rem] font-bold">
+        No search result found!
+      </p>
     ) : (
       <WeatherDashboard forecast={forecast} location={location} unit={forecastUnit} />
     );
@@ -56,7 +60,7 @@ export function WeatherContent() {
           onSelect={handleLocationSelect}
         />
 
-        {state.status !== 'empty' && weatherContent}
+        {weatherContent}
       </section>
     </>
   );

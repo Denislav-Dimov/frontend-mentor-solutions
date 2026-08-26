@@ -1,60 +1,54 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import reverseGeocode from '../api/reverseGeocode';
 import { DEFAULT_LOCATION } from '../constants';
 import getBrowserCoordinates from '../services/getBrowserCoordinates';
 import { Location } from '../types';
 
 export function useSelectedLocation() {
-  const [location, setLocation] = useState<Location>(DEFAULT_LOCATION);
-  const [locationLoading, setLocationLoading] = useState(true);
-  const hasManualSelectionRef = useRef(false);
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
 
-  useEffect(() => {
-    let cancelled = false;
-
-    async function loadUserLocation() {
+  const { data: browserLocation, isPending } = useQuery<Location>({
+    queryKey: ['browser-location'],
+    queryFn: async ({ signal }) => {
       try {
         const coordinates = await getBrowserCoordinates();
-        const data = await reverseGeocode(coordinates);
+        const data = await reverseGeocode({ ...coordinates, signal });
 
-        if (cancelled || hasManualSelectionRef.current) {
-          return;
-        }
-
-        setLocation({
+        return {
           country: data.countryName,
           city: data.city || data.locality,
           latitude: data.latitude,
           longitude: data.longitude,
-        });
+        };
       } catch (error) {
-        if (cancelled || hasManualSelectionRef.current) {
-          return;
+        if (signal.aborted) {
+          throw error;
         }
 
-        console.error('Unable to determine the current location. Using the default location.', error);
-        setLocation(DEFAULT_LOCATION);
-      } finally {
-        if (!cancelled && !hasManualSelectionRef.current) {
-          setLocationLoading(false);
-        }
+        console.error(
+          'Unable to determine the current location. Using the default location.',
+          error,
+        );
+
+        return DEFAULT_LOCATION;
       }
-    }
-
-    loadUserLocation();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    },
+    enabled: selectedLocation === null,
+    networkMode: 'always',
+    retry: false,
+    staleTime: Infinity,
+  });
 
   function selectLocation(nextLocation: Location) {
-    hasManualSelectionRef.current = true;
-    setLocation(nextLocation);
-    setLocationLoading(false);
+    setSelectedLocation(nextLocation);
   }
 
-  return { location, locationLoading, selectLocation };
+  return {
+    location: selectedLocation ?? browserLocation ?? DEFAULT_LOCATION,
+    locationLoading: selectedLocation === null && isPending,
+    selectLocation,
+  };
 }

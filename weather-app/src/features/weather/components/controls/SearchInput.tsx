@@ -120,11 +120,6 @@ export function SearchInput({ query, state, onQueryChange, onSubmit, onSelect }:
         </button>
       </div>
 
-      {state.status === 'empty' && (
-        <p role="status" className="mt-12 text-center text-[1.75rem] font-bold">
-          No search result found!
-        </p>
-      )}
     </form>
   );
 }

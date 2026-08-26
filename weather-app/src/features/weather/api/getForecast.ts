@@ -1,4 +1,4 @@
-import { Forecast, LocationCoords, Unit } from '../types';
+import type { LocationCoords, Unit } from '../types';
 import { getQueryParamsFromUnit } from '../lib/utils';
 import { forecastSchema } from './schemas/forecastSchema';
 
@@ -9,12 +9,7 @@ type GetForecastOptions = LocationCoords & {
   signal?: AbortSignal;
 };
 
-export async function getForecast({
-  latitude,
-  longitude,
-  unit,
-  signal,
-}: GetForecastOptions): Promise<Forecast> {
+export async function getForecast({ latitude, longitude, unit, signal }: GetForecastOptions) {
   const response = await fetch(
     `${OPEN_METEO_URL}?latitude=${latitude}&longitude=${longitude}` +
       '&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,precipitation,weather_code' +

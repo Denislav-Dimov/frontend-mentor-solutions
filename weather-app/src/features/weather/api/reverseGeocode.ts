@@ -1,18 +1,25 @@
 import { LocationCoords } from '../types';
-import { reverseGeocodeSchema, ReverseGeocodeResult } from './schemas/reverseGeocodeSchema';
+import { reverseGeocodeSchema } from './schemas/reverseGeocodeSchema';
+
+type ReverseGeocodeOptions = LocationCoords & {
+  signal?: AbortSignal;
+};
 
 export default async function reverseGeocode({
   latitude,
   longitude,
-}: LocationCoords): Promise<ReverseGeocodeResult> {
-  const url = `https://api-bdc.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}`;
-  const res = await fetch(url);
+  signal,
+}: ReverseGeocodeOptions) {
+  const response = await fetch(
+    `https://api-bdc.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}`,
+    { signal },
+  );
 
-  if (!res.ok) {
+  if (!response.ok) {
     throw new Error('Failed to reverse-geocode coordinates');
   }
 
-  const data: unknown = await res.json();
+  const data: unknown = await response.json();
 
   return reverseGeocodeSchema.parse(data);
 }
