@@ -14,7 +14,9 @@ export default function ButtonTheme() {
 
   return (
     <button
+      type="button"
       onClick={toggleTheme}
+      aria-label="Toggle color theme"
       className="flex items-center gap-3 cursor-pointer text-sm"
     >
       <Moon />
@@ -26,17 +28,9 @@ export default function ButtonTheme() {
 function Moon() {
   return (
     <>
-      <Image
-        src={moonLightIcon}
-        alt="Toggle color theme"
-        className="dark:hidden block size-4"
-      />
+      <Image src={moonLightIcon} alt="" className="dark:hidden block size-4" />
 
-      <Image
-        src={moonDarkIcon}
-        alt="Toggle color theme"
-        className="hidden dark:block size-4"
-      />
+      <Image src={moonDarkIcon} alt="" className="hidden dark:block size-4" />
     </>
   );
 }

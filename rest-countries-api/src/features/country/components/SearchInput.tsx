@@ -20,7 +20,11 @@ export default function SearchInput() {
     <div className="w-full max-w-lg flex items-center gap-6 px-8 md:px-6 py-3.5 rounded-md bg-white dark:bg-dark-blue-900 shadow">
       <Search className="size-5 text-light-grey-400 dark:text-white min-w-fit" />
 
+      <label htmlFor="country-search" className="sr-only">
+        Search for a country
+      </label>
       <input
+        id="country-search"
         type="text"
         className="text-sm w-full text-light-grey-400 dark:text-white placeholder:text-light-grey-400 dark:placeholder:text-white focus-within:outline-0"
         onChange={e => setSearch(e.currentTarget.value)}

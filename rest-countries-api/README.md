@@ -48,7 +48,7 @@ Users should be able to:
 
 ### Preview
 
-![](./)
+![REST Countries application preview](./design/preview.jpg)
 
 ### Links
 
@@ -65,6 +65,7 @@ Make sure you have the following installed:
 
 - **Node.js** (v18 or higher)
 - **npm** (v9 or higher)
+- A [REST Countries API key](https://restcountries.com/sign-up)
 
 ### Installation
 
@@ -76,6 +77,13 @@ cd rest-countries-api
 npm install
 ```
 
+Copy `.env.example` to `.env`, then replace the placeholder with your REST Countries
+API key:
+
+```env
+REST_COUNTRIES_API_KEY=
+```
+
 ### Usage
 
 Run the app in development mode:
@@ -84,7 +92,7 @@ Run the app in development mode:
 npm run dev
 ```
 
-Then open your browser at http://localhost:5173.
+Then open your browser at http://localhost:3000.
 
 ## About
 

@@ -22,7 +22,6 @@ export default function HomeLayout({ children }: { children: React.ReactNode }) 
           <FilterRegion />
         </Suspense>
       </section>
-
       {children}
     </main>
   );

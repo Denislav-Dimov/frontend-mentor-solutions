@@ -3,7 +3,7 @@ import { Nunito_Sans } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import Header from '@/components/Header';
-import '../styles/style.css';
+import './globals.css';
 
 const nunitoSans = Nunito_Sans({
   variable: '--font-nunito-sans',
@@ -12,24 +12,22 @@ const nunitoSans = Nunito_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'Frontend Mentor | Rest Contries Api',
-  icons: {
-    icon: '/favicon.png',
+  title: {
+    default: 'REST Countries API',
+    template: '%s | REST Countries API',
   },
+  description: 'Search and explore country information from around the world.',
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${nunitoSans.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <NuqsAdapter>
             <Header />
-
             {children}
           </NuqsAdapter>
         </ThemeProvider>
