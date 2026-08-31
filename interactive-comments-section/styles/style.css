@@ -1,0 +1,453 @@
+:root {
+  --primary-purple-600: hsl(238, 40%, 52%);
+  --primary-purple-200: hsl(239, 57%, 85%);
+  --primary-pink-400: hsl(358, 79%, 66%);
+  --primary-pink-200: hsl(357, 100%, 86%);
+  --neutral-grey-800: hsl(212, 24%, 26%);
+  --neutral-grey-500: hsl(211, 10%, 45%);
+  --neutral-grey-100: hsl(223, 19%, 93%);
+  --neutral-grey-50: hsl(228, 33%, 97%);
+  --neutral-white: hsl(0, 100%, 100%);
+
+  --font-family: 'Rubik', arial;
+  --font-weight-light: 400;
+  --font-weight-normal: 500;
+  --font-weight-bold: 700;
+
+  --smoothness: 200ms;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+/* hides scrollbar */
+textarea {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+textarea::-webkit-scrollbar {
+  display: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  background-color: var(--neutral-grey-50);
+  font-family: var(--font-family);
+  font-size: 1rem;
+  color: var(--neutral-grey-500);
+  font-weight: var(--font-weight-normal);
+}
+
+main {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}
+
+.wrapper {
+  max-width: 48rem;
+  width: 100%;
+  padding: 2rem;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.input-field-you {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  width: 100%;
+}
+
+.profile-pic {
+  width: 2.125rem;
+  height: 2.125rem;
+  border-radius: 50%;
+}
+
+.input-textarea {
+  padding: 0.5rem 1.25rem;
+  border: 2px solid var(--neutral-grey-100);
+  font-weight: var(--font-weight-light);
+  border-radius: .75rem;
+  width: 100%;
+  height: 6rem;
+  resize: none;
+}
+
+.input-textarea:focus {
+  outline: 2px solid var(--primary-purple-600);
+}
+
+.input-textarea::placeholder {
+  opacity: 0.6;
+}
+
+.button {
+  border: none;
+  background-color: var(--primary-purple-600);
+  color: var(--neutral-white);
+  text-transform: uppercase;
+  padding: 0.6rem 1.5rem;
+  width: fit-content;
+  border-radius: 5px;
+  font-size: 0.875rem;
+  transition: var(--smoothness);
+}
+
+.button:hover {
+  opacity: 0.5;
+}
+
+.input-field-you {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  width: 100%;
+  display: grid;
+  grid-auto-columns: auto;
+  grid-template-areas:
+    'input input'
+    'pfp button';
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.input-field-you img {
+  grid-area: pfp;
+}
+
+.input-field-you .input-textarea {
+  grid-area: input;
+}
+
+.input-field-you button {
+  grid-area: button;
+  justify-self: end;
+}
+
+@media (min-width: 48em) {
+  .input-field-you {
+    display: flex;
+    align-items: start;
+    gap: 1rem;
+  }
+
+  .main-comment-input {
+    padding: 1.5rem;
+  }
+}
+
+.reply-input-field {
+  margin-top: 0.5rem;
+}
+
+.comments-list {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.main-comment {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2.5rem 1fr auto;
+  grid-template-areas:
+    'score userDetails reply'
+    'score paragraph paragraph';
+  gap: 1rem 1.5rem;
+  align-items: start;
+}
+
+.score {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  background-color: var(--neutral-grey-50);
+  color: var(--primary-purple-600);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-size: 1.125rem;
+  height: fit-content;
+  width: 2.6rem;
+
+  grid-area: score;
+}
+
+.score svg {
+  cursor: pointer;
+  justify-self: center;
+}
+
+.score svg path {
+  transition: var(--smoothness);
+}
+
+.score svg:hover path {
+  fill: var(--primary-purple-600);
+}
+
+.user-details {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+
+  grid-area: userDetails;
+}
+
+.username {
+  color: var(--neutral-grey-800);
+  min-width: fit-content;
+}
+
+.username-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.label {
+  background-color: var(--primary-purple-600);
+  color: var(--neutral-white);
+  padding: 0px 7px;
+  border-radius: 5px;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.time-created {
+  font-weight: var(--font-weight-light);
+  min-width: fit-content;
+  flex-shrink: 0;
+}
+
+.reply-button {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  color: var(--primary-purple-600);
+  cursor: pointer;
+  transition: var(--smoothness);
+  white-space: nowrap;
+
+  grid-area: reply;
+}
+
+.reply-button:hover {
+  opacity: 0.6;
+}
+
+.reply-buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  white-space: nowrap;
+  grid-area: reply;
+}
+
+.delete {
+  color: var(--primary-pink-400);
+}
+
+.reply-button img {
+  transform: translateY(1px);
+}
+
+.reply-username {
+  color: var(--primary-purple-600);
+  font-weight: var(--font-weight-normal);
+}
+
+.content {
+  display: grid;
+  gap: 1rem;
+  font-weight: var(--font-weight-light);
+
+  grid-area: paragraph;
+}
+
+.update-button {
+  justify-self: end;
+  font-weight: var(--font-weight-normal);
+}
+
+@media (max-width: 48em) {
+  .main-comment {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      'userDetails userDetails userDetails'
+      'paragraph paragraph paragraph'
+      'score . reply';
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .score {
+    display: flex;
+    padding: 0.5rem 1rem;
+    width: fit-content;
+    justify-self: start;
+  }
+
+  .reply-button,
+  .reply-buttons {
+    justify-self: end;
+    align-self: center;
+  }
+}
+
+.reply-container {
+  display: flex;
+  align-items: stretch;
+  margin-top: 1.5rem;
+}
+
+.reply-container .profile-pic {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.reply-container .content {
+  font-size: 0.95rem;
+}
+
+.reply-container .reply-buttons {
+  font-size: 0.875rem;
+}
+
+.reply-container .time-created {
+  font-size: 0.85rem;
+}
+
+.line {
+  width: 5px;
+  background-color: var(--neutral-grey-100);
+  margin-inline: 2.5rem;
+}
+
+.reply-list {
+  width: 100%;
+}
+
+.reply-list>*:not(:first-child):not(.reply-input-field) {
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 48em) {
+  .line {
+    margin-inline-start: 0;
+    margin-inline-end: 1.5rem;
+  }
+}
+
+.delete-confirmation-container {
+  position: fixed;
+  inset: 0;
+  background-color: hsl(0, 0%, 0%, 0.5);
+  display: grid;
+  place-items: center;
+  padding-inline: 1rem;
+}
+
+.delete-confirmation {
+  background-color: var(--neutral-white);
+  padding: 2rem;
+  max-width: 25rem;
+  border-radius: 0.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.delete-confirmation h2 {
+  color: var(--neutral-grey-800);
+}
+
+.confirmation-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.confirmation-buttons button {
+  border: none;
+  text-transform: uppercase;
+  color: var(--neutral-grey-50);
+  padding: 0.75rem;
+  width: 100%;
+  border-radius: 0.5rem;
+  transition: var(--smoothness);
+}
+
+.confirmation-buttons button:hover {
+  opacity: 0.5;
+}
+
+.cancel {
+  background-color: var(--neutral-grey-500);
+}
+
+.confirm {
+  background-color: var(--primary-pink-400);
+}
