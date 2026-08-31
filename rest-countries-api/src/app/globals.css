@@ -1,0 +1,50 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-*: initial;
+  /* dark mode text & light mode elements */
+  --color-white: hsl(0, 100%, 100%);
+
+  --color-dark-blue-950: hsl(207, 26%, 17%); /* background */
+  --color-dark-blue-900: hsl(209, 23%, 22%); /* elements */
+
+  --color-light-grey-950: hsl(200, 15%, 8%); /* text */
+  --color-light-grey-400: hsl(0, 0%, 50%); /* input */
+  --color-light-grey-50: hsl(0, 0%, 99%); /* background */
+
+  --font-nunito-sans: var(--font-nunito-sans);
+
+  --font-weight-*: initial;
+  --font-weight-light: 300;
+  --font-weight-normal: 600;
+  --font-weight-bold: 800;
+
+  --animate-fade-in-slow: fade-in 800ms ease-out;
+  --animate-fade-in-fast: fade-in 200ms ease-in;
+}
+
+@layer base {
+  body {
+    @apply bg-light-grey-50 dark:bg-dark-blue-950 text-light-grey-950 dark:text-white font-nunito-sans font-normal transition-all duration-300;
+  }
+}
+
+@layer utilities {
+  .shadow {
+    @apply shadow-md shadow-light-grey-400/10 dark:shadow-dark-blue-900/10;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
