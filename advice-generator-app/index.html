@@ -21,28 +21,26 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
 
-  <!-- font awesome -->
-  <script src="https://kit.fontawesome.com/e3a28620b7.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <main>
-    <button class="menu-btn-open" onclick="toggleMenu()">
-      <i class="fa-solid fa-bars"></i>
+    <button class="menu-btn-open" type="button" aria-label="Open menu" onclick="toggleMenu()">
+      <img src="./images/menu.svg" alt="">
     </button>
 
     <section id="menuBackground" class="menu-background">
       <aside class="menu" id="menu">
         <nav class="menu-navigation">
           <div class="navigation-buttons">
-            <button class="menu-btn" id="menuBtnHistory">
-              <i class="fa-regular fa-clock icon"></i>
+            <button class="menu-btn" id="menuBtnHistory" type="button" aria-label="Show recent advice">
+              <img src="./images/icon-clock.svg" alt="">
             </button>
-            <button class="menu-btn" id="menuBtnFavourite">
-              <i class="fa-regular fa-star icon"></i>
+            <button class="menu-btn" id="menuBtnFavourite" type="button" aria-label="Show favourite advice">
+              <img src="./images/icon-star.svg" alt="">
             </button>
           </div>
-          <button class="menu-btn-close" onclick="toggleMenu()">
-            <i class="fa-solid fa-close"></i>
+          <button class="menu-btn-close" type="button" aria-label="Close menu" onclick="toggleMenu()">
+            <img src="./images/icon-close.svg" alt="">
           </button>
         </nav>
 

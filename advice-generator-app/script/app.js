@@ -132,14 +132,14 @@ function renderHistory() {
           <h3 class="menu-content-id"><span class="spaced">advice</span> # <span class="spaced">${currentAdvice.adviceId}</span></h3>
 
           <div class="menu-content-buttons">
-            <button class="menu-content-btn btn-delete" title="delete advice" onclick="deleteAdvice('${currentAdvice.uniqueId}')">
-              <i class="fa-solid fa-trash"></i>
+            <button class="menu-content-btn btn-delete" type="button" title="delete advice" onclick="deleteAdvice('${currentAdvice.uniqueId}')">
+              <img src="./images/icon-trash.svg" alt="">
             </button>
-            <button class="menu-content-btn btn-favourite" title="favourite advice" onclick="favouriteAdvice('${currentAdvice.uniqueId}', this)">
-              <i class="fa-solid fa-star"></i>
+            <button class="menu-content-btn btn-favourite" type="button" title="favourite advice" onclick="favouriteAdvice('${currentAdvice.uniqueId}', this)">
+              <img src="./images/icon-star.svg" alt="">
             </button>
-            <button class="menu-content-btn" title="paste advice on screen" onclick="pasteAdvice('${currentAdvice.uniqueId}', false)">
-              <i class="fa-solid fa-paste"></i>
+            <button class="menu-content-btn" type="button" title="paste advice on screen" onclick="pasteAdvice('${currentAdvice.uniqueId}', false)">
+              <img src="./images/icon-paste.svg" alt="">
             </button>
           </div>
         </div>
@@ -225,11 +225,11 @@ function renderFavourite() {
           <h3 class="menu-content-id"><span class="spaced">advice</span> # <span class="spaced">${currentAdvice.adviceId}</span></h3>
 
           <div class="menu-content-buttons">
-            <button class="menu-content-btn btn-unfavourite" title="unfavourite advice" onclick="unfavouriteAdvice('${currentAdvice.uniqueId}')">
-              <i class="fa-solid fa-star"></i>
+            <button class="menu-content-btn btn-unfavourite" type="button" title="unfavourite advice" onclick="unfavouriteAdvice('${currentAdvice.uniqueId}')">
+              <img src="./images/icon-star.svg" alt="">
             </button>
-            <button class="menu-content-btn" title="paste advice on screen" onclick="pasteAdvice('${currentAdvice.uniqueId}')">
-              <i class="fa-solid fa-paste"></i>
+            <button class="menu-content-btn" type="button" title="paste advice on screen" onclick="pasteAdvice('${currentAdvice.uniqueId}')">
+              <img src="./images/icon-paste.svg" alt="">
             </button>
           </div>
         </div>

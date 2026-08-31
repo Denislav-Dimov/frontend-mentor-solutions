@@ -106,6 +106,12 @@ main {
   border: none;
 }
 
+.menu-btn-open img,
+.menu-btn-close img {
+  width: 1em;
+  height: 1em;
+}
+
 .menu {
   position: absolute;
   right: -30vw;
@@ -157,6 +163,15 @@ main {
 .menu-btn.active {
   color: var(--clr-secondary);
   position: relative;
+}
+
+.menu-btn img {
+  width: 1em;
+  height: 1em;
+}
+
+.menu-btn.active img {
+  filter: brightness(0) saturate(100%) invert(87%) sepia(66%) saturate(685%) hue-rotate(81deg) brightness(103%) contrast(101%);
 }
 
 .menu-btn.active::before {
@@ -221,25 +236,32 @@ main {
   font-size: 1.65rem;
   border: none;
   background: none;
-  color: hsla(193, 38%, 86%, 0.1);
   transition: 200ms;
 
-  &:hover {
-    color: var(--clr-primary);
+  img {
+    width: 1em;
+    height: 1em;
+    opacity: 0.1;
+    transition: 200ms;
+  }
+
+  &:hover img {
+    opacity: 1;
   }
 }
 
-.btn-delete:hover {
-  color: var(--clr-primary-red);
+.btn-delete:hover img,
+.btn-unfavourite:hover img,
+.btn-favourite.pulse-animation img {
+  filter: brightness(0) saturate(100%) invert(13%) sepia(98%) saturate(5995%) hue-rotate(358deg) brightness(80%) contrast(113%);
 }
 
-.btn-favourite:hover {
-  color: #FFFF00;
+.btn-favourite:hover img {
+  filter: brightness(0) saturate(100%) invert(92%) sepia(100%) saturate(7490%) hue-rotate(359deg) brightness(106%) contrast(104%);
 }
 
 .btn-favourite.pulse-animation {
   animation: pulse 1s infinite;
-  color: var(--clr-primary-red);
 }
 
 @keyframes pulse {
@@ -254,10 +276,6 @@ main {
   100% {
     transform: scale(1);
   }
-}
-
-.btn-unfavourite:hover {
-  color: var(--clr-primary-red);
 }
 
 @media (min-width: 48em) {
