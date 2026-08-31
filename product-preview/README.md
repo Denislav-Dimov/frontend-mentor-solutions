@@ -28,7 +28,7 @@ Users should be able to:
 ### Links
 
 -   Solution URL: https://www.frontendmentor.io/solutions/solution--RXkGlBCy6
--   Live Site URL: https://denislav-dimov.github.io/Product-preview/
+-   Live Site URL: https://fm-dd-product-preview.vercel.app
 
 ## My process
 

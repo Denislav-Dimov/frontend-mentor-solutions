@@ -26,7 +26,7 @@ Users should be able to:
 ### Links
 
 -   Solution URL: https://www.frontendmentor.io/solutions/solution-using-css-grid-fz35IwHxCB
--   Live Site URL: https://denislav-dimov.github.io/Four-card-feature-section/
+-   Live Site URL: https://fm-dd-four-card-feature-section.vercel.app
 
 ## Built with
 

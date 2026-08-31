@@ -2,7 +2,7 @@
 
 This is a solution to the [Tip calculator app challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/tip-calculator-app-ugJNGbJUX). Frontend Mentor challenges help you improve your coding skills by building realistic projects.
 
-[![Live Preview](https://img.shields.io/badge/Live%20Preview-blue?style=for-the-badge&logo=web&logoColor=white)](https://denislav-dimov.github.io/tip-calculator-app/)
+[![Live Preview](https://img.shields.io/badge/Live%20Preview-blue?style=for-the-badge&logo=web&logoColor=white)](https://fm-dd-tip-calculator-app.vercel.app)
 
 ## Table of contents
 
@@ -31,7 +31,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: https://www.frontendmentor.io/solutions/responsive-tip-calculator-with-grid-uBVM3txqQv
-- Live Site URL: https://denislav-dimov.github.io/tip-calculator-app/
+- Live Site URL: https://fm-dd-tip-calculator-app.vercel.app
 
 ## My process
 

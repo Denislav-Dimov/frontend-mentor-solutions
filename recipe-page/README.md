@@ -18,4 +18,4 @@ This is a solution to the [Recipe page challenge on Frontend Mentor](https://www
 ### Links
 
 - Solution URL: https://www.frontendmentor.io/solutions/recipe-page-please-dont-look-at-that-solution-SJr8AhOupz
-- Live Site URL: https://denislav-dimov.github.io/Recipe-page/
+- Live Site URL: https://fm-dd-recipe-page.vercel.app

@@ -4,9 +4,9 @@ This is a solution to the [Contact form challenge on Frontend Mentor](https://ww
 
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
-![Last Commit](https://img.shields.io/github/last-commit/denislav-dimov/contact-form)
-![Language](https://img.shields.io/github/languages/top/denislav-dimov/contact-form)
-![Languages](https://img.shields.io/github/languages/count/denislav-dimov/contact-form)
+![Last Commit](https://img.shields.io/github/last-commit/denislav-dimov/frontend-mentor-solutions)
+![Language](https://img.shields.io/github/languages/top/denislav-dimov/frontend-mentor-solutions)
+![Languages](https://img.shields.io/github/languages/count/denislav-dimov/frontend-mentor-solutions)
 
 ![HTML5](https://img.shields.io/badge/-HTML5-000?logo=html5)
 ![TailwindCSS](https://img.shields.io/badge/-TailwindCSS-000?logo=tailwindcss)
@@ -15,7 +15,7 @@ This is a solution to the [Contact form challenge on Frontend Mentor](https://ww
 ![npm](https://img.shields.io/badge/-npm-000?logo=npm)
 ![Markdown](https://img.shields.io/badge/-Markdown-000?logo=markdown)
 
-<a href="https://denislav-dimov-contact-form.vercel.app/">
+<a href="https://fm-dd-contact-form.vercel.app">
   <img src="https://img.shields.io/badge/View_Website-181717?style=for-the-badge&logo=vercel&logoColor=white" alt="View Website" />
 </a>
 
@@ -57,7 +57,7 @@ Users should be able to:
 <!-- add later -->
 
 - Solution URL:
-- Live Site URL: https://denislav-dimov-contact-form.vercel.app/
+- Live Site URL: https://fm-dd-contact-form.vercel.app
 
 ## Getting Started
 
@@ -75,7 +75,7 @@ Make sure you have the following installed:
 Clone this repository and install dependencies.
 
 ```bash
-git clone https://github.com/Denislav-Dimov/contact-form.git
+git clone https://github.com/Denislav-Dimov/frontend-mentor-solutions.git
 cd contact-form
 npm install
 ```

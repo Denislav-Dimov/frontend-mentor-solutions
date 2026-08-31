@@ -24,4 +24,4 @@ Users should be able to:
 ### Links
 
 -   Solution URL: https://www.frontendmentor.io/solutions/stats-preview-cards-WWchS3jn7l
--   Live Site URL: https://denislav-dimov.github.io/Stats-Preview-Card/
+-   Live Site URL: https://fm-dd-stats-preview-cards.vercel.app

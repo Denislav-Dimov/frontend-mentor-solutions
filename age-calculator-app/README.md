@@ -2,7 +2,7 @@
 
 This is my solution to the [Age calculator app challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/age-calculator-app-dF9DFFpj-Q). Completing Frontend Mentor challenges is a great way to enhance your coding skills by working on real-world projects.
 
-[![Live Preview](https://img.shields.io/badge/Live%20Preview-blue?style=for-the-badge&logo=web&logoColor=white)](https://denislav-dimov.github.io/age-calculator-app/)
+[![Live Preview](https://img.shields.io/badge/Live%20Preview-blue?style=for-the-badge&logo=web&logoColor=white)](https://fm-dd-age-calculator-app.vercel.app)
 
 ## Table of Contents
 
@@ -38,7 +38,7 @@ Users can:
 ### Links
 
 - Solution URL: https://www.frontendmentor.io/solutions/age-calculator-with-animations-rANMLT9llk
-- Live Site URL: https://denislav-dimov.github.io/age-calculator-app/
+- Live Site URL: https://fm-dd-age-calculator-app.vercel.app
 
 ## My Process
 

@@ -2,7 +2,7 @@
 
 This is a solution to the [Shortly URL shortening API Challenge challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/url-shortening-api-landing-page-2ce3ob-G). Frontend Mentor challenges help you improve your coding skills by building realistic projects. 
 
-[![Live Preview](https://img.shields.io/badge/Live%20Preview-Visit%20Site-blue?style=for-the-badge&logo=google-chrome&logoColor=white)](https://denislav-dimov.github.io/url-shortening-api/)
+[![Live Preview](https://img.shields.io/badge/Live%20Preview-Visit%20Site-blue?style=for-the-badge&logo=google-chrome&logoColor=white)](https://fm-dd-url-shortening-api.vercel.app)
 
 ## Table of contents
 
@@ -33,7 +33,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: https://cleanuri.com/VrbGL4 <!-- the link was too long ;) -->
-- Live Site URL: https://denislav-dimov.github.io/url-shortening-api/
+- Live Site URL: https://fm-dd-url-shortening-api.vercel.app
 
 ## My process
 

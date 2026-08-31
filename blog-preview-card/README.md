@@ -24,4 +24,4 @@ Users should be able to:
 ### Links
 
 - Solution URL: https://www.frontendmentor.io/solutions/blog-preview-card-with-flexbox-l4MjPsHsVK
-- Live Site URL: https://denislav-dimov.github.io/Blog-preview-card/
+- Live Site URL: https://fm-dd-blog-preview-card.vercel.app

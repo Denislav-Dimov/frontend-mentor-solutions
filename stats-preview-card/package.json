@@ -1,6 +1,6 @@
 {
   "name": "stats-preview-card",
-  "homepage": "https://denislav-dimov.github.io/Stats-Preview-Card/",
+  "homepage": "https://fm-dd-stats-preview-cards.vercel.app",
   "private": true,
   "version": "0.0.0",
   "type": "module",

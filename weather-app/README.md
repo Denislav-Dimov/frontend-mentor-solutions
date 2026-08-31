@@ -5,14 +5,14 @@
 This is a solution to the [Weather app challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/weather-app-K1FhddVm49). Frontend Mentor challenges help you improve your coding skills by building realistic projects.
 
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
-![Last Commit](https://img.shields.io/github/last-commit/denislav-dimov/weather-app)
+![Last Commit](https://img.shields.io/github/last-commit/denislav-dimov/frontend-mentor-solutions)
 
 ![Next.js](https://img.shields.io/badge/-Next.js-000?logo=nextdotjs)
 ![TypeScript](https://img.shields.io/badge/-TypeScript-000?logo=typescript)
 ![TailwindCSS](https://img.shields.io/badge/-TailwindCSS-000?logo=tailwindcss)
 ![TailwindCSS](https://img.shields.io/badge/-Zod-000?logo=zod)
 
-<a href="https://denislav-dimov-weather-app.vercel.app/">
+<a href="https://fm-dd-weather-app.vercel.app">
   <img src="https://img.shields.io/badge/View_Website-181717?style=for-the-badge&logo=vercel&logoColor=white" alt="View Website" />
 </a>
 
@@ -53,7 +53,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: https://www.frontendmentor.io/solutions/weather-app---nextjs-typescript-dLa8BR96fp
-- Live Site URL: https://denislav-dimov-weather-app.vercel.app/
+- Live Site URL: https://fm-dd-weather-app.vercel.app
 
 ## Getting Started
 
@@ -71,7 +71,7 @@ Make sure you have the following installed:
 Clone this repository and install dependencies.
 
 ```bash
-git clone https://github.com/Denislav-Dimov/weather-app.git
+git clone https://github.com/Denislav-Dimov/frontend-mentor-solutions.git
 cd weather-app
 npm i
 ```

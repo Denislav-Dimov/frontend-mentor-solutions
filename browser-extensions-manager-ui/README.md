@@ -4,9 +4,9 @@ This is a solution to the [Browser extensions manager UI challenge on Frontend M
 
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
-![Last Commit](https://img.shields.io/github/last-commit/denislav-dimov/browser-extensions-manager-ui)
-![Language](https://img.shields.io/github/languages/top/denislav-dimov/browser-extensions-manager-ui)
-![Languages](https://img.shields.io/github/languages/count/denislav-dimov/browser-extensions-manager-ui)
+![Last Commit](https://img.shields.io/github/last-commit/denislav-dimov/frontend-mentor-solutions)
+![Language](https://img.shields.io/github/languages/top/denislav-dimov/frontend-mentor-solutions)
+![Languages](https://img.shields.io/github/languages/count/denislav-dimov/frontend-mentor-solutions)
 
 ![React](https://img.shields.io/badge/-React-000?logo=react)
 ![TypeScript](https://img.shields.io/badge/-TypeScript-000?logo=typescript)
@@ -16,7 +16,7 @@ This is a solution to the [Browser extensions manager UI challenge on Frontend M
 ![JSON](https://img.shields.io/badge/-JSON-000?logo=json)
 ![Markdown](https://img.shields.io/badge/-Markdown-000?logo=markdown)
 
-<a href="https://denislav-dimov-browser-extensions-manager-ui.vercel.app/">
+<a href="https://fm-dd-browser-extensions-manager-ui.vercel.app">
   <img src="https://img.shields.io/badge/View_Website-181717?style=for-the-badge&logo=vercel&logoColor=white" alt="View Website" />
 </a>
 
@@ -54,7 +54,7 @@ Users should be able to:
 ### Links
 
 - Solution URL:
-- Live Site URL: https://denislav-dimov-browser-extensions-manager-ui.vercel.app/
+- Live Site URL: https://fm-dd-browser-extensions-manager-ui.vercel.app
 
 ## Getting Started
 
@@ -72,7 +72,7 @@ Make sure you have the following installed:
 Clone this repository and install dependencies.
 
 ```bash
-git clone https://github.com/Denislav-Dimov/browser-extensions-manager-ui.git
+git clone https://github.com/Denislav-Dimov/frontend-mentor-solutions.git
 cd browser-extensions-manager-ui
 npm install
 ```

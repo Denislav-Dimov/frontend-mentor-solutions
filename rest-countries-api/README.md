@@ -4,15 +4,15 @@ This is a solution to the [REST Countries API with color theme switcher challeng
 
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
-![Last Commit](https://img.shields.io/github/last-commit/denislav-dimov/rest-countries-api)
-![Language](https://img.shields.io/github/languages/top/denislav-dimov/rest-countries-api)
-![Languages](https://img.shields.io/github/languages/count/denislav-dimov/rest-countries-api)
+![Last Commit](https://img.shields.io/github/last-commit/denislav-dimov/frontend-mentor-solutions)
+![Language](https://img.shields.io/github/languages/top/denislav-dimov/frontend-mentor-solutions)
+![Languages](https://img.shields.io/github/languages/count/denislav-dimov/frontend-mentor-solutions)
 
 ![Next.js](https://img.shields.io/badge/-Next.js-000?logo=nextdotjs)
 ![TypeScript](https://img.shields.io/badge/-TypeScript-000?logo=typescript)
 ![TailwindCSS](https://img.shields.io/badge/-TailwindCSS-000?logo=tailwindcss)
 
-<a href="https://dd-rest-countries-api.vercel.app/">
+<a href="https://fm-dd-rest-countries-api.vercel.app">
   <img src="https://img.shields.io/badge/View_Website-181717?style=for-the-badge&logo=vercel&logoColor=white" alt="View Website" />
 </a>
 
@@ -53,7 +53,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: https://www.frontendmentor.io/solutions/rest-countries---nextjs-typescript-tailwindcss-hdFyZmT9MR
-- Live Site URL: https://dd-rest-countries-api.vercel.app/
+- Live Site URL: https://fm-dd-rest-countries-api.vercel.app
 
 ## Getting Started
 
@@ -72,7 +72,7 @@ Make sure you have the following installed:
 Clone this repository and install dependencies.
 
 ```bash
-git clone https://github.com/denislav-dimov/rest-countries-api.git
+git clone https://github.com/Denislav-Dimov/frontend-mentor-solutions.git
 cd rest-countries-api
 npm install
 ```

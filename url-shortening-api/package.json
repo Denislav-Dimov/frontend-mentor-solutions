@@ -2,7 +2,7 @@
   "name": "url-shortening-api",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://denislav-dimov.github.io/url-shortening-api/",
+  "homepage": "https://fm-dd-url-shortening-api.vercel.app",
   "type": "module",
   "scripts": {
     "dev": "vite",

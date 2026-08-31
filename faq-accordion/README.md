@@ -4,16 +4,16 @@ This is a solution to the [FAQ accordion challenge on Frontend Mentor](https://w
 
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
-![Last Commit](https://img.shields.io/github/last-commit/denislav-dimov/faq-accordion)
-![Language](https://img.shields.io/github/languages/top/denislav-dimov/faq-accordion)
-![Languages](https://img.shields.io/github/languages/count/denislav-dimov/faq-accordion)
+![Last Commit](https://img.shields.io/github/last-commit/denislav-dimov/frontend-mentor-solutions)
+![Language](https://img.shields.io/github/languages/top/denislav-dimov/frontend-mentor-solutions)
+![Languages](https://img.shields.io/github/languages/count/denislav-dimov/frontend-mentor-solutions)
 
 ![HTML5](https://img.shields.io/badge/-HTML5-000?logo=html5)
 ![CSS3](https://img.shields.io/badge/-CSS3-000?logo=css3)
 ![Markdown](https://img.shields.io/badge/-JavaScript-000?logo=javascript)
 ![Markdown](https://img.shields.io/badge/-Markdown-000?logo=markdown)
 
-<a href="https://Denislav-Dimov.github.io/faq-accordion/">
+<a href="https://fm-dd-faq-accordion.vercel.app">
   <img src="https://img.shields.io/badge/View_Website-181717?style=for-the-badge&logo=github&logoColor=white" alt="View Website" />
 </a>
 
@@ -45,7 +45,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: https://www.frontendmentor.io/solutions/faq-accordion-eXi9_soIwe
-- Live Site URL: https://denislav-dimov.github.io/faq-accordion/
+- Live Site URL: https://fm-dd-faq-accordion.vercel.app
 
 ## About
 

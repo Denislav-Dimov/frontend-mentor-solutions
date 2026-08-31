@@ -35,7 +35,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: [Frontend Mentor](https://www.frontendmentor.io/solutions/responsive-newsletter-sign-up-with-mainly-flexbox-jDIz9T0cCb)
-- Live Site URL: [GitHub live site](https://denislav-dimov.github.io/newsletter-sign-up/)
+- Live Site URL: [Live site](https://fm-dd-newsletter-sign-up.vercel.app)
 
 ## My process
 

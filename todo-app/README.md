@@ -4,9 +4,9 @@ This is a solution to the [Todo app challenge on Frontend Mentor](https://www.fr
 
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
-![Last Commit](https://img.shields.io/github/last-commit/denislav-dimov/todo-app)
-![Language](https://img.shields.io/github/languages/top/denislav-dimov/todo-app)
-![Languages](https://img.shields.io/github/languages/count/denislav-dimov/todo-app)
+![Last Commit](https://img.shields.io/github/last-commit/denislav-dimov/frontend-mentor-solutions)
+![Language](https://img.shields.io/github/languages/top/denislav-dimov/frontend-mentor-solutions)
+![Languages](https://img.shields.io/github/languages/count/denislav-dimov/frontend-mentor-solutions)
 
 ![React](https://img.shields.io/badge/-React-000?logo=react)
 ![Firebase](https://img.shields.io/badge/Firebase-000?logo=firebase&logoColor=FFCA28)
@@ -16,7 +16,7 @@ This is a solution to the [Todo app challenge on Frontend Mentor](https://www.fr
 ![npm](https://img.shields.io/badge/-npm-000?logo=npm)
 ![JSON](https://img.shields.io/badge/-JSON-000?logo=json)
 
-<a href="https://denislav-dimov-todo-app.vercel.app/">
+<a href="https://fm-dd-todo-app.vercel.app">
   <img src="https://img.shields.io/badge/View_Website-181717?style=for-the-badge&logo=vercel&logoColor=white" alt="View Website" />
 </a>
 
@@ -60,7 +60,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: https://www.frontendmentor.io/solutions/to-do-app-with-drag-and-drop-and-locally-saved-tasks-JqtYrMr6Y_
-- Live Site URL: https://denislav-dimov-todo-app.vercel.app/
+- Live Site URL: https://fm-dd-todo-app.vercel.app
 
 ## Getting Started
 
@@ -78,7 +78,7 @@ Make sure you have the following installed:
 Clone this repository and install dependencies.
 
 ```bash
-git clone https://github.com/Denislav-Dimov/todo-app.git
+git clone https://github.com/Denislav-Dimov/frontend-mentor-solutions.git
 cd todo-app
 npm install
 ```
