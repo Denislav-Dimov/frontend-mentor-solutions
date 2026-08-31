@@ -1,32 +1,50 @@
+<div align="center">
+
 # Frontend Mentor Solutions
 
-A collection of my solutions to [Frontend Mentor](https://www.frontendmentor.io/) challenges.
+A collection of the solutions of my [Frontend Mentor](https://www.frontendmentor.io/profile/Denislav-Dimov) challenges.
 
-Each project lives in its own folder and retains the commit history from its original repository.
+## Favorite Solutions
 
-| Project | Original repository | Live site |
-| --- | --- | --- |
-| [Advice generator app](./advice-generator-app/) | [Repository](https://github.com/Denislav-Dimov/advice-generator-app) | — |
-| [Age calculator app](./age-calculator-app/) | [Repository](https://github.com/Denislav-Dimov/age-calculator-app) | — |
-| [Article preview component](./article-preview-component/) | [Repository](https://github.com/Denislav-Dimov/article-preview-component) | — |
-| [Blog preview card](./blog-preview-card/) | [Repository](https://github.com/Denislav-Dimov/Blog-preview-card) | — |
-| [Browser extensions manager UI](./browser-extensions-manager-ui/) | [Repository](https://github.com/Denislav-Dimov/browser-extensions-manager-ui) | [Live site](https://browser-extensions-manager-ui-peach.vercel.app) |
-| [Contact form](./contact-form/) | [Repository](https://github.com/Denislav-Dimov/contact-form) | [Live site](https://contact-form-kappa-two.vercel.app) |
-| [FAQ accordion](./faq-accordion/) | [Repository](https://github.com/Denislav-Dimov/faq-accordion) | — |
-| [Four card feature section](./four-card-feature-section/) | [Repository](https://github.com/Denislav-Dimov/Four-card-feature-section) | — |
-| [Interactive comments section](./interactive-comments-section/) | [Repository](https://github.com/Denislav-Dimov/interactive-comments-section) | — |
-| [Interactive rating component](./interactive-rating-component/) | [Repository](https://github.com/Denislav-Dimov/interactive-rating-component) | — |
-| [Newsletter sign-up](./newsletter-sign-up/) | [Repository](https://github.com/Denislav-Dimov/newsletter-sign-up) | — |
-| [Product preview](./product-preview/) | [Repository](https://github.com/Denislav-Dimov/Product-preview) | — |
-| [QR code component](./qr-code-component/) | [Repository](https://github.com/Denislav-Dimov/QR-code-component) | — |
-| [Recipe page](./recipe-page/) | [Repository](https://github.com/Denislav-Dimov/Recipe-page) | — |
-| [REST Countries API](./rest-countries-api/) | [Repository](https://github.com/Denislav-Dimov/rest-countries-api) | [Live site](https://dd-rest-countries-api.vercel.app) |
-| [Social links profile](./social-links-profile/) | [Repository](https://github.com/Denislav-Dimov/Social-links-profile) | — |
-| [Static job listings](./static-job-listings/) | [Repository](https://github.com/Denislav-Dimov/static-job-listings) | [Live site](https://static-job-listings-chi-steel.vercel.app) |
-| [Stats preview card](./stats-preview-card/) | [Repository](https://github.com/Denislav-Dimov/Stats-Preview-Card) | — |
-| [Testimonials grid section](./testimonials-grid-section-main/) | [Repository](https://github.com/Denislav-Dimov/Testimonials-grid-section-main) | — |
-| [Time tracking dashboard](./time-tracking-dashboard/) | [Repository](https://github.com/Denislav-Dimov/time-tracking-dashboard) | — |
-| [Tip calculator app](./tip-calculator-app/) | [Repository](https://github.com/Denislav-Dimov/tip-calculator-app) | — |
-| [Todo app](./todo-app/) | [Repository](https://github.com/Denislav-Dimov/todo-app) | [Live site](https://denislav-dimov-todo-app.vercel.app/) |
-| [URL shortening API](./url-shortening-api/) | [Repository](https://github.com/Denislav-Dimov/url-shortening-api) | — |
-| [Weather app](./weather-app/) | [Repository](https://github.com/Denislav-Dimov/weather-app) | [Live site](https://weather-app-pearl-rho-23.vercel.app) |
+| Project                                                         | Live site                                                          | Frontend Mentor Solution                                                                                                                   |
+| --------------------------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| [REST Countries API](./rest-countries-api/)                     | [Live site](https://fm-dd-rest-countries-api.vercel.app)           | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/rest-countries---nextjs-typescript-tailwindcss-hdFyZmT9MR)              |
+| [Weather app](./weather-app/)                                   | [Live site](https://fm-dd-weather-app.vercel.app)                  | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/weather-app---nextjs-typescript-dLa8BR96fp)                             |
+| [Interactive comments section](./interactive-comments-section/) | [Live site](https://fm-dd-interactive-comments-section.vercel.app) | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/solution-with-vanilla-javascript-and-all-bonus-requirements-Gg_7rfaxA_) |
+| [Todo app](./todo-app/)                                         | [Live site](https://fm-dd-todo-app.vercel.app)                     | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/to-do-app-with-drag-and-drop-and-locally-saved-tasks-JqtYrMr6Y_)        |
+| [Age calculator app](./age-calculator-app/)                     | [Live site](https://fm-dd-age-calculator-app.vercel.app)           | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/age-calculator-with-animations-rANMLT9llk)                              |
+| [Tip calculator app](./tip-calculator-app/)                     | [Live site](https://fm-dd-tip-calculator-app.vercel.app)           | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/responsive-tip-calculator-with-grid-uBVM3txqQv)                         |
+| [Advice generator app](./advice-generator-app/)                 | [Live site](https://fm-dd-advice-generator-app.vercel.app)         | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/just-a-solution-Nds8yxAM5n)                                             |
+
+## All Solutions
+
+Ordered by most recent
+
+| Project                                                           | Live site                                                           | Frontend Mentor Solution                                                                                                                   |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| [Weather app](./weather-app/)                                     | [Live site](https://fm-dd-weather-app.vercel.app)                   | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/weather-app---nextjs-typescript-dLa8BR96fp)                             |
+| [REST Countries API](./rest-countries-api/)                       | [Live site](https://fm-dd-rest-countries-api.vercel.app)            | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/rest-countries---nextjs-typescript-tailwindcss-hdFyZmT9MR)              |
+| [Browser extensions manager UI](./browser-extensions-manager-ui/) | [Live site](https://fm-dd-browser-extensions-manager-ui.vercel.app) | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/solution-with-react-typescript-and-tailwindcss-GVU_f2CYbJ)              |
+| [Contact form](./contact-form/)                                   | [Live site](https://fm-dd-contact-form.vercel.app)                  | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/contact-form-with-tailwind-css-HGdfpPZAbD)                              |
+| [FAQ accordion](./faq-accordion/)                                 | [Live site](https://fm-dd-faq-accordion.vercel.app)                 | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/faq-accordion-eXi9_soIwe)                                               |
+| [Static job listings](./static-job-listings/)                     | [Live site](https://fm-dd-static-job-listings.vercel.app)           | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/job-listings-with-dynamic-job-offer-pages-qWBTEYCw5g)                   |
+| [URL shortening API](./url-shortening-api/)                       | [Live site](https://fm-dd-url-shortening-api.vercel.app)            | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/url-shortening-api-landing-page-with-tailwind-css-o7VCcpoD_k)           |
+| [Interactive rating component](./interactive-rating-component/)   | [Live site](https://fm-dd-interactive-rating-component.vercel.app)  | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/solution-with-nothing-special-7wS2ldajTG)                               |
+| [Interactive comments section](./interactive-comments-section/)   | [Live site](https://fm-dd-interactive-comments-section.vercel.app)  | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/solution-with-vanilla-javascript-and-all-bonus-requirements-Gg_7rfaxA_) |
+| [Advice generator app](./advice-generator-app/)                   | [Live site](https://fm-dd-advice-generator-app.vercel.app)          | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/just-a-solution-Nds8yxAM5n)                                             |
+| [Todo app](./todo-app/)                                           | [Live site](https://fm-dd-todo-app.vercel.app)                      | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/to-do-app-with-drag-and-drop-and-locally-saved-tasks-JqtYrMr6Y_)        |
+| [Age calculator app](./age-calculator-app/)                       | [Live site](https://fm-dd-age-calculator-app.vercel.app)            | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/age-calculator-with-animations-rANMLT9llk)                              |
+| [Tip calculator app](./tip-calculator-app/)                       | [Live site](https://fm-dd-tip-calculator-app.vercel.app)            | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/responsive-tip-calculator-with-grid-uBVM3txqQv)                         |
+| [Time tracking dashboard](./time-tracking-dashboard/)             | [Live site](https://fm-dd-time-tracking-dashboard.vercel.app)       | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/time-tracking-dashboard-with-grid-fjNEe0tFpr)                           |
+| [Newsletter sign-up](./newsletter-sign-up/)                       | [Live site](https://fm-dd-newsletter-sign-up.vercel.app)            | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/responsive-newsletter-sign-up-with-mainly-flexbox-jDIz9T0cCb)           |
+| [Article preview component](./article-preview-component/)         | [Live site](https://fm-dd-article-preview-component.vercel.app)     | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/article-preview-component-pXfclO0K6I)                                   |
+| [Testimonials grid section](./testimonials-grid-section-main/)    | [Live site](https://fm-dd-testimonials-grid-section.vercel.app)     | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/responsive-solution-with-grid-and-multiple-breakpoints-S22wekzbXG)      |
+| [Four card feature section](./four-card-feature-section/)         | [Live site](https://fm-dd-four-card-feature-section.vercel.app)     | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/solution-using-css-grid-fz35IwHxCB)                                     |
+| [Product preview](./product-preview/)                             | [Live site](https://fm-dd-product-preview.vercel.app)               | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/solution--RXkGlBCy6)                                                    |
+| [Recipe page](./recipe-page/)                                     | [Live site](https://fm-dd-recipe-page.vercel.app)                   | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/recipe-page-please-dont-look-at-that-solution-SJr8AhOupz)               |
+| [Social links profile](./social-links-profile/)                   | [Live site](https://fm-dd-social-links-profile.vercel.app)          | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/social-links-profile-with-flexbox-Anb9lGDbV5)                           |
+| [Blog preview card](./blog-preview-card/)                         | [Live site](https://fm-dd-blog-preview-card.vercel.app)             | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/blog-preview-card-with-flexbox-l4MjPsHsVK)                              |
+| [QR code component](./qr-code-component/)                         | [Live site](https://fm-dd-qr-code-component.vercel.app)             | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/qr-code-component-37jLVwot8C)                                           |
+| [Stats preview card](./stats-preview-card/)                       | [Live site](https://fm-dd-stats-preview-cards.vercel.app)           | [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/stats-preview-cards-WWchS3jn7l)                                         |
+
+</div>
