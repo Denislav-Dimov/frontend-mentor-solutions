@@ -1,0 +1,19 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-primary-green-400: hsl(180, 29%, 50%);
+  --color-secondary-green-50: hsl(180, 52%, 96%);
+  --color-secondary-gray-400: hsl(180, 8%, 52%);
+  --color-secondary-gray-900: hsl(180, 14%, 20%);
+  --font-family-primary: 'League Spartan', arial;
+  --font-weight-normal: 500;
+  --font-weight-bold: 700;
+  --font-size-base: 15px;
+  --spacing-space-primary: 0.375rem 0.125rem;
+  --shadow-primary: hsl(180, 29%, 50%, 0.2) 0px 20px 25px -5px,
+    hsl(180, 29%, 50%, 0.04) 0px 10px 10px -5px;
+}
+
+html {
+  font-size: var(--font-size-base);
+}
