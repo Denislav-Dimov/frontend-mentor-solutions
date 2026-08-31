@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="./images/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./images/favicons/favicon-16x16.png">
+  <!-- This file lets browsers know how the website should act
+    when someone adds it to their home screen or installs it. -->
+  <link rel="manifest" href="./site.webmanifest">
+
+  <title>Frontend Mentor | Advice generator app</title>
+
+  <link rel="stylesheet" href="./styles/style.css">
+  <script src="./script/app.js" defer></script>
+
+  <!-- font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+
+  <!-- font awesome -->
+  <script src="https://kit.fontawesome.com/e3a28620b7.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <main>
+    <button class="menu-btn-open" onclick="toggleMenu()">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <section id="menuBackground" class="menu-background">
+      <aside class="menu" id="menu">
+        <nav class="menu-navigation">
+          <div class="navigation-buttons">
+            <button class="menu-btn" id="menuBtnHistory">
+              <i class="fa-regular fa-clock icon"></i>
+            </button>
+            <button class="menu-btn" id="menuBtnFavourite">
+              <i class="fa-regular fa-star icon"></i>
+            </button>
+          </div>
+          <button class="menu-btn-close" onclick="toggleMenu()">
+            <i class="fa-solid fa-close"></i>
+          </button>
+        </nav>
+
+        <div class="menu-content-wrapper">
+          <h2 class="menu-current" id="currentState"></h2>
+          <div class="menu-content-container" id="menuContent"></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="card" id="card">
+      <h1><span class="spaced">advice</span> # <span id="adviceNumber" class="spaced">0</span></h1>
+
+      <p id="adviceText"></p>
+
+      <picture>
+        <source srcset="./images/pattern-divider-desktop.svg" media="(width >= 568px)">
+        <img src="./images/pattern-divider-mobile.svg" alt="">
+      </picture>
+
+      <button onclick="generateAdvice()">
+        <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 0H4a4.005 4.005 0 0 0-4 4v16a4.005 4.005 0 0 0 4 4h16a4.005 4.005 0 0 0 4-4V4a4.005 4.005 0 0 0-4-4ZM7.5 18a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm0-9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm4.5 4.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm4.5 4.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm0-9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z" fill="#202733" />
+        </svg>
+      </button>
+    </section>
+  </main>
+</body>
+</html>
