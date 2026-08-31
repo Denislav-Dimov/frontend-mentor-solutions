@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lexend+Deca:wght@100..900&family=Outfit:wght@100..900&family=Poppins:wght@200;400;600&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    --green: hsl(75, 94%, 57%);
+    --white: hsl(0, 0%, 100%);
+    --grey300: hsl(0, 0%, 67%);
+    --grey700: hsl(0, 0%, 20%);
+    --grey800: hsl(0, 0%, 12%);
+    --grey900: hsl(0, 0%, 8%);
+
+    --ff: 'Inter';
+
+    --fs-100: 13px;
+    --fs-200: 14px;
+    --fs-300: 24px;
+
+    --fw-400: 400;
+    --fw-600: 600;
+    --fw-700: 700;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--grey900);
+    color: var(--white);
+    font-family: var(--ff);
+    margin: 0;
+}
+
+main {
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.card {
+    background-color: var(--grey800);
+    border-radius: 12px;
+}
+
+.content {
+    margin: 35px;
+}
+
+.content img {
+    border-radius: 50%;
+}
+
+.content h1 {
+    font-size: var(--fs-300);
+    font-weight: var(--fw-600);
+    margin: 20px 0 8px 0;
+}
+
+.colored-paragraph {
+    color: var(--green);
+    font-size: var(--fs-200);
+    font-weight: var(--fw-600);
+    margin: 0;
+}
+
+.content-paragraph {
+    color: var(--grey300);
+    font-size: var(--fs-100);
+    font-weight: var(--fw-400);
+    margin: 23px 0 20px 0;
+}
+
+.links {
+    background-color: var(--grey700);
+    width: 280px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 100ms;
+}
+
+.links:hover {
+    background-color: var(--green);
+    color: var(--grey800);
+}
+
+.links-paragraph {
+    font-size: var(--fs-100);
+    font-weight: var(--fw-700);
+}
+
+@media (max-width: 500px) {
+    .content {
+        margin: 25px;
+    }
+
+    .links {
+        width: 260px;
+    }
+}
