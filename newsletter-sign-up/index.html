@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+
+    <title>Frontend Mentor | Newsletter sign-up form with success message</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="form.js" defer></script>
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main>
+        <section class="container">
+            <picture class="image-section">
+                <source media="(min-width: 768px)" srcset="./assets/images/illustration-sign-up-desktop.svg">
+                <source media="(min-width: 375px)" srcset="./assets/images/illustration-sign-up-tablet.svg">
+                <img src="./assets/images/illustration-sign-up-mobile.svg" alt="">
+            </picture>
+            <div class="content-section">
+                <h1>Stay updated!</h1>
+                <p>Join 60,000+ product managers receiving monthly updates on:</p>
+                <ul>
+                    <li>Product discovery and building what matters</li>
+                    <li>Measuring to ensure updates are a success</li>
+                    <li>And much more!</li>
+                </ul>
+                <form action="/" id="form">
+                    <div class="input-area">
+                        <div class="flex-group">
+                            <label for="email">Email address</label>
+                            <span id="email-error-msg"></span>
+                        </div>
+                        <input type="text" name="email" id="email" placeholder="email@company.com">
+                    </div>
+                    <button id="submit-btn" class="button">Subscribe to monthly newsletter</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="success-message-container" class="hidden">
+            <div class="success-message">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+                    <defs>
+                        <linearGradient id="a" x1="100%" x2="0%" y1="0%" y2="100%">
+                            <stop offset="0%" stop-color="#FF6A3A" />
+                            <stop offset="100%" stop-color="#FF527B" />
+                        </linearGradient>
+                    </defs>
+                    <g fill="none">
+                        <circle cx="32" cy="32" r="32" fill="url(#a)" />
+                        <path stroke="#FFF" stroke-width="4" d="m18.286 34.686 8.334 7.98 19.094-18.285" />
+                    </g>
+                </svg>
+                <h2>Thanks for subscribing!</h2>
+                <p>
+                    A confirmation email has been sent to <span id="success-message-email">---</span>.
+                    Please open it and click the button inside to confirm your subscription.
+                </p>
+                <button id="success-message-btn" class="button">Dismiss message</button>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
