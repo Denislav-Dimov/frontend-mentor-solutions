@@ -8,15 +8,20 @@ public static class CommentsEndpoints {
     public static WebApplication MapCommentEndpoints(this WebApplication app) {
         var group = app.MapGroup("/api/comments").WithTags("Comments");
 
-        group.MapGet("/", async (AppDbContext db, CancellationToken cancellationToken) => {
+        group.MapGet("/", async (
+            ClaimsPrincipal principal,
+            AppDbContext db,
+            CancellationToken cancellationToken) => {
             var comments = await db.Comments
                 .AsNoTracking()
                 .Include(comment => comment.Author)
-                .OrderByDescending(comment => comment.Score)
+                .Include(comment => comment.Votes)
                 .ToListAsync(cancellationToken);
 
+            var currentUserId = GetUserId(principal);
             var responseComments = comments
-                .Select(ToResponse)
+                .Select(comment => ToResponse(comment, currentUserId))
+                .OrderByDescending(comment => comment.Score)
                 .ToList();
 
             var responsesById = responseComments
@@ -80,41 +85,79 @@ public static class CommentsEndpoints {
             await db.SaveChangesAsync(cancellationToken);
 
             await db.Entry(comment).Reference(item => item.Author).LoadAsync(cancellationToken);
-            return Results.Created($"/api/comments/{comment.Id}", ToResponse(comment));
+            return Results.Created($"/api/comments/{comment.Id}", ToResponse(comment, authorId));
         }).RequireAuthorization();
 
-        group.MapPut("/{id:guid}/score", async (
+        group.MapPut("/{id:guid}/vote", async (
             Guid id,
-            UpdateScoreRequest request,
+            VoteRequest request,
+            ClaimsPrincipal principal,
             AppDbContext db,
             CancellationToken cancellationToken) => {
-            if (request.Score is < -1 or > 1) {
+            if (request.Value is not (-1 or 1)) {
                 return Results.ValidationProblem(new Dictionary<string, string[]> {
-                    ["score"] = ["Score must be -1, 0, or 1."]
+                    ["value"] = ["Value must be -1 or 1."]
                 });
             }
 
+            var userId = GetUserId(principal);
+
+            if (userId is null) {
+                return Results.Unauthorized();
+            }
+
             var comment = await db.Comments
-                .Include(item => item.Author)
                 .SingleOrDefaultAsync(item => item.Id == id, cancellationToken);
 
             if (comment is null) {
                 return Results.NotFound();
             }
 
-            comment.Score = request.Score;
+            await using var transaction = await db.Database.BeginTransactionAsync(cancellationToken);
+            var vote = await db.CommentVotes
+                .SingleOrDefaultAsync(item =>
+                        item.CommentId == id && item.UserId == userId.Value,
+                    cancellationToken);
+
+            if (vote is null) {
+                db.CommentVotes.Add(new CommentVote {
+                    CommentId = id,
+                    UserId = userId.Value,
+                    Value = request.Value
+                });
+            } else if (vote.Value == request.Value) {
+                db.CommentVotes.Remove(vote);
+            } else {
+                vote.Value = request.Value;
+                vote.UpdatedAt = DateTime.UtcNow;
+            }
+
             await db.SaveChangesAsync(cancellationToken);
-            return Results.Ok(ToResponse(comment));
+            await transaction.CommitAsync(cancellationToken);
+
+            return Results.Ok(await GetVoteSummary(id, userId.Value, db, cancellationToken));
         }).RequireAuthorization();
 
         group.MapDelete("/{id:guid}", async (
             Guid id,
+            ClaimsPrincipal principal,
             AppDbContext db,
             CancellationToken cancellationToken) => {
-            var comment = await db.Comments.FindAsync([id], cancellationToken);
+            var userId = GetUserId(principal);
+
+            if (userId is null) {
+                return Results.Unauthorized();
+            }
+
+            var comment = await db.Comments
+                .SingleOrDefaultAsync(item => item.Id == id, cancellationToken);
 
             if (comment is null) {
                 return Results.NotFound();
+            }
+
+            if (comment.AuthorId != userId.Value) {
+                return Results.Forbid();
             }
 
             db.Comments.Remove(comment);
@@ -122,19 +165,116 @@ public static class CommentsEndpoints {
             return Results.NoContent();
         }).RequireAuthorization();
 
+        group.MapGet("/{id:guid}/votes", async (
+            Guid id,
+            int? page,
+            int? pageSize,
+            AppDbContext db,
+            CancellationToken cancellationToken) => {
+            var requestedPage = page ?? 1;
+            var requestedPageSize = pageSize ?? 20;
+
+            if (requestedPage < 1 || requestedPageSize is < 1 or > 50) {
+                return Results.ValidationProblem(new Dictionary<string, string[]> {
+                    ["page"] = ["Page must be at least 1."],
+                    ["pageSize"] = ["Page size must be between 1 and 50."]
+                });
+            }
+
+            if (!await db.Comments.AnyAsync(comment => comment.Id == id, cancellationToken)) {
+                return Results.NotFound();
+            }
+
+            var votes = db.CommentVotes
+                .AsNoTracking()
+                .Where(vote => vote.CommentId == id);
+            var totalCount = await votes.CountAsync(cancellationToken);
+            var items = await votes
+                .OrderByDescending(vote => vote.UpdatedAt)
+                .ThenBy(vote => vote.UserId)
+                .Skip((requestedPage - 1) * requestedPageSize)
+                .Take(requestedPageSize)
+                .Select(vote => new VoteResponse(
+                    new PublicUserResponse(
+                        vote.User.Id,
+                        vote.User.UserName!,
+                        vote.User.AvatarUrl),
+                    vote.Value,
+                    vote.UpdatedAt))
+                .ToListAsync(cancellationToken);
+
+            return Results.Ok(new VotePageResponse(
+                items,
+                requestedPage,
+                requestedPageSize,
+                totalCount,
+                requestedPage * requestedPageSize < totalCount
+                    ? requestedPage + 1
+                    : null));
+        });
+
         return app;
     }
 
-    private static CommentResponse ToResponse(Comment comment) =>
-        new(
+    private static async Task<VoteSummaryResponse> GetVoteSummary(
+        Guid commentId,
+        Guid userId,
+        AppDbContext db,
+        CancellationToken cancellationToken) {
+        var votes = db.CommentVotes
+            .AsNoTracking()
+            .Where(vote => vote.CommentId == commentId);
+        var counts = await votes
+            .GroupBy(vote => vote.Value)
+            .Select(group => new { Value = group.Key, Count = group.Count() })
+            .ToListAsync(cancellationToken);
+        var currentVote = await votes
+            .Where(vote => vote.UserId == userId)
+            .Select(vote => (int?)vote.Value)
+            .SingleOrDefaultAsync(cancellationToken);
+        var baseline = await db.Comments
+            .Where(comment => comment.Id == commentId)
+            .Select(comment => comment.Score)
+            .SingleAsync(cancellationToken);
+        var upvotes = counts.SingleOrDefault(item => item.Value == 1)?.Count ?? 0;
+        var downvotes = counts.SingleOrDefault(item => item.Value == -1)?.Count ?? 0;
+
+        return new VoteSummaryResponse(
+            baseline + upvotes - downvotes,
+            upvotes,
+            downvotes,
+            currentVote
+        );
+    }
+
+    private static CommentResponse ToResponse(Comment comment, Guid? currentUserId) {
+        var upvotes = comment.Votes.Count(vote => vote.Value == 1);
+        var downvotes = comment.Votes.Count(vote => vote.Value == -1);
+        var currentVote = currentUserId is null
+            ? null
+            : comment.Votes
+                .Where(vote => vote.UserId == currentUserId.Value)
+                .Select(vote => (int?)vote.Value)
+                .SingleOrDefault();
+
+        return new CommentResponse(
             comment.Id,
             comment.Content,
-            comment.Score,
+            comment.Score + upvotes - downvotes,
             comment.CreatedAt,
             new AuthorResponse(comment.Author.Id, comment.Author.UserName!, comment.Author.AvatarUrl),
             comment.ParentId,
-            []
+            [],
+            upvotes,
+            downvotes,
+            currentVote
         );
+    }
+
+    private static Guid? GetUserId(ClaimsPrincipal principal) =>
+        Guid.TryParse(principal.FindFirstValue(ClaimTypes.NameIdentifier), out var userId)
+            ? userId
+            : null;
 
     private static void SortRepliesByCreatedAt(CommentResponse comment) {
         comment.Replies.Sort((first, second) =>
@@ -147,7 +287,7 @@ public static class CommentsEndpoints {
 
     private record CreateCommentRequest(string Content, Guid? ParentId);
 
-    private record UpdateScoreRequest(int Score);
+    private record VoteRequest(int Value);
 
     private record CommentResponse(
         Guid Id,
@@ -156,8 +296,28 @@ public static class CommentsEndpoints {
         DateTime CreatedAt,
         AuthorResponse Author,
         Guid? ParentId,
-        List<CommentResponse> Replies
+        List<CommentResponse> Replies,
+        int UpvoteCount,
+        int DownvoteCount,
+        int? CurrentUserVote
     );
 
     private record AuthorResponse(Guid Id, string Username, string? AvatarUrl);
+
+    private record PublicUserResponse(Guid Id, string Username, string? AvatarUrl);
+
+    private record VoteResponse(PublicUserResponse User, int Value, DateTime UpdatedAt);
+
+    private record VotePageResponse(
+        List<VoteResponse> Items,
+        int Page,
+        int PageSize,
+        int TotalCount,
+        int? NextPage);
+
+    private record VoteSummaryResponse(
+        int Score,
+        int UpvoteCount,
+        int DownvoteCount,
+        int? CurrentUserVote);
 }

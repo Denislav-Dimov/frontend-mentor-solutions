@@ -3,6 +3,7 @@ using System;
 using Api.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace api.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260904203319_AddCommentVotes")]
+    partial class AddCommentVotes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,7 +54,7 @@ namespace api.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Api.Features.Comments.CommentVote", b =>
@@ -72,7 +75,7 @@ namespace api.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("CommentId", "UpdatedAt");
 
-                    b.ToTable("CommentVotes", (string)null);
+                    b.ToTable("CommentVotes");
                 });
 
             modelBuilder.Entity("Api.Features.Users.ApplicationUser", b =>

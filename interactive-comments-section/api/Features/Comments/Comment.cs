@@ -17,4 +17,5 @@ public class Comment {
     public Comment? Parent { get; set; }
 
     public ICollection<Comment> Replies { get; } = [];
+    public ICollection<CommentVote> Votes { get; } = [];
 }

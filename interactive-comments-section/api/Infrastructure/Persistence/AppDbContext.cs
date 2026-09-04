@@ -9,6 +9,7 @@ namespace Api.Infrastructure.Persistence;
 public class AppDbContext(DbContextOptions<AppDbContext> options)
     : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>(options) {
     public DbSet<Comment> Comments => Set<Comment>();
+    public DbSet<CommentVote> CommentVotes => Set<CommentVote>();
 
     protected override void OnModelCreating(ModelBuilder builder) {
         base.OnModelCreating(builder);
@@ -30,6 +31,21 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             entity.HasOne(comment => comment.Parent)
                 .WithMany(comment => comment.Replies)
                 .HasForeignKey(comment => comment.ParentId);
+        });
+
+        builder.Entity<CommentVote>(entity => {
+            entity.HasKey(vote => new { vote.UserId, vote.CommentId });
+            entity.Property(vote => vote.Value).IsRequired();
+            entity.Property(vote => vote.UpdatedAt).IsRequired();
+            entity.HasIndex(vote => new { vote.CommentId, vote.UpdatedAt });
+            entity.HasOne(vote => vote.User)
+                .WithMany(user => user.CommentVotes)
+                .HasForeignKey(vote => vote.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(vote => vote.Comment)
+                .WithMany(comment => comment.Votes)
+                .HasForeignKey(vote => vote.CommentId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }
