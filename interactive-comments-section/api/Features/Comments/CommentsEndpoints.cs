@@ -12,7 +12,7 @@ public static class CommentsEndpoints {
             var comments = await db.Comments
                 .AsNoTracking()
                 .Include(comment => comment.Author)
-                .OrderByDescending(comment => comment.CreatedAt)
+                .OrderByDescending(comment => comment.Score)
                 .ToListAsync(cancellationToken);
 
             var responseComments = comments
@@ -26,6 +26,10 @@ public static class CommentsEndpoints {
                 if (responsesById.TryGetValue(comment.ParentId!.Value, out var parent)) {
                     parent.Replies.Add(comment);
                 }
+            }
+
+            foreach (var parent in responseComments.Where(comment => comment.ParentId is null)) {
+                SortRepliesByCreatedAt(parent);
             }
 
             return Results.Ok(
@@ -131,6 +135,15 @@ public static class CommentsEndpoints {
             comment.ParentId,
             []
         );
+
+    private static void SortRepliesByCreatedAt(CommentResponse comment) {
+        comment.Replies.Sort((first, second) =>
+            first.CreatedAt.CompareTo(second.CreatedAt));
+
+        foreach (var reply in comment.Replies) {
+            SortRepliesByCreatedAt(reply);
+        }
+    }
 
     private record CreateCommentRequest(string Content, Guid? ParentId);
 
