@@ -37,6 +37,9 @@ var app = builder.Build();
 await using (var scope = app.Services.CreateAsyncScope()) {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await db.Database.MigrateAsync();
+    await DatabaseSeeder.SeedAsync(
+        scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>(),
+        db);
 }
 
 if (app.Environment.IsDevelopment()) {
