@@ -34,8 +34,7 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment()) {
-    await using var scope = app.Services.CreateAsyncScope();
+await using (var scope = app.Services.CreateAsyncScope()) {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await db.Database.MigrateAsync();
 }
