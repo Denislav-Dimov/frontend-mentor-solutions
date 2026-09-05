@@ -1,4 +1,5 @@
 using Api.Infrastructure.Persistence;
+using Api.Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
@@ -86,7 +87,10 @@ public static class CommentsEndpoints {
 
             await db.Entry(comment).Reference(item => item.Author).LoadAsync(cancellationToken);
             return Results.Created($"/api/comments/{comment.Id}", ToResponse(comment, authorId));
-        }).RequireAuthorization();
+        })
+        .RequireAuthorization()
+        .RequireRateLimiting("mutation")
+        .AddEndpointFilter<AntiforgeryEndpointFilter>();
 
         group.MapPut("/{id:guid}/vote", async (
             Guid id,
@@ -136,7 +140,10 @@ public static class CommentsEndpoints {
             await transaction.CommitAsync(cancellationToken);
 
             return Results.Ok(await GetVoteSummary(id, userId.Value, db, cancellationToken));
-        }).RequireAuthorization();
+        })
+        .RequireAuthorization()
+        .RequireRateLimiting("mutation")
+        .AddEndpointFilter<AntiforgeryEndpointFilter>();
 
         group.MapDelete("/{id:guid}", async (
             Guid id,
@@ -163,7 +170,10 @@ public static class CommentsEndpoints {
             db.Comments.Remove(comment);
             await db.SaveChangesAsync(cancellationToken);
             return Results.NoContent();
-        }).RequireAuthorization();
+        })
+        .RequireAuthorization()
+        .RequireRateLimiting("mutation")
+        .AddEndpointFilter<AntiforgeryEndpointFilter>();
 
         group.MapGet("/{id:guid}/votes", async (
             Guid id,
