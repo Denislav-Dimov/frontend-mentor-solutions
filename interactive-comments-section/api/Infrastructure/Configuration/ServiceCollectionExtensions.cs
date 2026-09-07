@@ -1,5 +1,7 @@
 using Api.Features.Users;
 using Api.Infrastructure.Persistence;
+using Amazon.S3;
+using Amazon.Runtime;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +24,19 @@ public static class ServiceCollectionExtensions {
 
         builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(connectionString));
+
+        var storageOptions = StorageOptions.FromConfiguration(builder.Configuration);
+        builder.Services.AddSingleton(storageOptions);
+        builder.Services.AddSingleton<IAmazonS3>(_ =>
+            new AmazonS3Client(
+                new BasicAWSCredentials(
+                    storageOptions.AccessKeyId,
+                    storageOptions.SecretAccessKey),
+                new AmazonS3Config {
+                    ServiceURL = storageOptions.Endpoint,
+                    AuthenticationRegion = storageOptions.Region,
+                    ForcePathStyle = true
+                }));
 
         builder.Services.AddCors(options =>
             options.AddPolicy("Frontend", policy => policy
@@ -106,8 +121,81 @@ public static class ServiceCollectionExtensions {
                     }));
         });
         builder.WebHost.ConfigureKestrel(options =>
-            options.Limits.MaxRequestBodySize = 64 * 1024);
+            options.Limits.MaxRequestBodySize = 2 * 1024 * 1024);
 
         return builder;
+    }
+
+    public record StorageOptions(
+        string AccessKeyId,
+        string SecretAccessKey,
+        string Endpoint,
+        string Region,
+        string Bucket) {
+        public static StorageOptions FromConfiguration(IConfiguration configuration) {
+            var values = new {
+                AccessKeyId = GetValue(configuration, "Storage:AccessKeyId", "AWS_ACCESS_KEY_ID"),
+                SecretAccessKey = GetValue(
+                    configuration,
+                    "Storage:SecretAccessKey",
+                    "AWS_SECRET_ACCESS_KEY"),
+                Endpoint = GetValue(configuration, "Storage:Endpoint", "AWS_ENDPOINT_URL_S3"),
+                Region = GetValue(configuration, "Storage:Region", "AWS_REGION"),
+                Bucket = GetValue(configuration, "Storage:Bucket", "AWS_S3_BUCKET")
+            };
+
+            var missing = new[] {
+                (Name: "Storage:AccessKeyId or AWS_ACCESS_KEY_ID", Value: values.AccessKeyId),
+                (
+                    Name: "Storage:SecretAccessKey or AWS_SECRET_ACCESS_KEY",
+                    Value: values.SecretAccessKey),
+                (Name: "Storage:Endpoint or AWS_ENDPOINT_URL_S3", Value: values.Endpoint),
+                (Name: "Storage:Region or AWS_REGION", Value: values.Region),
+                (Name: "Storage:Bucket or AWS_S3_BUCKET", Value: values.Bucket)
+            }
+            .Where(item => string.IsNullOrWhiteSpace(item.Value))
+            .Select(item => item.Name)
+            .ToArray();
+
+            if (missing.Length > 0) {
+                throw new InvalidOperationException(
+                    $"Missing Neon Object Storage configuration: {string.Join(", ", missing)}.");
+            }
+
+            return new StorageOptions(
+                values.AccessKeyId!,
+                values.SecretAccessKey!,
+                values.Endpoint!.TrimEnd('/'),
+                values.Region!,
+                values.Bucket!);
+        }
+
+        private static string? GetValue(
+            IConfiguration configuration,
+            string primaryKey,
+            string fallbackKey) =>
+            configuration[primaryKey] ?? configuration[fallbackKey];
+
+        public string PublicUrlFor(string key) =>
+            $"{Endpoint}/{Uri.EscapeDataString(Bucket)}/{string.Join(
+                "/",
+                key.Split('/').Select(Uri.EscapeDataString))}";
+
+        public bool TryGetKey(string? avatarUrl, out string key) {
+            key = string.Empty;
+            if (string.IsNullOrWhiteSpace(avatarUrl) ||
+                !Uri.TryCreate(avatarUrl, UriKind.Absolute, out var uri) ||
+                !uri.AbsoluteUri.StartsWith($"{Endpoint}/", StringComparison.OrdinalIgnoreCase)) {
+                return false;
+            }
+
+            var prefix = $"/{Bucket}/";
+            if (!uri.AbsolutePath.StartsWith(prefix, StringComparison.Ordinal)) {
+                return false;
+            }
+
+            key = Uri.UnescapeDataString(uri.AbsolutePath[prefix.Length..]);
+            return !string.IsNullOrWhiteSpace(key);
+        }
     }
 }

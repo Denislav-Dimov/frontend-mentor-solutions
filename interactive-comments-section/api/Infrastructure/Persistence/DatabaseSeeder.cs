@@ -1,5 +1,6 @@
 using Api.Features.Comments;
 using Api.Features.Users;
+using Api.Infrastructure.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,7 @@ public static class DatabaseSeeder {
     public static async Task SeedAsync(
         UserManager<ApplicationUser> userManager,
         AppDbContext db,
+        ServiceCollectionExtensions.StorageOptions storageOptions,
         CancellationToken cancellationToken = default) {
         var users = new[] {
             new ApplicationUser {
@@ -26,33 +28,45 @@ public static class DatabaseSeeder {
                 UserName = "amyrobson",
                 Email = "amyrobson@demo.local",
                 EmailConfirmed = true,
-                AvatarUrl = "/images/avatars/image-amyrobson.png"
+                AvatarUrl = storageOptions.PublicUrlFor("avatars/seed/image-amyrobson.png")
             },
             new ApplicationUser {
                 Id = MaxId,
                 UserName = "maxblagun",
                 Email = "maxblagun@demo.local",
                 EmailConfirmed = true,
-                AvatarUrl = "/images/avatars/image-maxblagun.png"
+                AvatarUrl = storageOptions.PublicUrlFor("avatars/seed/image-maxblagun.png")
             },
             new ApplicationUser {
                 Id = RamsesId,
                 UserName = "ramsesmiron",
                 Email = "ramsesmiron@demo.local",
                 EmailConfirmed = true,
-                AvatarUrl = "/images/avatars/image-ramsesmiron.png"
+                AvatarUrl = storageOptions.PublicUrlFor("avatars/seed/image-ramsesmiron.png")
             },
             new ApplicationUser {
                 Id = JuliusId,
                 UserName = "juliusomo",
                 Email = "juliusomo@demo.local",
                 EmailConfirmed = true,
-                AvatarUrl = "/images/avatars/image-juliusomo.png"
+                AvatarUrl = storageOptions.PublicUrlFor("avatars/seed/image-juliusomo.png")
             }
         };
 
         foreach (var user in users) {
-            if (await userManager.FindByIdAsync(user.Id.ToString()) is not null) {
+            var existingUser = await userManager.FindByIdAsync(user.Id.ToString());
+            if (existingUser is not null) {
+                if (existingUser.AvatarUrl == user.AvatarUrl) {
+                    continue;
+                }
+
+                existingUser.AvatarUrl = user.AvatarUrl;
+                var updateResult = await userManager.UpdateAsync(existingUser);
+                if (!updateResult.Succeeded) {
+                    throw new InvalidOperationException(
+                        $"Unable to update seeded user '{existingUser.UserName}': " +
+                        string.Join("; ", updateResult.Errors.Select(error => error.Description)));
+                }
                 continue;
             }
 

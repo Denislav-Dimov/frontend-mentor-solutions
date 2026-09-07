@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Amazon.S3;
+using Amazon.S3.Model;
 using Api.Infrastructure.Security;
 using System.Net.Mail;
+using System.Security.Claims;
 
 namespace Api.Features.Users;
 
@@ -87,6 +90,82 @@ public static class UsersEndpoints {
         group.MapPost("/logout", async (SignInManager<ApplicationUser> signInManager) => {
             await signInManager.SignOutAsync();
             return Results.NoContent();
+        })
+        .RequireAuthorization()
+        .RequireRateLimiting("mutation")
+        .AddEndpointFilter<AntiforgeryEndpointFilter>();
+
+        group.MapPost("/me/avatar", async (
+            IFormFile file,
+            ClaimsPrincipal principal,
+            UserManager<ApplicationUser> userManager,
+            IAmazonS3 storage,
+            Infrastructure.Configuration.ServiceCollectionExtensions.StorageOptions storageOptions,
+            CancellationToken cancellationToken) => {
+            if (file.Length is < 1 or > 2 * 1024 * 1024) {
+                return Results.ValidationProblem(new Dictionary<string, string[]> {
+                    ["file"] = ["Profile pictures must be between 1 byte and 2 MB."]
+                });
+            }
+
+            var allowedContentTypes = new[] {
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            };
+
+            if (!allowedContentTypes.Contains(file.ContentType, StringComparer.OrdinalIgnoreCase)) {
+                return Results.ValidationProblem(new Dictionary<string, string[]> {
+                    ["file"] = ["Only JPEG, PNG, and WebP images are supported."]
+                });
+            }
+
+            if (!Guid.TryParse(principal.FindFirstValue(ClaimTypes.NameIdentifier), out var userId)) {
+                return Results.Unauthorized();
+            }
+
+            var user = await userManager.FindByIdAsync(userId.ToString());
+            if (user is null) {
+                return Results.Unauthorized();
+            }
+
+            var extension = file.ContentType.ToLowerInvariant() switch {
+                "image/jpeg" => "jpg",
+                "image/png" => "png",
+                "image/webp" => "webp",
+                _ => throw new InvalidOperationException("Unsupported image content type.")
+            };
+            var key = $"avatars/{user.Id}/{Guid.NewGuid():N}.{extension}";
+
+            await using var stream = file.OpenReadStream();
+            await storage.PutObjectAsync(new PutObjectRequest {
+                BucketName = storageOptions.Bucket,
+                Key = key,
+                InputStream = stream,
+                ContentType = file.ContentType
+            }, cancellationToken);
+
+            var previousAvatarUrl = user.AvatarUrl;
+            user.AvatarUrl = storageOptions.PublicUrlFor(key);
+
+            var result = await userManager.UpdateAsync(user);
+            if (!result.Succeeded) {
+                await storage.DeleteObjectAsync(storageOptions.Bucket, key, cancellationToken);
+                return Results.ValidationProblem(result.Errors
+                    .GroupBy(error => error.Code)
+                    .ToDictionary(
+                        group => group.Key,
+                        group => group.Select(error => error.Description).ToArray()));
+            }
+
+            if (storageOptions.TryGetKey(previousAvatarUrl, out var previousKey)) {
+                await storage.DeleteObjectAsync(
+                    storageOptions.Bucket,
+                    previousKey,
+                    cancellationToken);
+            }
+
+            return Results.Ok(new UserResponse(user.Id, user.UserName!, user.AvatarUrl));
         })
         .RequireAuthorization()
         .RequireRateLimiting("mutation")

@@ -14,7 +14,9 @@ public static class WebApplicationExtensions {
         await db.Database.MigrateAsync();
         await DatabaseSeeder.SeedAsync(
             scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>(),
-            db);
+            db,
+            scope.ServiceProvider
+                .GetRequiredService<ServiceCollectionExtensions.StorageOptions>());
     }
 
     public static void UseApiPipeline(this WebApplication app) {
