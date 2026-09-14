@@ -51,7 +51,7 @@ export default function CommentComposer({ currentUser }: CommentComposerProps) {
         </p>
       )}
       <Composer
-        avatarSrc={currentUser.image.png}
+        avatarSrc={currentUser.image}
         avatarAlt={currentUser.username}
         buttonLabel="Send"
         isGuest={!currentUser.id}

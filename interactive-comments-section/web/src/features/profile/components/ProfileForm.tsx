@@ -127,7 +127,7 @@ export default function ProfileForm({ user }: Props) {
               alt=""
               width={64}
               height={64}
-              unoptimized={Boolean(user.avatarUrl)}
+              unoptimized
               className="h-16 w-16 shrink-0 rounded-full object-cover"
             />
             <label className="grid w-full min-w-0 gap-2 text-sm font-bold text-purple-600 sm:flex-1">

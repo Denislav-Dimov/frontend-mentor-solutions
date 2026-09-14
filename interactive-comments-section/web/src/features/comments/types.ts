@@ -1,13 +1,8 @@
 type Vote = 0 | 1 | -1;
 
-export type UserImage = {
-  png: string;
-  webp: string;
-};
-
 export type CommentUser = {
   id?: string;
-  image: UserImage;
+  image: string | null;
   username: string;
   isSeeded: boolean;
 };

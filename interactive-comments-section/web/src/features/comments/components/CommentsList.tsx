@@ -33,11 +33,6 @@ export default function CommentsList({ currentUser, comments }: CommentsListProp
   );
 }
 
-function avatar(url?: string | null) {
-  const source = url ?? '/images/avatars/image-default.png';
-  return { png: source, webp: source };
-}
-
 function mapComment(comment: ApiComment): TopLevelComment {
   const byId = new Map<string, ApiComment>();
   const walk = (node: ApiComment) => {
@@ -57,7 +52,7 @@ function mapComment(comment: ApiComment): TopLevelComment {
         user: {
           id: child.author.id,
           username: child.author.username,
-          image: avatar(child.author.avatarUrl),
+          image: child.author.avatarUrl,
           isSeeded: child.author.isSeeded ?? false,
         },
         replyingTo: child.parentId
@@ -79,7 +74,7 @@ function mapComment(comment: ApiComment): TopLevelComment {
     user: {
       id: comment.author.id,
       username: comment.author.username,
-      image: avatar(comment.author.avatarUrl),
+      image: comment.author.avatarUrl,
       isSeeded: comment.author.isSeeded ?? false,
     },
     replies,

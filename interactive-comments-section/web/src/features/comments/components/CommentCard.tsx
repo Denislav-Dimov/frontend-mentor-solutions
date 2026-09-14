@@ -113,14 +113,23 @@ export default function CommentCard({ comment, currentUser }: CommentCardProps) 
           <div className="grid min-w-0 flex-1 gap-4">
             <div className="flex min-w-0 items-center justify-between gap-4">
               <div className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1">
-                <Image
-                  src={comment.user.image.png}
-                  alt={comment.user.username}
-                  width={34}
-                  height={34}
-                  unoptimized={comment.user.image.png.startsWith('http')}
-                  className="h-8.5 w-8.5 rounded-full"
-                />
+                {comment.user.image ? (
+                  <Image
+                    src={comment.user.image}
+                    alt={comment.user.username}
+                    width={34}
+                    height={34}
+                    unoptimized
+                    className="h-8.5 w-8.5 rounded-full"
+                  />
+                ) : (
+                  <span
+                    aria-hidden="true"
+                    className="bg-grey-100 text-grey-500 grid h-8.5 w-8.5 shrink-0 place-items-center rounded-full font-bold"
+                  >
+                    {comment.user.username.charAt(0).toUpperCase()}
+                  </span>
+                )}
                 <p className="text-grey-800 font-medium">{comment.user.username}</p>
                 {isOwn && (
                   <span className="rounded-[5px] bg-purple-600 px-1.75 text-sm text-white">
@@ -183,7 +192,7 @@ export default function CommentCard({ comment, currentUser }: CommentCardProps) 
       {replyOpen && (
         <div className="mt-4">
           <Composer
-            avatarSrc={currentUser.image.png}
+            avatarSrc={currentUser.image}
             avatarAlt={currentUser.username}
             buttonLabel="Reply"
             initialValue={`@${comment.user.username} `}
@@ -281,14 +290,23 @@ function ReplyCard({ comment, currentUser }: ReplyCardProps) {
           <div className="grid min-w-0 flex-1 gap-4">
             <div className="flex min-w-0 items-center justify-between gap-4">
               <div className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1">
-                <Image
-                  src={comment.user.image.png}
-                  alt={comment.user.username}
-                  width={34}
-                  height={34}
-                  unoptimized={comment.user.image.png.startsWith('http')}
-                  className="h-8.5 w-8.5 rounded-full"
-                />
+                {comment.user.image ? (
+                  <Image
+                    src={comment.user.image}
+                    alt={comment.user.username}
+                    width={34}
+                    height={34}
+                    unoptimized
+                    className="h-8.5 w-8.5 rounded-full"
+                  />
+                ) : (
+                  <span
+                    aria-hidden="true"
+                    className="bg-grey-100 text-grey-500 grid h-8.5 w-8.5 shrink-0 place-items-center rounded-full font-bold"
+                  >
+                    {comment.user.username.charAt(0).toUpperCase()}
+                  </span>
+                )}
                 <p className="text-grey-800 font-medium">{comment.user.username}</p>
                 {isOwn && (
                   <span className="rounded-[5px] bg-purple-600 px-1.75 text-sm text-white">
@@ -354,7 +372,7 @@ function ReplyCard({ comment, currentUser }: ReplyCardProps) {
       </article>
       {replyOpen && (
         <Composer
-          avatarSrc={currentUser.image.png}
+          avatarSrc={currentUser.image}
           avatarAlt={currentUser.username}
           buttonLabel="Reply"
           initialValue={`@${comment.user.username} `}

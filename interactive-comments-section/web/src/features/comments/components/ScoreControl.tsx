@@ -203,7 +203,7 @@ export default function ScoreControl({
                     alt=""
                     width={24}
                     height={24}
-                    unoptimized={Boolean(reaction.user.avatarUrl)}
+                    unoptimized
                     className="h-6 w-6 rounded-full"
                   />
                   <span className="min-w-0 flex-1 truncate">{reaction.user.username}</span>

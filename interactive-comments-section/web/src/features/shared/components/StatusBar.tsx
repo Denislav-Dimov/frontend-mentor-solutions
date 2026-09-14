@@ -2,11 +2,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import GuestPrompt from './GuestPrompt';
 
-type StatusBarProps = {
-  user: { username: string; avatarUrl?: string | null } | null;
+type Props = {
+  user: {
+    username: string;
+    avatarUrl: string;
+  } | null;
 };
 
-export default function StatusBar({ user }: StatusBarProps) {
+export default function StatusBar({ user }: Props) {
   return (
     <header className="relative bg-transparent">
       <div className="sticky top-0 mx-auto flex w-full max-w-3xl items-center justify-between gap-3 px-4 py-6 md:gap-6 md:px-8">
@@ -36,11 +39,11 @@ export default function StatusBar({ user }: StatusBarProps) {
               {user.username}
             </span>
             <Image
-              src={user.avatarUrl ?? '/images/avatars/image-default.png'}
+              src={user.avatarUrl}
               alt=""
               width={32}
               height={32}
-              unoptimized={Boolean(user.avatarUrl)}
+              unoptimized
               className="h-8 w-8 rounded-full object-cover"
             />
           </Link>

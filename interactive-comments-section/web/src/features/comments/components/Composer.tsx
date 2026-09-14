@@ -5,7 +5,7 @@ import Image from 'next/image';
 import GuestPrompt from '@/features/shared/components/GuestPrompt';
 
 type ComposerProps = {
-  avatarSrc: string;
+  avatarSrc: string | null;
   avatarAlt: string;
   buttonLabel: string;
   placeholder?: string;
@@ -54,14 +54,23 @@ export default function Composer({
         submitValue();
       }}
     >
-      <Image
-        src={avatarSrc}
-        alt={avatarAlt}
-        width={34}
-        height={34}
-        unoptimized={avatarSrc.startsWith('http')}
-        className="order-2 h-8.5 w-8.5 rounded-full md:order-1"
-      />
+      {avatarSrc ? (
+        <Image
+          src={avatarSrc}
+          alt={avatarAlt}
+          width={34}
+          height={34}
+          unoptimized
+          className="order-2 h-8.5 w-8.5 rounded-full md:order-1"
+        />
+      ) : (
+        <span
+          aria-hidden="true"
+          className="bg-grey-100 text-grey-500 order-2 grid h-8.5 w-8.5 shrink-0 place-items-center rounded-full font-bold md:order-1"
+        >
+          {avatarAlt.charAt(0).toUpperCase()}
+        </span>
+      )}
       <label htmlFor={`composer-${buttonLabel}`} className="sr-only">
         {placeholder}
       </label>
