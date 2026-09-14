@@ -52,11 +52,7 @@ export function GuestDialog({
         }
       }}
     >
-      <div
-        ref={panelRef}
-        tabIndex={-1}
-        className="grid w-full max-w-100 gap-4 rounded-lg bg-white p-8"
-      >
+      <div ref={panelRef} className="grid w-full max-w-100 gap-4 rounded-lg bg-white p-8">
         <div>
           <h2 id={titleId} className="text-grey-800 text-xl font-medium">
             Create an account to {action}
