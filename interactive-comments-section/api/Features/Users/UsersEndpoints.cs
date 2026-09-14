@@ -14,19 +14,38 @@ public static class UsersEndpoints {
 
         group.MapGet("/", async (
             UserManager<ApplicationUser> userManager,
+            Infrastructure.Configuration.ServiceCollectionExtensions.StorageOptions storageOptions,
             CancellationToken cancellationToken) => {
+            var defaultAvatarUrl = storageOptions.DefaultAvatarUrl();
             var users = await userManager.Users
                 .AsNoTracking()
                 .OrderBy(user => user.UserName)
-                .Select(user => new UserResponse(user.Id, user.UserName!, user.AvatarUrl))
+                .Select(user => new UserResponse(user.Id, user.UserName!, user.AvatarUrl ?? defaultAvatarUrl, user.IsSeeded))
                 .ToListAsync(cancellationToken);
 
             return Results.Ok(users);
         }).RequireAuthorization();
 
+        group.MapGet("/me", async (
+            ClaimsPrincipal principal,
+            UserManager<ApplicationUser> userManager,
+            Infrastructure.Configuration.ServiceCollectionExtensions.StorageOptions storageOptions) => {
+            var userId = GetUserId(principal);
+            if (userId is null) {
+                return Results.Unauthorized();
+            }
+
+            var user = await userManager.FindByIdAsync(userId.Value.ToString());
+            return user is null
+                ? Results.Unauthorized()
+                : Results.Ok(ToResponse(user, storageOptions));
+        }).RequireAuthorization();
+
         group.MapPost("/register", async (
             RegisterRequest request,
             UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            Infrastructure.Configuration.ServiceCollectionExtensions.StorageOptions storageOptions,
             CancellationToken cancellationToken) => {
             var validation = ValidateRegistration(request);
             if (validation is not null) {
@@ -36,7 +55,9 @@ public static class UsersEndpoints {
             var user = new ApplicationUser {
                 Id = Guid.NewGuid(),
                 UserName = request.Username!.Trim(),
-                Email = request.Email!.Trim()
+                Email = request.Email!.Trim(),
+                AvatarUrl = storageOptions.DefaultAvatarUrl(),
+                IsSeeded = false
             };
 
             var result = await userManager.CreateAsync(user, request.Password!);
@@ -49,8 +70,9 @@ public static class UsersEndpoints {
                         group => group.Select(error => error.Description).ToArray()));
             }
 
+            await signInManager.SignInAsync(user, isPersistent: true);
             return Results.Created($"/api/users/{user.Id}",
-                new UserResponse(user.Id, user.UserName!, user.AvatarUrl));
+                new UserResponse(user.Id, user.UserName!, user.AvatarUrl, user.IsSeeded));
         })
         .RequireRateLimiting("auth")
         .AddEndpointFilter<AntiforgeryEndpointFilter>();
@@ -58,7 +80,8 @@ public static class UsersEndpoints {
         group.MapPost("/login", async (
             LoginRequest request,
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager) => {
+            SignInManager<ApplicationUser> signInManager,
+            Infrastructure.Configuration.ServiceCollectionExtensions.StorageOptions storageOptions) => {
             if (string.IsNullOrWhiteSpace(request.UsernameOrEmail) ||
                 string.IsNullOrEmpty(request.Password) ||
                 request.UsernameOrEmail.Length > 256 ||
@@ -81,13 +104,82 @@ public static class UsersEndpoints {
                 lockoutOnFailure: true);
 
             return result.Succeeded
-                ? Results.Ok(new UserResponse(user.Id, user.UserName!, user.AvatarUrl))
+                ? Results.Ok(new UserResponse(user.Id, user.UserName!, user.AvatarUrl ?? storageOptions.DefaultAvatarUrl(), user.IsSeeded))
                 : Results.Unauthorized();
         })
         .RequireRateLimiting("auth")
         .AddEndpointFilter<AntiforgeryEndpointFilter>();
 
         group.MapPost("/logout", async (SignInManager<ApplicationUser> signInManager) => {
+            await signInManager.SignOutAsync();
+            return Results.NoContent();
+        })
+        .RequireAuthorization()
+        .RequireRateLimiting("mutation")
+        .AddEndpointFilter<AntiforgeryEndpointFilter>();
+
+        group.MapPut("/me", async (
+            UpdateProfileRequest request,
+            ClaimsPrincipal principal,
+            UserManager<ApplicationUser> userManager,
+            Infrastructure.Configuration.ServiceCollectionExtensions.StorageOptions storageOptions,
+            CancellationToken cancellationToken) => {
+            var userId = GetUserId(principal);
+            if (userId is null) {
+                return Results.Unauthorized();
+            }
+
+            var user = await userManager.FindByIdAsync(userId.Value.ToString());
+            if (user is null) {
+                return Results.NotFound();
+            }
+
+            var username = request.Username?.Trim();
+            if (string.IsNullOrWhiteSpace(username) || username.Length is < 3 or > 50) {
+                return Results.ValidationProblem(new Dictionary<string, string[]> {
+                    ["username"] = ["Name must be between 3 and 50 characters."]
+                });
+            }
+
+            user.UserName = username;
+            var result = await userManager.UpdateAsync(user);
+            if (!result.Succeeded) {
+                return Results.ValidationProblem(result.Errors
+                    .GroupBy(error => error.Code)
+                    .ToDictionary(
+                        group => group.Key,
+                        group => group.Select(error => error.Description).ToArray()));
+            }
+
+            return Results.Ok(ToResponse(user, storageOptions));
+        })
+        .RequireAuthorization()
+        .RequireRateLimiting("mutation")
+        .AddEndpointFilter<AntiforgeryEndpointFilter>();
+
+        group.MapDelete("/me", async (
+            ClaimsPrincipal principal,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager) => {
+            var userId = GetUserId(principal);
+            if (userId is null) {
+                return Results.Unauthorized();
+            }
+
+            var user = await userManager.FindByIdAsync(userId.Value.ToString());
+            if (user is null) {
+                return Results.NotFound();
+            }
+
+            var result = await userManager.DeleteAsync(user);
+            if (!result.Succeeded) {
+                return Results.ValidationProblem(result.Errors
+                    .GroupBy(error => error.Code)
+                    .ToDictionary(
+                        group => group.Key,
+                        group => group.Select(error => error.Description).ToArray()));
+            }
+
             await signInManager.SignOutAsync();
             return Results.NoContent();
         })
@@ -158,14 +250,15 @@ public static class UsersEndpoints {
                         group => group.Select(error => error.Description).ToArray()));
             }
 
-            if (storageOptions.TryGetKey(previousAvatarUrl, out var previousKey)) {
+            if (storageOptions.TryGetKey(previousAvatarUrl, out var previousKey) &&
+                !string.Equals(previousKey, Infrastructure.Configuration.ServiceCollectionExtensions.StorageOptions.DefaultAvatarKey, StringComparison.Ordinal)) {
                 await storage.DeleteObjectAsync(
                     storageOptions.Bucket,
                     previousKey,
                     cancellationToken);
             }
 
-            return Results.Ok(new UserResponse(user.Id, user.UserName!, user.AvatarUrl));
+            return Results.Ok(new UserResponse(user.Id, user.UserName!, user.AvatarUrl, user.IsSeeded));
         })
         .RequireAuthorization()
         .RequireRateLimiting("mutation")
@@ -204,9 +297,21 @@ public static class UsersEndpoints {
         }
     }
 
+    private static Guid? GetUserId(ClaimsPrincipal principal) =>
+        Guid.TryParse(principal.FindFirstValue(ClaimTypes.NameIdentifier), out var userId)
+            ? userId
+            : null;
+
+    private static UserResponse ToResponse(
+        ApplicationUser user,
+        Infrastructure.Configuration.ServiceCollectionExtensions.StorageOptions storageOptions) =>
+        new(user.Id, user.UserName!, user.AvatarUrl ?? storageOptions.DefaultAvatarUrl(), user.IsSeeded);
+
     private record RegisterRequest(string? Username, string? Email, string? Password);
 
     private record LoginRequest(string? UsernameOrEmail, string? Password);
 
-    private record UserResponse(Guid Id, string Username, string? AvatarUrl);
+    private record UpdateProfileRequest(string? Username);
+
+    private record UserResponse(Guid Id, string Username, string? AvatarUrl, bool IsSeeded);
 }

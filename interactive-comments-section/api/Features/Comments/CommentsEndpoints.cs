@@ -12,6 +12,7 @@ public static class CommentsEndpoints {
         group.MapGet("/", async (
             ClaimsPrincipal principal,
             AppDbContext db,
+            Infrastructure.Configuration.ServiceCollectionExtensions.StorageOptions storageOptions,
             CancellationToken cancellationToken) => {
             var comments = await db.Comments
                 .AsNoTracking()
@@ -20,8 +21,9 @@ public static class CommentsEndpoints {
                 .ToListAsync(cancellationToken);
 
             var currentUserId = GetUserId(principal);
+            var defaultAvatarUrl = storageOptions.DefaultAvatarUrl();
             var responseComments = comments
-                .Select(comment => ToResponse(comment, currentUserId))
+                .Select(comment => ToResponse(comment, currentUserId, defaultAvatarUrl))
                 .OrderByDescending(comment => comment.Score)
                 .ToList();
 
@@ -29,8 +31,9 @@ public static class CommentsEndpoints {
                 .ToDictionary(comment => comment.Id);
 
             foreach (var comment in responseComments.Where(comment => comment.ParentId is not null)) {
-                if (responsesById.TryGetValue(comment.ParentId!.Value, out var parent)) {
-                    parent.Replies.Add(comment);
+                var root = FindRoot(comment, responsesById);
+                if (root is not null && root.Id != comment.Id) {
+                    root.Replies.Add(comment);
                 }
             }
 
@@ -44,142 +47,230 @@ public static class CommentsEndpoints {
                     .ToList());
         });
 
-        group.MapPost("/", async (
-            CreateCommentRequest request,
+        group.MapGet("/history", async (
             ClaimsPrincipal principal,
             AppDbContext db,
+            Infrastructure.Configuration.ServiceCollectionExtensions.StorageOptions storageOptions,
             CancellationToken cancellationToken) => {
-            var content = request.Content.Trim();
+            var userId = GetUserId(principal);
 
-            if (content.Length is < 1 or > 2_000) {
-                return Results.ValidationProblem(new Dictionary<string, string[]> {
-                    ["content"] = ["Content must be between 1 and 2,000 characters."]
-                });
-            }
-
-            if (!Guid.TryParse(principal.FindFirstValue(ClaimTypes.NameIdentifier), out var authorId)) {
+            if (userId is null) {
                 return Results.Unauthorized();
             }
 
-            var authorExists = await db.Users.AnyAsync(user => user.Id == authorId, cancellationToken);
+            var defaultAvatarUrl = storageOptions.DefaultAvatarUrl();
+            var history = await db.Comments
+                .AsNoTracking()
+                .Where(comment => comment.AuthorId == userId.Value)
+                .Include(comment => comment.Author)
+                .OrderByDescending(comment => comment.CreatedAt)
+                .Select(comment => new {
+                    comment.Id,
+                    comment.Content,
+                    comment.CreatedAt,
+                    comment.ParentId,
+                    Author = new AuthorResponse(
+                        comment.Author.Id,
+                        comment.Author.UserName!,
+                        comment.Author.AvatarUrl ?? defaultAvatarUrl,
+                        comment.Author.IsSeeded)
+                })
+                .ToListAsync(cancellationToken);
 
-            if (!authorExists) {
-                return Results.ValidationProblem(new Dictionary<string, string[]> {
-                    ["author"] = ["Authenticated user does not exist."]
-                });
-            }
+            return Results.Ok(history);
+        }).RequireAuthorization();
 
-            if (request.ParentId is not null &&
-                !await db.Comments.AnyAsync(comment => comment.Id == request.ParentId, cancellationToken)) {
-                return Results.ValidationProblem(new Dictionary<string, string[]> {
-                    ["parentId"] = ["Parent comment does not exist."]
-                });
-            }
+        group.MapPost("/", async (
+                CreateCommentRequest request,
+                ClaimsPrincipal principal,
+                AppDbContext db,
+                Infrastructure.Configuration.ServiceCollectionExtensions.StorageOptions storageOptions,
+                CancellationToken cancellationToken) => {
+                var content = request.Content.Trim();
 
-            var comment = new Comment {
-                Content = content,
-                AuthorId = authorId,
-                ParentId = request.ParentId
-            };
+                if (content.Length is < 1 or > 2_000) {
+                    return Results.ValidationProblem(new Dictionary<string, string[]> {
+                        ["content"] = ["Content must be between 1 and 2,000 characters."]
+                    });
+                }
 
-            db.Comments.Add(comment);
-            await db.SaveChangesAsync(cancellationToken);
+                if (!Guid.TryParse(principal.FindFirstValue(ClaimTypes.NameIdentifier), out var authorId)) {
+                    return Results.Unauthorized();
+                }
 
-            await db.Entry(comment).Reference(item => item.Author).LoadAsync(cancellationToken);
-            return Results.Created($"/api/comments/{comment.Id}", ToResponse(comment, authorId));
-        })
-        .RequireAuthorization()
-        .RequireRateLimiting("mutation")
-        .AddEndpointFilter<AntiforgeryEndpointFilter>();
+                var authorExists = await db.Users.AnyAsync(user => user.Id == authorId, cancellationToken);
+
+                if (!authorExists) {
+                    return Results.ValidationProblem(new Dictionary<string, string[]> {
+                        ["author"] = ["Authenticated user does not exist."]
+                    });
+                }
+
+                if (request.ParentId is not null &&
+                    !await db.Comments.AnyAsync(comment => comment.Id == request.ParentId, cancellationToken)) {
+                    return Results.ValidationProblem(new Dictionary<string, string[]> {
+                        ["parentId"] = ["Parent comment does not exist."]
+                    });
+                }
+
+                var comment = new Comment {
+                    Content = content,
+                    AuthorId = authorId,
+                    ParentId = request.ParentId
+                };
+
+                db.Comments.Add(comment);
+                await db.SaveChangesAsync(cancellationToken);
+
+                await db.Entry(comment).Reference(item => item.Author).LoadAsync(cancellationToken);
+                return Results.Created($"/api/comments/{comment.Id}",
+                    ToResponse(comment, authorId, storageOptions.DefaultAvatarUrl()));
+            })
+            .RequireAuthorization()
+            .RequireRateLimiting("mutation")
+            .AddEndpointFilter<AntiforgeryEndpointFilter>();
+
+        group.MapPut("/{id:guid}", async (
+                Guid id,
+                UpdateCommentRequest request,
+                ClaimsPrincipal principal,
+                AppDbContext db,
+                CancellationToken cancellationToken) => {
+                var userId = GetUserId(principal);
+                var content = request.Content.Trim();
+                if (userId is null) return Results.Unauthorized();
+
+                if (content.Length is < 1 or > 2_000) {
+                    return Results.ValidationProblem(new Dictionary<string, string[]> {
+                        ["content"] = ["Content must be between 1 and 2,000 characters."]
+                    });
+                }
+
+                var comment = await db.Comments.SingleOrDefaultAsync(
+                    item => item.Id == id,
+                    cancellationToken);
+                if (comment is null) return Results.NotFound();
+                if (comment.AuthorId != userId.Value) return Results.Forbid();
+
+                comment.Content = content;
+                await db.SaveChangesAsync(cancellationToken);
+                return Results.Ok(new { comment.Id, comment.Content });
+            })
+            .RequireAuthorization()
+            .RequireRateLimiting("mutation")
+            .AddEndpointFilter<AntiforgeryEndpointFilter>();
 
         group.MapPut("/{id:guid}/vote", async (
-            Guid id,
-            VoteRequest request,
-            ClaimsPrincipal principal,
-            AppDbContext db,
-            CancellationToken cancellationToken) => {
-            if (request.Value is not (-1 or 1)) {
-                return Results.ValidationProblem(new Dictionary<string, string[]> {
-                    ["value"] = ["Value must be -1 or 1."]
-                });
-            }
+                Guid id,
+                VoteRequest request,
+                ClaimsPrincipal principal,
+                AppDbContext db,
+                CancellationToken cancellationToken) => {
+                if (request.Value is not (-1 or 1)) {
+                    return Results.ValidationProblem(new Dictionary<string, string[]> {
+                        ["value"] = ["Value must be -1 or 1."]
+                    });
+                }
 
-            var userId = GetUserId(principal);
+                var userId = GetUserId(principal);
 
-            if (userId is null) {
-                return Results.Unauthorized();
-            }
+                if (userId is null) {
+                    return Results.Unauthorized();
+                }
 
-            var comment = await db.Comments
-                .SingleOrDefaultAsync(item => item.Id == id, cancellationToken);
+                var comment = await db.Comments
+                    .SingleOrDefaultAsync(item => item.Id == id, cancellationToken);
 
-            if (comment is null) {
-                return Results.NotFound();
-            }
+                if (comment is null) {
+                    return Results.NotFound();
+                }
 
-            await using var transaction = await db.Database.BeginTransactionAsync(cancellationToken);
-            var vote = await db.CommentVotes
-                .SingleOrDefaultAsync(item =>
-                        item.CommentId == id && item.UserId == userId.Value,
-                    cancellationToken);
+                await using var transaction = await db.Database.BeginTransactionAsync(cancellationToken);
 
-            if (vote is null) {
-                db.CommentVotes.Add(new CommentVote {
-                    CommentId = id,
-                    UserId = userId.Value,
-                    Value = request.Value
-                });
-            } else if (vote.Value == request.Value) {
-                db.CommentVotes.Remove(vote);
-            } else {
-                vote.Value = request.Value;
-                vote.UpdatedAt = DateTime.UtcNow;
-            }
+                var vote = await db.CommentVotes
+                    .SingleOrDefaultAsync(item =>
+                            item.CommentId == id && item.UserId == userId.Value,
+                        cancellationToken);
 
-            await db.SaveChangesAsync(cancellationToken);
-            await transaction.CommitAsync(cancellationToken);
+                if (vote is null) {
+                    db.CommentVotes.Add(new CommentVote {
+                        CommentId = id,
+                        UserId = userId.Value,
+                        Value = request.Value
+                    });
+                } else if (vote.Value == request.Value) {
+                    db.CommentVotes.Remove(vote);
+                } else {
+                    vote.Value = request.Value;
+                    vote.UpdatedAt = DateTime.UtcNow;
+                }
 
-            return Results.Ok(await GetVoteSummary(id, userId.Value, db, cancellationToken));
-        })
-        .RequireAuthorization()
-        .RequireRateLimiting("mutation")
-        .AddEndpointFilter<AntiforgeryEndpointFilter>();
+                await db.SaveChangesAsync(cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
+
+                return Results.Ok(await GetVoteSummary(id, userId.Value, db, cancellationToken));
+            })
+            .RequireAuthorization()
+            .RequireRateLimiting("mutation")
+            .AddEndpointFilter<AntiforgeryEndpointFilter>();
 
         group.MapDelete("/{id:guid}", async (
-            Guid id,
-            ClaimsPrincipal principal,
-            AppDbContext db,
-            CancellationToken cancellationToken) => {
-            var userId = GetUserId(principal);
+                Guid id,
+                ClaimsPrincipal principal,
+                AppDbContext db,
+                CancellationToken cancellationToken) => {
+                var userId = GetUserId(principal);
 
-            if (userId is null) {
-                return Results.Unauthorized();
-            }
+                if (userId is null) {
+                    return Results.Unauthorized();
+                }
 
-            var comment = await db.Comments
-                .SingleOrDefaultAsync(item => item.Id == id, cancellationToken);
+                var comment = await db.Comments
+                    .SingleOrDefaultAsync(item => item.Id == id, cancellationToken);
 
-            if (comment is null) {
-                return Results.NotFound();
-            }
+                if (comment is null) {
+                    return Results.NotFound();
+                }
 
-            if (comment.AuthorId != userId.Value) {
-                return Results.Forbid();
-            }
+                if (comment.AuthorId != userId.Value) {
+                    return Results.Forbid();
+                }
 
-            db.Comments.Remove(comment);
-            await db.SaveChangesAsync(cancellationToken);
-            return Results.NoContent();
-        })
-        .RequireAuthorization()
-        .RequireRateLimiting("mutation")
-        .AddEndpointFilter<AntiforgeryEndpointFilter>();
+                var allIds = await db.Comments
+                    .AsNoTracking()
+                    .Select(item => new { item.Id, item.ParentId })
+                    .ToListAsync(cancellationToken);
+                var childrenByParent = allIds
+                    .Where(item => item.ParentId is not null)
+                    .GroupBy(item => item.ParentId!.Value)
+                    .ToDictionary(group => group.Key, group => group.Select(item => item.Id).ToList());
+                var idsToDelete = new HashSet<Guid> { id };
+                var queue = new Queue<Guid>();
+                queue.Enqueue(id);
+                while (queue.Count > 0) {
+                    var current = queue.Dequeue();
+                    if (childrenByParent.TryGetValue(current, out var children)) {
+                        foreach (var childId in children.Where(childId => idsToDelete.Add(childId))) {
+                            queue.Enqueue(childId);
+                        }
+                    }
+                }
+
+                await db.Comments
+                    .Where(item => idsToDelete.Contains(item.Id))
+                    .ExecuteDeleteAsync(cancellationToken);
+                return Results.NoContent();
+            })
+            .RequireAuthorization()
+            .RequireRateLimiting("mutation")
+            .AddEndpointFilter<AntiforgeryEndpointFilter>();
 
         group.MapGet("/{id:guid}/votes", async (
             Guid id,
             int? page,
             int? pageSize,
             AppDbContext db,
+            Infrastructure.Configuration.ServiceCollectionExtensions.StorageOptions storageOptions,
             CancellationToken cancellationToken) => {
             var requestedPage = page ?? 1;
             var requestedPageSize = pageSize ?? 20;
@@ -199,6 +290,7 @@ public static class CommentsEndpoints {
                 .AsNoTracking()
                 .Where(vote => vote.CommentId == id);
             var totalCount = await votes.CountAsync(cancellationToken);
+            var defaultAvatarUrl = storageOptions.DefaultAvatarUrl();
             var items = await votes
                 .OrderByDescending(vote => vote.UpdatedAt)
                 .ThenBy(vote => vote.UserId)
@@ -208,7 +300,8 @@ public static class CommentsEndpoints {
                     new PublicUserResponse(
                         vote.User.Id,
                         vote.User.UserName!,
-                        vote.User.AvatarUrl),
+                        vote.User.AvatarUrl ?? defaultAvatarUrl,
+                        vote.User.IsSeeded),
                     vote.Value,
                     vote.UpdatedAt))
                 .ToListAsync(cancellationToken);
@@ -257,7 +350,7 @@ public static class CommentsEndpoints {
         );
     }
 
-    private static CommentResponse ToResponse(Comment comment, Guid? currentUserId) {
+    private static CommentResponse ToResponse(Comment comment, Guid? currentUserId, string defaultAvatarUrl) {
         var upvotes = comment.Votes.Count(vote => vote.Value == 1);
         var downvotes = comment.Votes.Count(vote => vote.Value == -1);
         var currentVote = currentUserId is null
@@ -272,7 +365,8 @@ public static class CommentsEndpoints {
             comment.Content,
             comment.Score + upvotes - downvotes,
             comment.CreatedAt,
-            new AuthorResponse(comment.Author.Id, comment.Author.UserName!, comment.Author.AvatarUrl),
+            new AuthorResponse(comment.Author.Id, comment.Author.UserName!,
+                comment.Author.AvatarUrl ?? defaultAvatarUrl, comment.Author.IsSeeded),
             comment.ParentId,
             [],
             upvotes,
@@ -286,6 +380,21 @@ public static class CommentsEndpoints {
             ? userId
             : null;
 
+    private static CommentResponse? FindRoot(
+        CommentResponse comment,
+        Dictionary<Guid, CommentResponse> responsesById) {
+        var current = comment;
+        var visited = new HashSet<Guid> { current.Id };
+        while (current.ParentId is not null &&
+            responsesById.TryGetValue(current.ParentId.Value, out var parent)) {
+            if (!visited.Add(parent.Id)) {
+                return null;
+            }
+            current = parent;
+        }
+        return current.ParentId is null ? current : null;
+    }
+
     private static void SortRepliesByCreatedAt(CommentResponse comment) {
         comment.Replies.Sort((first, second) =>
             first.CreatedAt.CompareTo(second.CreatedAt));
@@ -296,6 +405,8 @@ public static class CommentsEndpoints {
     }
 
     private record CreateCommentRequest(string Content, Guid? ParentId);
+
+    private record UpdateCommentRequest(string Content);
 
     private record VoteRequest(int Value);
 
@@ -312,9 +423,9 @@ public static class CommentsEndpoints {
         int? CurrentUserVote
     );
 
-    private record AuthorResponse(Guid Id, string Username, string? AvatarUrl);
+    private record AuthorResponse(Guid Id, string Username, string? AvatarUrl, bool IsSeeded);
 
-    private record PublicUserResponse(Guid Id, string Username, string? AvatarUrl);
+    private record PublicUserResponse(Guid Id, string Username, string? AvatarUrl, bool IsSeeded);
 
     private record VoteResponse(PublicUserResponse User, int Value, DateTime UpdatedAt);
 

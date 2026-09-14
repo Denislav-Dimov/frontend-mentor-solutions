@@ -6,12 +6,14 @@ export type UserImage = {
 };
 
 export type CommentUser = {
+  id?: string;
   image: UserImage;
   username: string;
+  isSeeded: boolean;
 };
 
 export type BaseComment = {
-  id: number;
+  id: string;
   content: string;
   createdAt: number;
   score: number;

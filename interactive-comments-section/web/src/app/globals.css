@@ -32,6 +32,58 @@
     scroll-behavior: smooth;
   }
 
+  @layer components {
+    .input {
+      background: var(--neutral-white);
+      border: 2px solid var(--neutral-grey-100);
+      border-radius: 0.75rem;
+      box-shadow: 0 2px 8px rgb(33 42 58 / 0.04);
+      color: var(--neutral-grey-800);
+      padding: 0.8rem 1rem;
+      transition:
+        border-color var(--smoothness),
+        box-shadow var(--smoothness),
+        background-color var(--smoothness);
+    }
+
+    .input:hover {
+      border-color: var(--primary-purple-200);
+    }
+
+    .input:focus {
+      border-color: var(--primary-purple-600);
+      box-shadow: 0 0 0 4px rgb(91 95 199 / 0.12);
+      outline: none;
+    }
+
+    .button-primary,
+    .button-secondary {
+      border-radius: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      font-weight: 700;
+      transition:
+        background-color var(--smoothness),
+        color var(--smoothness),
+        opacity var(--smoothness);
+    }
+
+    .button-primary {
+      background: var(--primary-purple-600);
+      color: var(--neutral-white);
+    }
+
+    .button-primary:hover,
+    .button-secondary:hover {
+      opacity: 0.82;
+    }
+
+    .button-secondary {
+      border: 2px solid var(--neutral-grey-100);
+      background: var(--neutral-white);
+      color: var(--neutral-grey-800);
+    }
+  }
+
   body {
     background-color: var(--neutral-grey-50);
     color: var(--neutral-grey-500);
@@ -42,6 +94,19 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  :where(a, button, input, textarea):focus-visible {
+    outline: 3px solid rgb(91 95 199 / 0.28);
+    outline-offset: 2px;
+  }
+
   textarea {
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -49,5 +114,35 @@
 
   textarea::-webkit-scrollbar {
     display: none;
+  }
+
+  .toast-enter {
+    animation:
+      toast-slide-in 300ms ease-out,
+      toast-slide-out 300ms ease-in 4.2s forwards;
+  }
+
+  @keyframes toast-slide-in {
+    from {
+      transform: translateX(110%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes toast-slide-out {
+    to {
+      transform: translateX(110%);
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .toast-enter {
+      animation: none;
+    }
   }
 }

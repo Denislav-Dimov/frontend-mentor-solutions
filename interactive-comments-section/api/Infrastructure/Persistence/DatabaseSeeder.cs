@@ -28,39 +28,44 @@ public static class DatabaseSeeder {
                 UserName = "amyrobson",
                 Email = "amyrobson@demo.local",
                 EmailConfirmed = true,
-                AvatarUrl = storageOptions.PublicUrlFor("avatars/seed/image-amyrobson.png")
+                AvatarUrl = storageOptions.PublicUrlFor("avatars/seed/image-amyrobson.png"),
+                IsSeeded = true
             },
             new ApplicationUser {
                 Id = MaxId,
                 UserName = "maxblagun",
                 Email = "maxblagun@demo.local",
                 EmailConfirmed = true,
-                AvatarUrl = storageOptions.PublicUrlFor("avatars/seed/image-maxblagun.png")
+                AvatarUrl = storageOptions.PublicUrlFor("avatars/seed/image-maxblagun.png"),
+                IsSeeded = true
             },
             new ApplicationUser {
                 Id = RamsesId,
                 UserName = "ramsesmiron",
                 Email = "ramsesmiron@demo.local",
                 EmailConfirmed = true,
-                AvatarUrl = storageOptions.PublicUrlFor("avatars/seed/image-ramsesmiron.png")
+                AvatarUrl = storageOptions.PublicUrlFor("avatars/seed/image-ramsesmiron.png"),
+                IsSeeded = true
             },
             new ApplicationUser {
                 Id = JuliusId,
                 UserName = "juliusomo",
                 Email = "juliusomo@demo.local",
                 EmailConfirmed = true,
-                AvatarUrl = storageOptions.PublicUrlFor("avatars/seed/image-juliusomo.png")
+                AvatarUrl = storageOptions.PublicUrlFor("avatars/seed/image-juliusomo.png"),
+                IsSeeded = true
             }
         };
 
         foreach (var user in users) {
             var existingUser = await userManager.FindByIdAsync(user.Id.ToString());
             if (existingUser is not null) {
-                if (existingUser.AvatarUrl == user.AvatarUrl) {
+                if (existingUser.AvatarUrl == user.AvatarUrl && existingUser.IsSeeded) {
                     continue;
                 }
 
                 existingUser.AvatarUrl = user.AvatarUrl;
+                existingUser.IsSeeded = true;
                 var updateResult = await userManager.UpdateAsync(existingUser);
                 if (!updateResult.Succeeded) {
                     throw new InvalidOperationException(
@@ -78,6 +83,13 @@ public static class DatabaseSeeder {
                     string.Join("; ", result.Errors.Select(error => error.Description)));
             }
         }
+
+        var defaultAvatarUrl = storageOptions.DefaultAvatarUrl();
+        await db.Users
+            .Where(user => user.AvatarUrl == null)
+            .ExecuteUpdateAsync(
+                setter => setter.SetProperty(user => user.AvatarUrl, defaultAvatarUrl),
+                cancellationToken);
 
         var comments = new[] {
             new Comment {
@@ -112,7 +124,7 @@ public static class DatabaseSeeder {
                 Score = 2,
                 CreatedAt = new DateTime(2026, 9, 2, 14, 0, 0, DateTimeKind.Utc),
                 AuthorId = JuliusId,
-                ParentId = SecondCommentId
+                ParentId = FirstReplyId
             }
         };
 

@@ -18,6 +18,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             entity.Property(user => user.AvatarUrl).HasMaxLength(500);
             entity.Property(user => user.UserName).HasMaxLength(50).IsRequired();
             entity.Property(user => user.NormalizedUserName).HasMaxLength(50);
+            entity.Property(user => user.IsSeeded).IsRequired().HasDefaultValue(false);
         });
 
         builder.Entity<Comment>(entity => {
@@ -30,7 +31,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
                 .HasForeignKey(comment => comment.AuthorId);
             entity.HasOne(comment => comment.Parent)
                 .WithMany(comment => comment.Replies)
-                .HasForeignKey(comment => comment.ParentId);
+                .HasForeignKey(comment => comment.ParentId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         builder.Entity<CommentVote>(entity => {

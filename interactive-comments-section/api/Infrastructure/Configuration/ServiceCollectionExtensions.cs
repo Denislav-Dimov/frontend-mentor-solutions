@@ -109,13 +109,21 @@ public static class ServiceCollectionExtensions {
                         Window = TimeSpan.FromMinutes(1),
                         QueueLimit = 0
                     }));
+            options.AddPolicy("antiforgery", context =>
+                RateLimitPartition.GetFixedWindowLimiter(
+                    context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                    _ => new FixedWindowRateLimiterOptions {
+                        PermitLimit = 120,
+                        Window = TimeSpan.FromMinutes(1),
+                        QueueLimit = 0
+                    }));
             options.AddPolicy("mutation", context =>
                 RateLimitPartition.GetFixedWindowLimiter(
                     context.User.Identity?.Name
                     ?? context.Connection.RemoteIpAddress?.ToString()
                     ?? "unknown",
                     _ => new FixedWindowRateLimiterOptions {
-                        PermitLimit = 60,
+                        PermitLimit = 120,
                         Window = TimeSpan.FromMinutes(1),
                         QueueLimit = 0
                     }));
@@ -180,6 +188,10 @@ public static class ServiceCollectionExtensions {
             $"{Endpoint}/{Uri.EscapeDataString(Bucket)}/{string.Join(
                 "/",
                 key.Split('/').Select(Uri.EscapeDataString))}";
+
+        public const string DefaultAvatarKey = "avatars/image-default.png";
+
+        public string DefaultAvatarUrl() => PublicUrlFor(DefaultAvatarKey);
 
         public bool TryGetKey(string? avatarUrl, out string key) {
             key = string.Empty;

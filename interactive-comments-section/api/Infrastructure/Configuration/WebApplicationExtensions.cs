@@ -51,7 +51,7 @@ public static class WebApplicationExtensions {
                 return Results.Ok(new { token = tokens.RequestToken });
             })
             .WithTags("Security")
-            .RequireRateLimiting("auth");
+            .RequireRateLimiting("antiforgery");
 
         app.MapGet("/api/health", async (
                 AppDbContext db,
