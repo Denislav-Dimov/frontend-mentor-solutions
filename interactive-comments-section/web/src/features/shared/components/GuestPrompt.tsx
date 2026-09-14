@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 type Props = {
   action: string;
@@ -18,6 +19,7 @@ export function GuestDialog({
   onClose: () => void;
 }) {
   const titleId = useId();
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -27,12 +29,18 @@ export function GuestDialog({
       }
     };
     document.addEventListener('keydown', closeOnEscape);
-    return () => document.removeEventListener('keydown', closeOnEscape);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    panelRef.current?.focus({ preventScroll: true });
+    return () => {
+      document.removeEventListener('keydown', closeOnEscape);
+      document.body.style.overflow = previousOverflow;
+    };
   }, [open, onClose]);
 
   if (!open) return null;
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-50 grid place-items-center bg-black/50 px-4"
       role="dialog"
@@ -44,7 +52,11 @@ export function GuestDialog({
         }
       }}
     >
-      <div className="grid w-full max-w-100 gap-4 rounded-lg bg-white p-8">
+      <div
+        ref={panelRef}
+        tabIndex={-1}
+        className="grid w-full max-w-100 gap-4 rounded-lg bg-white p-8"
+      >
         <div>
           <h2 id={titleId} className="text-grey-800 text-xl font-medium">
             Create an account to {action}
@@ -75,7 +87,8 @@ export function GuestDialog({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
