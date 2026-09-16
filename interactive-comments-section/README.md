@@ -110,7 +110,6 @@ I used OpenCode as a development partner throughout this project, specifically f
 
 ```bash
 # web/.env
-NEXT_PUBLIC_API_URL=http://localhost:5217
 API_URL=http://localhost:5217
 ```
 

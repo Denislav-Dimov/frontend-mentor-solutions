@@ -1,14 +1,9 @@
 import { cookies } from 'next/headers';
 import { z } from 'zod';
-import {
-  apiCommentSchema,
-  apiHistoryItemSchema,
-  apiUserSchema,
-} from '../schemas';
+import { apiCommentSchema, apiHistoryItemSchema, apiUserSchema } from '../schemas';
 import { ApiRequestError } from './errors';
 
-const apiUrl =
-  process.env.API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5217';
+const apiUrl = process.env.API_URL ?? 'http://localhost:5217';
 
 async function serverFetch(path: string, init?: RequestInit) {
   const cookieHeader = (await cookies()).toString();

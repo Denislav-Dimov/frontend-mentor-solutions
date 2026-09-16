@@ -2,8 +2,6 @@ import { antiforgerySchema } from '@/features/auth/schemas';
 import { ApiRequestError } from '@/features/shared/api/errors';
 import { commentResponseSchema, voteSummarySchema } from '../schemas';
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5217';
-
 const RATE_LIMIT_MESSAGE =
   'You are doing that too quickly. Please wait a moment and try again.';
 
@@ -20,7 +18,7 @@ async function requestToken(forceRefresh = false) {
   }
 
   tokenPromise = (async () => {
-    const response = await fetch(`${apiUrl}/api/security/antiforgery`, {
+    const response = await fetch('/api/security/antiforgery', {
       credentials: 'include',
     });
     if (!response.ok) {
@@ -57,7 +55,7 @@ function isAntiforgeryFailure(body: unknown) {
 
 async function sendMutation(path: string, init: RequestInit, token: string) {
   try {
-    return await fetch(`${apiUrl}${path}`, {
+    return await fetch(path, {
       ...init,
       credentials: 'include',
       headers: {

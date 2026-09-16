@@ -6,10 +6,8 @@ import Image from 'next/image';
 import { profileSchema } from '../schemas';
 import { ConfirmDialog } from '@/features/shared';
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5217';
-
 async function antiforgeryToken() {
-  const response = await fetch(`${apiUrl}/api/security/antiforgery`, {
+  const response = await fetch('/api/security/antiforgery', {
     credentials: 'include',
   });
   if (!response.ok) {
@@ -44,7 +42,7 @@ export default function ProfileForm({ user }: Props) {
     setPending(true);
     try {
       const token = await antiforgeryToken();
-      const response = await fetch(`${apiUrl}/api/users/me`, {
+      const response = await fetch('/api/users/me', {
         method: 'PUT',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json', 'X-XSRF-TOKEN': token },
@@ -72,7 +70,7 @@ export default function ProfileForm({ user }: Props) {
       const token = await antiforgeryToken();
       const body = new FormData();
       body.append('file', file);
-      const response = await fetch(`${apiUrl}/api/users/me/avatar`, {
+      const response = await fetch('/api/users/me/avatar', {
         method: 'POST',
         credentials: 'include',
         headers: { 'X-XSRF-TOKEN': token },
@@ -95,14 +93,11 @@ export default function ProfileForm({ user }: Props) {
     setPending(true);
     try {
       const token = await antiforgeryToken();
-      const response = await fetch(
-        `${apiUrl}/api/users/${action === 'delete' ? 'me' : 'logout'}`,
-        {
-          method: action === 'delete' ? 'DELETE' : 'POST',
-          credentials: 'include',
-          headers: { 'X-XSRF-TOKEN': token },
-        },
-      );
+      const response = await fetch(`/api/users/${action === 'delete' ? 'me' : 'logout'}`, {
+        method: action === 'delete' ? 'DELETE' : 'POST',
+        credentials: 'include',
+        headers: { 'X-XSRF-TOKEN': token },
+      });
       if (!response.ok) {
         throw new Error('The request could not be completed.');
       }
@@ -136,7 +131,7 @@ export default function ProfileForm({ user }: Props) {
                 type="file"
                 accept="image/png,image/jpeg,image/webp"
                 onChange={uploadAvatar}
-                className="text-grey-500 block w-full min-w-0 max-w-full overflow-hidden rounded-lg border-2 border-dashed border-purple-200 p-2 text-xs"
+                className="text-grey-500 block w-full max-w-full min-w-0 overflow-hidden rounded-lg border-2 border-dashed border-purple-200 p-2 text-xs"
               />
             </label>
           </div>

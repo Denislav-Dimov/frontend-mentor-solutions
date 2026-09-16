@@ -26,8 +26,6 @@ type Reaction = {
   value: number;
 };
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5217';
-
 export default function ScoreControl({
   commentId,
   score,
@@ -65,7 +63,7 @@ export default function ScoreControl({
 
     setLoadingReactions(true);
     try {
-      const response = await fetch(`${apiUrl}/api/comments/${commentId}/votes`, {
+      const response = await fetch(`/api/comments/${commentId}/votes`, {
         credentials: 'include',
       });
       if (!response.ok) {

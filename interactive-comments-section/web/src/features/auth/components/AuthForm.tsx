@@ -5,8 +5,6 @@ import { useRouter } from 'next/navigation';
 import { ChangeEvent, SubmitEvent, useState } from 'react';
 import { loginSchema, registerSchema, antiforgerySchema, apiErrorSchema } from '../schemas';
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5217';
-
 type Mode = 'login' | 'register';
 
 type Values = {
@@ -42,7 +40,7 @@ export default function AuthForm({ mode }: Props) {
     setPending(true);
     setError('');
     try {
-      const tokenResponse = await fetch(`${apiUrl}/api/security/antiforgery`, {
+      const tokenResponse = await fetch('/api/security/antiforgery', {
         credentials: 'include',
       });
 
@@ -52,7 +50,7 @@ export default function AuthForm({ mode }: Props) {
 
       const token = antiforgerySchema.parse(await tokenResponse.json()).token;
 
-      const response = await fetch(`${apiUrl}/api/users/${mode}`, {
+      const response = await fetch(`/api/users/${mode}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-XSRF-TOKEN': token },
         credentials: 'include',
