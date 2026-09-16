@@ -1,23 +1,48 @@
+<div align="center">
+
 # Frontend Mentor - Interactive comments section solution
 
-This is a solution to the [Interactive comments section challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/interactive-comments-section-iG1RugEG9). Frontend Mentor challenges help you improve your coding skills by building realistic projects. 
+This is a solution to the [Interactive comments section challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/interactive-comments-section-iG1RugEG9). Frontend Mentor challenges help you improve your coding skills by building realistic projects.
+
+![Next.js](https://img.shields.io/badge/-Next.js-000?logo=nextdotjs)
+![React](https://img.shields.io/badge/-React-000?logo=react)
+![TypeScript](https://img.shields.io/badge/-TypeScript-000?logo=typescript)
+![TailwindCSS](https://img.shields.io/badge/-TailwindCSS-000?logo=tailwindcss)
+![Zod](https://img.shields.io/badge/-Zod-000?logo=zod)
+![C#](https://img.shields.io/badge/-C%23-000?logo=csharp)
+![ASP.NET Core](https://img.shields.io/badge/-ASP.NET_Core-000?logo=dotnet)
+![Entity Framework Core](https://img.shields.io/badge/-EF_Core-000?logo=dotnet)
+![ASP.NET Identity](https://img.shields.io/badge/-ASP.NET_Identity-000?logo=dotnet)
+![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-000?logo=postgresql)
+![Neon](https://img.shields.io/badge/-Neon-000?logo=neon)
+![Amazon S3](https://img.shields.io/badge/-S3_Storage-000?logo=amazons3)
+![Swagger](https://img.shields.io/badge/-Swagger-000?logo=swagger)
+![OpenAPI](https://img.shields.io/badge/-OpenAPI-000?logo=openapiinitiative)
+![Docker](https://img.shields.io/badge/-Docker-000?logo=docker)
+
+<a href="https://fm-dd-interactive-comments-section.vercel.app">
+  <img src="https://img.shields.io/badge/View_Website-181717?style=for-the-badge&logo=vercel&logoColor=white" alt="View Website" />
+</a>
+
+</div>
 
 ## Table of contents
 
 - [Overview](#overview)
   - [The challenge](#the-challenge)
-  - [Screenshot](#screenshot)
+  - [Demo](#demo)
   - [Links](#links)
 - [My process](#my-process)
   - [Built with](#built-with)
   - [What I learned](#what-i-learned)
   - [Continued development](#continued-development)
-  - [Useful resources](#useful-resources)
   - [AI Collaboration](#ai-collaboration)
+- [Running the app](#running-the-app)
+  - [Prerequisites](#prerequisites)
+  - [Environment variables](#environment-variables)
+  - [Run locally](#run-locally)
+  - [Useful endpoints](#useful-endpoints)
 - [Author](#author)
-- [Acknowledgments](#acknowledgments)
-
-**Note: Delete this note and update the table of contents based on what sections you keep.**
 
 ## Overview
 
@@ -31,96 +56,106 @@ Users should be able to:
 - Upvote and downvote comments
 - **Bonus**: If you're building a purely front-end project, use `localStorage` to save the current state in the browser that persists when the browser is refreshed.
 - **Bonus**: Instead of using the `createdAt` strings from the `data.json` file, try using timestamps and dynamically track the time since the comment or reply was posted.
+- **Bonus**: Build this project as a full-stack application
 
-### Screenshot
+### Demo
 
-![](./screenshot.jpg)
-
-Add a screenshot of your solution. The easiest way to do this is to use Firefox to view your project, right-click the page and select "Take a Screenshot". You can choose either a full-height screenshot or a cropped one based on how long the page is. If it's very long, it might be best to crop it.
-
-Alternatively, you can use a tool like [FireShot](https://getfireshot.com/) to take the screenshot. FireShot has a free option, so you don't need to purchase it. 
-
-Then crop/optimize/edit your image however you like, add it to your project, and update the file path in the image above.
-
-**Note: Delete this note and the paragraphs above when you add your screenshot. If you prefer not to add a screenshot, feel free to remove this entire section.**
+![](./)
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+- Solution URL: [Frontend Mentor]()
+- Live Site URL: https://fm-dd-interactive-comments-section.vercel.app
 
 ## My process
 
 ### Built with
 
-- Semantic HTML5 markup
-- CSS custom properties
-- Flexbox
-- CSS Grid
-- Mobile-first workflow
-- [React](https://reactjs.org/) - JS library
 - [Next.js](https://nextjs.org/) - React framework
-- [Styled Components](https://styled-components.com/) - For styles
-
-**Note: These are just examples. Delete this note and replace the list above with your own choices**
+- [React](https://react.dev/) - JavaScript library
+- [TypeScript](https://www.typescriptlang.org/) - Typed JavaScript
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS
+- [Zod](https://zod.dev/) - Schema validation
+- [C#](https://learn.microsoft.com/dotnet/csharp/) with [ASP.NET Core](https://dotnet.microsoft.com/apps/aspnet) (.NET 10) - REST API
+- [Entity Framework Core](https://learn.microsoft.com/ef/core/) with [Npgsql](https://www.npgsql.org/efcore/) - ORM + PostgreSQL provider
+- [ASP.NET Core Identity](https://learn.microsoft.com/aspnet/core/security/authentication/identity) with Identity Cookies - Auth (cookie auth, sign-in manager, token providers)
+- [PostgreSQL](https://www.postgresql.org/) hosted on [Neon](https://neon.com/) - Database
+- [Neon Object Storage](https://neon.com/docs/guides/object-storage) via [AWSSDK.S3](https://www.nuget.org/packages/AWSSDK.S3) (S3-compatible) - Avatar/file storage
+- [OpenAPI](https://learn.microsoft.com/aspnet/core/fundamentals/openapi) + [Swashbuckle Swagger UI](https://github.com/domaindrive-dev/Swashbuckle.AspNetCore) - API docs
+- [Docker](https://www.docker.com/) - API containerization
 
 ### What I learned
 
-Use this section to recap over some of your major learnings while working through this project. Writing these out and providing code samples of areas you want to highlight is a great way to reinforce your own knowledge.
-
-To see how you can add code snippets, see below:
-
-```html
-<h1>Some HTML code I'm proud of</h1>
-```
-```css
-.proud-of-this-css {
-  color: papayawhip;
-}
-```
-```js
-const proudOfThisFunc = () => {
-  console.log('🎉')
-}
-```
-
-If you want more help with writing markdown, we'd recommend checking out [The Markdown Guide](https://www.markdownguide.org/) to learn more.
-
-**Note: Delete this note and the content within this section and replace with your own learnings.**
+Through this project I learned how to work with Docker properly and how to build an API, including containerizing the backend, wiring it to PostgreSQL, and deploying a working frontend-to-API flow.
 
 ### Continued development
 
-Use this section to outline areas that you want to continue focusing on in future projects. These could be concepts you're still not completely comfortable with or techniques you found useful that you want to refine and perfect.
-
-**Note: Delete this note and the content within this section and replace with your own plans for continued development.**
-
-### Useful resources
-
-- [Example resource 1](https://www.example.com) - This helped me for XYZ reason. I really liked this pattern and will use it going forward.
-- [Example resource 2](https://www.example.com) - This is an amazing article which helped me finally understand XYZ. I'd recommend it to anyone still learning this concept.
-
-**Note: Delete this note and replace the list above with resources that helped you during the challenge. These could come in handy for anyone viewing your solution or for yourself when you look back on this project in the future.**
+This was my first full-stack app with a frontend, backend, and database, and I'd like to continue building full-stack apps.
 
 ### AI Collaboration
 
-Describe how you used AI tools (if any) during this project. This helps demonstrate your ability to work effectively with AI assistants.
+I used OpenCode as a development partner throughout this project, specifically for API architecture decisions, deployment setup, and working with Docker and PostgreSQL configuration. It was also helpful for exploring UI layout options and answering routine implementation questions.
 
-- What tools did you use (e.g., ChatGPT, Claude, GitHub Copilot)?
-- How did you use them (e.g., debugging, generating boilerplate, brainstorming solutions)?
-- What worked well? What didn't?
+## Running the app
 
-**Note: Delete this note and the content above if you didn't use AI, or replace with your own experience.**
+### Prerequisites
+
+- .NET 10 SDK for the `api/` backend
+- Node.js 20+ for the `web/` frontend
+- Docker Compose for local Postgres
+
+### Environment variables
+
+- Copy `web/.env.example` to `web/.env`:
+
+```bash
+# web/.env
+NEXT_PUBLIC_API_URL=http://localhost:5217
+API_URL=http://localhost:5217
+```
+
+- Set the API secrets with dotnet user-secrets (run from `api/`):
+
+```bash
+cd api
+dotnet user-secrets init
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=interactive_comments_section;Username=postgres;Password=postgres"
+dotnet user-secrets set "Storage:AccessKeyId" "<your-key>"
+dotnet user-secrets set "Storage:SecretAccessKey" "<your-secret>"
+dotnet user-secrets set "Storage:Endpoint" "<your-s3-endpoint>"
+dotnet user-secrets set "Storage:Region" "<your-region>"
+dotnet user-secrets set "Storage:Bucket" "<your-bucket>"
+```
+
+### Run locally
+
+- PostgreSQL
+
+```bash
+docker compose up -d
+```
+
+- Api
+
+```bash
+cd ./api
+dotnet run --project .
+```
+
+- Web
+
+```bash
+cd ./web
+npm i
+npm run dev
+```
+
+### Useful endpoints
+
+- `GET /api/health`: DB-connected health check
+- `GET /api/security/antiforgery`: issues the `X-XSRF-TOKEN` the frontend sends back as the `X-XSRF-TOKEN` header
+- `GET /openapi/v1.json` plus Swagger UI in Development: API docs
 
 ## Author
 
-- Website - [Add your name here](https://www.your-site.com)
-- Frontend Mentor - [@yourusername](https://www.frontendmentor.io/profile/yourusername)
-- Twitter - [@yourusername](https://www.twitter.com/yourusername)
-
-**Note: Delete this note and add/remove/edit lines above based on what links you'd like to share.**
-
-## Acknowledgments
-
-This is where you can give a hat tip to anyone who helped you out on this project. Perhaps you worked in a team or got some inspiration from someone else's solution. This is the perfect place to give them some credit.
-
-**Note: Delete this note and edit this section's content as necessary. If you completed this challenge by yourself, feel free to delete this section entirely.**
+- Frontend Mentor - [@Denislav-Dimov](https://www.frontendmentor.io/profile/Denislav-Dimov)
