@@ -56,7 +56,7 @@ export default function Loading() {
           >
             <span className="bg-grey-100 order-2 h-8 w-8 animate-pulse rounded-full motion-reduce:animate-none md:order-1" />
             <span className="border-grey-100 bg-grey-50 order-1 col-span-2 h-24 w-full animate-pulse rounded-xl border-2 motion-reduce:animate-none md:order-2 md:flex-1" />
-            <span className="bg-grey-100 order-3 h-10 w-24 animate-pulse rounded-[5px] motion-reduce:animate-none" />
+            <span className="bg-grey-100 order-3 h-10 w-24 animate-pulse justify-self-end rounded-[5px] motion-reduce:animate-none" />
           </div>
         </section>
       </div>

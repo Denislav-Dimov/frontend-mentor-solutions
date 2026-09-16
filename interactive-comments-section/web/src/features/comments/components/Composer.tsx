@@ -99,7 +99,7 @@ export default function Composer({
         <GuestPrompt
           action={buttonLabel === 'Reply' ? 'reply to comments' : 'publish comments'}
         >
-          <span className="order-3 w-fit rounded-[5px] bg-purple-600 px-6 py-2.5 text-sm font-medium text-white uppercase md:justify-self-auto">
+          <span className="order-3 w-fit justify-self-end rounded-[5px] bg-purple-600 px-6 py-2.5 text-sm font-medium text-white uppercase md:justify-self-auto">
             {buttonLabel}
           </span>
         </GuestPrompt>
