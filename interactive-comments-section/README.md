@@ -32,6 +32,7 @@ This is a solution to the [Interactive comments section challenge on Frontend Me
   - [The challenge](#the-challenge)
   - [Demo](#demo)
   - [Links](#links)
+  - [Demo data notice](#demo-data-notice)
 - [My process](#my-process)
   - [Built with](#built-with)
   - [What I learned](#what-i-learned)
@@ -66,6 +67,10 @@ Users should be able to:
 
 - Solution URL: [Frontend Mentor]()
 - Live Site URL: https://fm-dd-interactive-comments-section.vercel.app
+
+### Demo data notice
+
+This is an educational portfolio project. The live demo allows account creation for testing the comments flow. If you register, the app stores your username, email, securely hashed password, avatar, comments, and votes. Hosting and storage are provided by Vercel (frontend), Neon Postgres (database), and S3-compatible object storage (avatars). Data is kept until you delete your account from `/profile`, which removes your profile, comments, and reactions. For questions or deletion help, contact via [GitHub](https://github.com/Denislav-Dimov) or [Frontend Mentor](https://www.frontendmentor.io/profile/Denislav-Dimov). This notice is for transparency only and is not legal advice.
 
 ## My process
 

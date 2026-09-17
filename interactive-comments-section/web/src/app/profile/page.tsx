@@ -27,6 +27,24 @@ export default async function ProfilePage() {
         </div>
 
         <ProfileForm user={user} />
+
+        <section
+          aria-labelledby="profile-data-notice"
+          className="rounded-lg bg-white p-7 md:p-9"
+        >
+          <h2 id="profile-data-notice" className="text-grey-800 font-bold">
+            Your data
+          </h2>
+          <p className="text-grey-500 mt-1 text-sm">
+            Educational demo. Your username, email, hashed password, avatar,
+            comments, and votes are stored to run your account and are kept until
+            you delete your account above. See the{' '}
+            <Link href="/privacy" className="font-bold text-purple-600 hover:underline">
+              privacy notice
+            </Link>{' '}
+            for details.
+          </p>
+        </section>
       </main>
     </>
   );

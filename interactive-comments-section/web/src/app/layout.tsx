@@ -18,6 +18,14 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
     <html lang="en" className={`${RubikFont.variable} h-full antialiased`}>
       <body className="font-sans">
         <ToastProvider>{children}</ToastProvider>
+        <footer className="mx-auto w-full max-w-3xl px-4 pb-8 md:px-8">
+          <p className="text-grey-500 text-center text-xs">
+            Educational demo project.{' '}
+            <a href="/privacy" className="font-bold text-purple-600 hover:underline">
+              Privacy notice
+            </a>
+          </p>
+        </footer>
       </body>
     </html>
   );

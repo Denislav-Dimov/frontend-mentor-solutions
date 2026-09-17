@@ -154,6 +154,16 @@ export default function AuthForm({ mode }: Props) {
           {error}
         </p>
       )}
+      {isRegister && (
+        <p className="text-grey-500 text-xs">
+          Educational demo. Your username, email, and hashed password are stored to
+          run your account until deletion. See the{' '}
+          <Link href="/privacy" className="font-bold text-purple-600 hover:underline">
+            privacy notice
+          </Link>
+          .
+        </p>
+      )}
       <button disabled={pending} className="button-primary w-full disabled:opacity-50">
         {pending ? 'Working...' : isRegister ? 'Create account' : 'Log in'}
       </button>
