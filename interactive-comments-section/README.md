@@ -60,7 +60,7 @@ Users should be able to:
 
 ### Demo
 
-![](./)
+![](./docs/demo.gif)
 
 ### Links
 
