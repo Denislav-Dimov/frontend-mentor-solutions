@@ -65,7 +65,7 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Frontend Mentor]()
+- Solution URL: [Frontend Mentor](https://www.frontendmentor.io/solutions/interactive-comments-section---nextjs-aspnet-core-postgresql-cPpuUE-DSt)
 - Live Site URL: https://fm-dd-interactive-comments-section.vercel.app
 
 ### Demo data notice
