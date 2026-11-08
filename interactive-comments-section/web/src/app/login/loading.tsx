@@ -1,26 +1,30 @@
+const bone = 'animate-pulse rounded motion-reduce:animate-none';
+
 export default function Loading() {
   return (
-    <main className="mx-auto grid min-h-screen max-w-md place-items-center px-4 py-8 md:py-12">
-      <div aria-busy="true" className="grid w-full gap-6 rounded-lg bg-white p-7 md:p-9">
-        <p role="status" className="sr-only">
-          Loading sign in…
-        </p>
-        <div aria-hidden="true" className="grid gap-2">
-          <span className="h-4 w-28 animate-pulse rounded bg-grey-100 motion-reduce:animate-none" />
-          <span className="h-8 w-44 animate-pulse rounded bg-grey-100 motion-reduce:animate-none" />
-          <span className="mt-1 h-4 w-full animate-pulse rounded bg-grey-100 motion-reduce:animate-none" />
+    <>
+      <div aria-hidden="true" className="border-grey-100 h-16 border-b bg-white" />
+      <main id="main" className="page">
+        <div aria-busy="true" className="card mx-auto grid w-full max-w-md gap-6">
+          <p role="status" className="sr-only">
+            Loading…
+          </p>
+          <div aria-hidden="true" className="grid gap-2">
+            <span className={`${bone} bg-grey-100 h-8 w-40`} />
+            <span className={`${bone} bg-grey-100 h-4 w-full`} />
+          </div>
+          <div aria-hidden="true" className="grid gap-5">
+            {[0, 1].map(index => (
+              <div key={index} className="grid gap-2">
+                <span className={`${bone} bg-grey-100 h-4 w-28`} />
+                <span className={`${bone} bg-grey-50 h-12 w-full rounded-xl`} />
+              </div>
+            ))}
+          </div>
+          <span aria-hidden="true" className={`${bone} bg-grey-100 h-12 w-full rounded-lg`} />
+          <span aria-hidden="true" className={`${bone} bg-grey-100 mx-auto h-4 w-48`} />
         </div>
-        <div aria-hidden="true" className="grid gap-2">
-          <span className="h-4 w-32 animate-pulse rounded bg-grey-100 motion-reduce:animate-none" />
-          <span className="h-12 w-full animate-pulse rounded-xl bg-grey-50 motion-reduce:animate-none" />
-        </div>
-        <div aria-hidden="true" className="grid gap-2">
-          <span className="h-4 w-20 animate-pulse rounded bg-grey-100 motion-reduce:animate-none" />
-          <span className="h-12 w-full animate-pulse rounded-xl bg-grey-50 motion-reduce:animate-none" />
-        </div>
-        <span aria-hidden="true" className="h-12 w-full animate-pulse rounded-lg bg-grey-100 motion-reduce:animate-none" />
-        <span aria-hidden="true" className="mx-auto h-4 w-48 animate-pulse rounded bg-grey-100 motion-reduce:animate-none" />
-      </div>
-    </main>
+      </main>
+    </>
   );
 }

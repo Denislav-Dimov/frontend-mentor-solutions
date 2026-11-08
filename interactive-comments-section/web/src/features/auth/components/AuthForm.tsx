@@ -2,177 +2,293 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, SubmitEvent, useState } from 'react';
-import { loginSchema, registerSchema, antiforgerySchema, apiErrorSchema } from '../schemas';
+import { useId, useRef, useState } from 'react';
+import type { ComponentProps, SubmitEvent } from 'react';
+import { ApiRequestError, apiMutation, resetAntiforgeryToken } from '@/features/shared';
+import { loginSchema, registerSchema } from '../schemas';
 
 type Mode = 'login' | 'register';
+type FieldName = 'usernameOrEmail' | 'username' | 'email' | 'password';
+type Values = Record<FieldName, string>;
+type FieldErrors = Partial<Record<FieldName, string>>;
 
-type Values = {
-  usernameOrEmail: string;
-  username: string;
-  email: string;
-  password: string;
+const FIELDS: Record<Mode, FieldName[]> = {
+  login: ['usernameOrEmail', 'password'],
+  register: ['username', 'email', 'password'],
 };
+
+const COPY = {
+  login: {
+    title: 'Log in',
+    subtitle: 'Welcome back. Log in to comment, reply, and vote.',
+    submit: 'Log in',
+    pending: 'Logging in…',
+    switchPrompt: 'New here?',
+    switchLabel: 'Create an account',
+    switchHref: '/register',
+  },
+  register: {
+    title: 'Create an account',
+    subtitle: 'Pick a username to join the conversation and keep track of your activity.',
+    submit: 'Create account',
+    pending: 'Creating account…',
+    switchPrompt: 'Already have an account?',
+    switchLabel: 'Log in',
+    switchHref: '/login',
+  },
+} as const;
+
+function toFieldName(key: string, mode: Mode): FieldName | null {
+  const normalized = key.toLowerCase();
+  if (normalized.startsWith('password')) return 'password';
+  if (mode === 'login') {
+    return normalized.includes('username') || normalized.includes('email')
+      ? 'usernameOrEmail'
+      : null;
+  }
+  if (normalized.includes('username')) return 'username';
+  if (normalized.includes('email')) return 'email';
+  return null;
+}
 
 type Props = {
   mode: Mode;
+  returnTo: string;
 };
 
-export default function AuthForm({ mode }: Props) {
+export default function AuthForm({ mode, returnTo }: Props) {
   const router = useRouter();
+  const formRef = useRef<HTMLFormElement>(null);
   const [values, setValues] = useState<Values>({
     usernameOrEmail: '',
     username: '',
     email: '',
     password: '',
   });
-  const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [formError, setFormError] = useState('');
   const [pending, setPending] = useState(false);
   const isRegister = mode === 'register';
+  const copy = COPY[mode];
+  const switchHref =
+    returnTo === '/'
+      ? copy.switchHref
+      : `${copy.switchHref}?returnTo=${encodeURIComponent(returnTo)}`;
 
-  async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const parsed = (isRegister ? registerSchema : loginSchema).safeParse(values);
-    if (!parsed.success) {
-      setError(parsed.error.issues[0]?.message ?? 'Please check the form.');
+  function focusFirstInvalid(errors: FieldErrors) {
+    const first = FIELDS[mode].find(name => errors[name]);
+    if (!first) return;
+    requestAnimationFrame(() => {
+      const element = formRef.current?.elements.namedItem(first);
+      if (element instanceof HTMLInputElement) element.focus();
+    });
+  }
+
+  function updateValue(name: FieldName, value: string) {
+    setValues(previous => ({ ...previous, [name]: value }));
+    if (fieldErrors[name]) {
+      setFieldErrors(previous => ({ ...previous, [name]: undefined }));
+    }
+  }
+
+  function validate() {
+    const parsed = isRegister
+      ? registerSchema.safeParse(values)
+      : loginSchema.safeParse(values);
+    if (parsed.success) return { data: parsed.data, errors: null };
+
+    const errors: FieldErrors = {};
+    for (const issue of parsed.error.issues) {
+      const name = issue.path[0] as FieldName;
+      errors[name] ??= issue.message;
+    }
+    return { data: null, errors };
+  }
+
+  function handleApiError(error: unknown) {
+    if (!(error instanceof ApiRequestError)) {
+      setFormError('Something went wrong. Check your connection and try again.');
       return;
     }
+    if (!isRegister && error.status === 401) {
+      setFormError('That username, email, or password is incorrect.');
+      return;
+    }
+
+    const mapped: FieldErrors = {};
+    const unmapped: string[] = [];
+    for (const [key, messages] of Object.entries(error.fieldErrors ?? {})) {
+      const message = messages[0];
+      if (!message) continue;
+      const name = toFieldName(key, mode);
+      if (name) mapped[name] ??= message;
+      else unmapped.push(message);
+    }
+
+    const hasFieldErrors = Object.keys(mapped).length > 0;
+    setFieldErrors(mapped);
+    setFormError(unmapped[0] ?? (hasFieldErrors ? '' : error.message));
+    focusFirstInvalid(mapped);
+  }
+
+  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (pending) return;
+
+    const { data, errors } = validate();
+    setFormError('');
+    if (!data) {
+      setFieldErrors(errors);
+      focusFirstInvalid(errors);
+      return;
+    }
+
+    setFieldErrors({});
     setPending(true);
-    setError('');
     try {
-      const tokenResponse = await fetch('/api/security/antiforgery', {
-        credentials: 'include',
-      });
-
-      if (!tokenResponse.ok) {
-        throw new Error('Unable to prepare this request.');
-      }
-
-      const token = antiforgerySchema.parse(await tokenResponse.json()).token;
-
-      const response = await fetch(`/api/users/${mode}`, {
+      await apiMutation(`/api/users/${mode}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-XSRF-TOKEN': token },
-        credentials: 'include',
-        body: JSON.stringify(
-          isRegister
-            ? { username: values.username, email: values.email, password: values.password }
-            : { usernameOrEmail: values.usernameOrEmail, password: values.password },
-        ),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
       });
-
-      if (!response.ok) {
-        if (!isRegister && response.status === 401) {
-          throw new Error('The username or password is incorrect.');
-        }
-
-        const payload = apiErrorSchema.safeParse(await response.json().catch(() => null));
-
-        const apiMessage = payload.success
-          ? (Object.values(payload.data.errors ?? {})[0]?.[0] ??
-            payload.data.detail ??
-            payload.data.title)
-          : undefined;
-
-        throw new Error(apiMessage ?? `The API returned ${response.status}.`);
-      }
-      router.push('/');
+      resetAntiforgeryToken();
+      router.push(returnTo);
       router.refresh();
-    } catch (submissionError) {
-      setError(
-        submissionError instanceof Error ? submissionError.message : 'Unable to continue.',
-      );
-    } finally {
+    } catch (error) {
+      handleApiError(error);
       setPending(false);
     }
   }
 
-  const updateValue = (
-    e: ChangeEvent<HTMLInputElement, HTMLInputElement>,
-    value: keyof Values,
-  ) => setValues(prev => ({ ...prev, [value]: e.target.value }));
-
   return (
-    <form onSubmit={handleSubmit} className="grid gap-6 rounded-lg bg-white p-7 md:p-9">
+    <form ref={formRef} onSubmit={handleSubmit} noValidate className="grid gap-6">
       <div>
-        <Link href="/" className="text-sm font-bold text-purple-600 hover:underline">
-          Back to comments
-        </Link>
-        <h1 className="text-grey-800 text-2xl font-bold">
-          {isRegister ? 'Create your account' : 'Welcome back'}
-        </h1>
-        <p className="text-grey-500 mt-1 text-sm">
-          Join the conversation and keep your comments in one place.
-        </p>
+        <h1 className="page-title">{copy.title}</h1>
+        <p className="page-subtitle">{copy.subtitle}</p>
       </div>
-      {isRegister && (
-        <label className="grid gap-2 text-sm font-bold">
-          Name
-          <input
-            name="username"
-            className="input"
-            autoComplete="username"
-            onChange={e => updateValue(e, 'username')}
-          />
-        </label>
-      )}
-      {isRegister && (
-        <label className="grid gap-2 text-sm font-bold">
-          Email
-          <input
-            name="email"
-            type="email"
-            className="input"
-            autoComplete="email"
-            onChange={e => updateValue(e, 'email')}
-          />
-        </label>
-      )}
-      {!isRegister && (
-        <label className="grid gap-2 text-sm font-bold">
-          Username or email
-          <input
+
+      <div className="grid gap-5">
+        {isRegister ? (
+          <>
+            <Field
+              label="Username"
+              name="username"
+              autoComplete="username"
+              autoCapitalize="none"
+              spellCheck={false}
+              value={values.username}
+              error={fieldErrors.username}
+              onValueChange={value => updateValue('username', value)}
+            />
+            <Field
+              label="Email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              value={values.email}
+              error={fieldErrors.email}
+              onValueChange={value => updateValue('email', value)}
+            />
+          </>
+        ) : (
+          <Field
+            label="Username or email"
             name="usernameOrEmail"
-            className="input"
             autoComplete="username"
-            onChange={e => updateValue(e, 'usernameOrEmail')}
+            autoCapitalize="none"
+            spellCheck={false}
+            value={values.usernameOrEmail}
+            error={fieldErrors.usernameOrEmail}
+            onValueChange={value => updateValue('usernameOrEmail', value)}
           />
-        </label>
-      )}
-      <label className="grid gap-2 text-sm font-bold">
-        Password
-        <input
+        )}
+        <Field
+          label="Password"
           name="password"
           type="password"
-          className="input"
           autoComplete={isRegister ? 'new-password' : 'current-password'}
-          onChange={e => updateValue(e, 'password')}
+          value={values.password}
+          error={fieldErrors.password}
+          hint={
+            isRegister
+              ? 'At least 8 characters, including an uppercase letter and a number.'
+              : undefined
+          }
+          onValueChange={value => updateValue('password', value)}
         />
-      </label>
-      {error && (
-        <p className="text-sm text-pink-400" role="alert">
-          {error}
+      </div>
+
+      {formError && (
+        <p role="alert" className="field-error">
+          {formError}
         </p>
       )}
+
       {isRegister && (
-        <p className="text-grey-500 text-xs">
-          Educational demo. Your username, email, and hashed password are stored to
-          run your account until deletion. See the{' '}
-          <Link href="/privacy" className="font-bold text-purple-600 hover:underline">
+        <p className="field-hint">
+          Educational demo. Your username, email, and hashed password are stored until you
+          delete your account. Read the{' '}
+          <Link href="/privacy" className="link">
             privacy notice
           </Link>
           .
         </p>
       )}
-      <button disabled={pending} className="button-primary w-full disabled:opacity-50">
-        {pending ? 'Working...' : isRegister ? 'Create account' : 'Log in'}
+
+      <button type="submit" disabled={pending} className="button-primary w-full">
+        {pending ? copy.pending : copy.submit}
       </button>
+
       <p className="text-grey-500 text-center text-sm">
-        {isRegister ? 'Already have an account? ' : 'Need an account? '}
-        <Link href={isRegister ? '/login' : '/register'} className="font-bold text-purple-600">
-          {isRegister ? 'Log in' : 'Register'}
+        {copy.switchPrompt}{' '}
+        <Link href={switchHref} className="link">
+          {copy.switchLabel}
         </Link>
       </p>
     </form>
+  );
+}
+
+type FieldProps = Omit<ComponentProps<'input'>, 'onChange' | 'value' | 'name'> & {
+  label: string;
+  name: FieldName;
+  value: string;
+  error?: string;
+  hint?: string;
+  onValueChange: (value: string) => void;
+};
+
+function Field({ label, name, error, hint, onValueChange, ...inputProps }: FieldProps) {
+  const id = useId();
+  const hintId = `${id}-hint`;
+  const errorId = `${id}-error`;
+  const describedBy = [hint && hintId, error && errorId].filter(Boolean).join(' ');
+
+  return (
+    <div className="grid gap-2">
+      <label htmlFor={id} className="field-label">
+        {label}
+      </label>
+      <input
+        {...inputProps}
+        id={id}
+        name={name}
+        required
+        className="input"
+        aria-invalid={error ? true : undefined}
+        aria-describedby={describedBy || undefined}
+        onChange={event => onValueChange(event.target.value)}
+      />
+      {hint && (
+        <p id={hintId} className="field-hint">
+          {hint}
+        </p>
+      )}
+      {error && (
+        <p id={errorId} className="field-error">
+          {error}
+        </p>
+      )}
+    </div>
   );
 }

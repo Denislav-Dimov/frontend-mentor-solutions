@@ -1,66 +1,80 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+import type { ReactNode } from 'react';
+import { StatusBar } from '@/features/shared';
+import { getCurrentUser } from '@/features/shared/api/server';
 
-export default function PrivacyPage() {
+export const metadata: Metadata = {
+  title: 'Privacy notice | Interactive comments section',
+};
+
+function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
   return (
-    <main className="mx-auto grid max-w-2xl gap-8 p-4 md:p-10">
-      <div>
-        <Link href="/" className="text-sm font-bold text-purple-600 hover:underline">
-          Back to comments
-        </Link>
-        <h1 className="text-grey-800 mt-2 text-4xl font-bold">Privacy notice</h1>
-        <p className="text-grey-500 mt-2">
-          Educational portfolio project. This notice explains what the live demo stores.
-        </p>
-      </div>
+    <section aria-labelledby={id} className="grid gap-2">
+      <h2 id={id} className="text-grey-800 text-lg font-bold">
+        {title}
+      </h2>
+      <p className="text-grey-500 max-w-prose leading-relaxed font-normal">{children}</p>
+    </section>
+  );
+}
 
-      <section className="grid gap-4 rounded-lg bg-white p-7 md:p-9">
-        <h2 className="text-grey-800 text-xl font-bold">What is stored</h2>
-        <p className="text-grey-500 text-sm">
-          When you register, the app stores your username, email, securely hashed password,
-          avatar image, comments, and votes so you can log in and participate. Passwords are
-          never stored in plain text.
-        </p>
+export default async function PrivacyPage() {
+  const user = await getCurrentUser();
 
-        <h2 className="text-grey-800 text-xl font-bold">Where it is stored</h2>
-        <p className="text-grey-500 text-sm">
-          Hosting and storage are provided by Vercel for the frontend, Neon Postgres for the
-          database, and S3-compatible object storage for avatars.
-        </p>
+  return (
+    <>
+      <StatusBar user={user} />
+      <main id="main" className="page">
+        <div>
+          <h1 className="page-title">Privacy notice</h1>
+          <p className="page-subtitle">
+            What this educational demo stores, where, and for how long.
+          </p>
+        </div>
 
-        <h2 className="text-grey-800 text-xl font-bold">How long it is kept</h2>
-        <p className="text-grey-500 text-sm">
-          Data is kept until you delete your account. Deleting your account from the profile
-          page removes your profile, comments, and reactions.
-        </p>
+        <div className="card grid gap-8">
+          <Section id="privacy-what" title="What is stored">
+            When you register, the app stores your username, email, securely hashed password,
+            profile photo, comments, and votes so you can log in and take part. Passwords are
+            never stored in plain text.
+          </Section>
 
-        <h2 className="text-grey-800 text-xl font-bold">Your choices</h2>
-        <p className="text-grey-500 text-sm">
-          You can update your username and avatar or delete your account at any time from{' '}
-          <Link href="/profile" className="font-bold text-purple-600 hover:underline">
-            your profile
-          </Link>
-          . Logging in is only needed to comment, vote, and manage your profile.
-        </p>
+          <Section id="privacy-where" title="Where it is stored">
+            The frontend is hosted on Vercel, the database on Neon Postgres, and profile photos
+            in S3-compatible object storage.
+          </Section>
 
-        <h2 className="text-grey-800 text-xl font-bold">Contact</h2>
-        <p className="text-grey-500 text-sm">
-          For questions or deletion help, contact via{' '}
-          <a
-            href="https://github.com/Denislav-Dimov"
-            className="font-bold text-purple-600 hover:underline"
-          >
-            GitHub
-          </a>{' '}
-          or{' '}
-          <a
-            href="https://www.frontendmentor.io/profile/Denislav-Dimov"
-            className="font-bold text-purple-600 hover:underline"
-          >
-            Frontend Mentor
-          </a>
-          . This notice is for transparency only and is not legal advice.
-        </p>
-      </section>
-    </main>
+          <Section id="privacy-retention" title="How long it is kept">
+            Data is kept until you delete your account. Deleting your account from your profile
+            removes your profile, comments, and votes.
+          </Section>
+
+          <Section id="privacy-choices" title="Your choices">
+            You can change your username and photo, or delete your account, at any time from{' '}
+            <Link href="/profile" className="link">
+              your profile
+            </Link>
+            . You only need an account to comment, vote, and manage your profile.
+          </Section>
+
+          <Section id="privacy-contact" title="Contact">
+            For questions or help deleting your data, get in touch on{' '}
+            <a href="https://github.com/Denislav-Dimov" rel="noreferrer" className="link">
+              GitHub
+            </a>{' '}
+            or{' '}
+            <a
+              href="https://www.frontendmentor.io/profile/Denislav-Dimov"
+              rel="noreferrer"
+              className="link"
+            >
+              Frontend Mentor
+            </a>
+            . This notice is for transparency only and is not legal advice.
+          </Section>
+        </div>
+      </main>
+    </>
   );
 }

@@ -1,50 +1,47 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { ProfileForm } from '@/features/profile';
+import { AccountSection, DeleteAccountSection, ProfileDetails } from '@/features/profile';
 import { StatusBar } from '@/features/shared';
 import { getCurrentUser } from '@/features/shared/api/server';
 
+export const metadata: Metadata = {
+  title: 'Your profile | Interactive comments section',
+};
+
 export default async function ProfilePage() {
   const user = await getCurrentUser();
-
   if (!user) {
-    redirect('/login');
+    redirect('/login?returnTo=/profile');
   }
 
   return (
     <>
       <StatusBar user={user} />
-
-      <main className="mx-auto grid max-w-2xl gap-8 p-4 md:p-10">
+      <main id="main" className="page">
         <div>
-          <Link href="/history" className="text-sm font-bold text-purple-600">
-            View comment history
-          </Link>
-          <h1 className="text-grey-800 mt-2 text-4xl font-bold">Your profile</h1>
-          <p className="text-grey-500 mt-2">
-            Manage your public profile and account preferences.
-          </p>
+          <h1 className="page-title">Your profile</h1>
+          <p className="page-subtitle">Manage how you appear and how you sign in.</p>
         </div>
 
-        <ProfileForm user={user} />
+        <ProfileDetails user={user} />
+        <AccountSection />
 
-        <section
-          aria-labelledby="profile-data-notice"
-          className="rounded-lg bg-white p-7 md:p-9"
-        >
-          <h2 id="profile-data-notice" className="text-grey-800 font-bold">
+        <section aria-labelledby="your-data-heading" className="card grid gap-1">
+          <h2 id="your-data-heading" className="text-grey-800 text-lg font-bold">
             Your data
           </h2>
-          <p className="text-grey-500 mt-1 text-sm">
-            Educational demo. Your username, email, hashed password, avatar,
-            comments, and votes are stored to run your account and are kept until
-            you delete your account above. See the{' '}
-            <Link href="/privacy" className="font-bold text-purple-600 hover:underline">
+          <p className="text-grey-500 text-sm">
+            Your username, email, hashed password, photo, comments, and votes are stored to run
+            your account and kept until you delete it. Read the{' '}
+            <Link href="/privacy" className="link">
               privacy notice
             </Link>{' '}
             for details.
           </p>
         </section>
+
+        <DeleteAccountSection />
       </main>
     </>
   );
