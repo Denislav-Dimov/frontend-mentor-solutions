@@ -18,7 +18,8 @@ COPY --from=build /app/publish .
 
 ENV ASPNETCORE_ENVIRONMENT=Production
 ENV ASPNETCORE_URLS=http://+:8080
-ENV ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
 EXPOSE 8080
+
+USER $APP_UID
 
 ENTRYPOINT ["sh", "-c", "dotnet api.dll --urls http://0.0.0.0:${PORT:-8080}"]

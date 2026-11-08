@@ -1,6 +1,8 @@
 using Api.Infrastructure.Persistence;
 using Api.Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 
 namespace Api.Features.Comments;
@@ -62,7 +64,6 @@ public static class CommentsEndpoints {
             var history = await db.Comments
                 .AsNoTracking()
                 .Where(comment => comment.AuthorId == userId.Value)
-                .Include(comment => comment.Author)
                 .OrderByDescending(comment => comment.CreatedAt)
                 .Select(comment => new {
                     comment.Id,
@@ -86,12 +87,10 @@ public static class CommentsEndpoints {
                 AppDbContext db,
                 Infrastructure.Configuration.ServiceCollectionExtensions.StorageOptions storageOptions,
                 CancellationToken cancellationToken) => {
-                var content = request.Content.Trim();
+                var content = request.Content?.Trim();
 
-                if (content.Length is < 1 or > 2_000) {
-                    return Results.ValidationProblem(new Dictionary<string, string[]> {
-                        ["content"] = ["Content must be between 1 and 2,000 characters."]
-                    });
+                if (!IsValidContent(content)) {
+                    return InvalidContent();
                 }
 
                 if (!Guid.TryParse(principal.FindFirstValue(ClaimTypes.NameIdentifier), out var authorId)) {
@@ -135,26 +134,26 @@ public static class CommentsEndpoints {
                 UpdateCommentRequest request,
                 ClaimsPrincipal principal,
                 AppDbContext db,
+                Infrastructure.Configuration.ServiceCollectionExtensions.StorageOptions storageOptions,
                 CancellationToken cancellationToken) => {
                 var userId = GetUserId(principal);
-                var content = request.Content.Trim();
                 if (userId is null) return Results.Unauthorized();
 
-                if (content.Length is < 1 or > 2_000) {
-                    return Results.ValidationProblem(new Dictionary<string, string[]> {
-                        ["content"] = ["Content must be between 1 and 2,000 characters."]
-                    });
+                var content = request.Content?.Trim();
+                if (!IsValidContent(content)) {
+                    return InvalidContent();
                 }
 
-                var comment = await db.Comments.SingleOrDefaultAsync(
-                    item => item.Id == id,
-                    cancellationToken);
+                var comment = await db.Comments
+                    .Include(item => item.Author)
+                    .Include(item => item.Votes)
+                    .SingleOrDefaultAsync(item => item.Id == id, cancellationToken);
                 if (comment is null) return Results.NotFound();
                 if (comment.AuthorId != userId.Value) return Results.Forbid();
 
                 comment.Content = content;
                 await db.SaveChangesAsync(cancellationToken);
-                return Results.Ok(new { comment.Id, comment.Content });
+                return Results.Ok(ToResponse(comment, userId, storageOptions.DefaultAvatarUrl()));
             })
             .RequireAuthorization()
             .RequireRateLimiting("mutation")
@@ -178,14 +177,9 @@ public static class CommentsEndpoints {
                     return Results.Unauthorized();
                 }
 
-                var comment = await db.Comments
-                    .SingleOrDefaultAsync(item => item.Id == id, cancellationToken);
-
-                if (comment is null) {
+                if (!await db.Comments.AnyAsync(item => item.Id == id, cancellationToken)) {
                     return Results.NotFound();
                 }
-
-                await using var transaction = await db.Database.BeginTransactionAsync(cancellationToken);
 
                 var vote = await db.CommentVotes
                     .SingleOrDefaultAsync(item =>
@@ -205,8 +199,14 @@ public static class CommentsEndpoints {
                     vote.UpdatedAt = DateTime.UtcNow;
                 }
 
-                await db.SaveChangesAsync(cancellationToken);
-                await transaction.CommitAsync(cancellationToken);
+                try {
+                    await db.SaveChangesAsync(cancellationToken);
+                } catch (DbUpdateException exception) when (
+                    exception.InnerException is PostgresException {
+                        SqlState: PostgresErrorCodes.UniqueViolation
+                    }) {
+                } catch (DbUpdateConcurrencyException) {
+                }
 
                 return Results.Ok(await GetVoteSummary(id, userId.Value, db, cancellationToken));
             })
@@ -225,39 +225,21 @@ public static class CommentsEndpoints {
                     return Results.Unauthorized();
                 }
 
-                var comment = await db.Comments
-                    .SingleOrDefaultAsync(item => item.Id == id, cancellationToken);
+                var authorId = await db.Comments
+                    .Where(item => item.Id == id)
+                    .Select(item => (Guid?)item.AuthorId)
+                    .SingleOrDefaultAsync(cancellationToken);
 
-                if (comment is null) {
+                if (authorId is null) {
                     return Results.NotFound();
                 }
 
-                if (comment.AuthorId != userId.Value) {
+                if (authorId != userId.Value) {
                     return Results.Forbid();
                 }
 
-                var allIds = await db.Comments
-                    .AsNoTracking()
-                    .Select(item => new { item.Id, item.ParentId })
-                    .ToListAsync(cancellationToken);
-                var childrenByParent = allIds
-                    .Where(item => item.ParentId is not null)
-                    .GroupBy(item => item.ParentId!.Value)
-                    .ToDictionary(group => group.Key, group => group.Select(item => item.Id).ToList());
-                var idsToDelete = new HashSet<Guid> { id };
-                var queue = new Queue<Guid>();
-                queue.Enqueue(id);
-                while (queue.Count > 0) {
-                    var current = queue.Dequeue();
-                    if (childrenByParent.TryGetValue(current, out var children)) {
-                        foreach (var childId in children.Where(childId => idsToDelete.Add(childId))) {
-                            queue.Enqueue(childId);
-                        }
-                    }
-                }
-
                 await db.Comments
-                    .Where(item => idsToDelete.Contains(item.Id))
+                    .Where(item => item.Id == id)
                     .ExecuteDeleteAsync(cancellationToken);
                 return Results.NoContent();
             })
@@ -275,11 +257,17 @@ public static class CommentsEndpoints {
             var requestedPage = page ?? 1;
             var requestedPageSize = pageSize ?? 20;
 
-            if (requestedPage < 1 || requestedPageSize is < 1 or > 50) {
-                return Results.ValidationProblem(new Dictionary<string, string[]> {
-                    ["page"] = ["Page must be at least 1."],
-                    ["pageSize"] = ["Page size must be between 1 and 50."]
-                });
+            var errors = new Dictionary<string, string[]>();
+            if (requestedPage < 1) {
+                errors["page"] = ["Page must be at least 1."];
+            }
+
+            if (requestedPageSize is < 1 or > 50) {
+                errors["pageSize"] = ["Page size must be between 1 and 50."];
+            }
+
+            if (errors.Count > 0) {
+                return Results.ValidationProblem(errors);
             }
 
             if (!await db.Comments.AnyAsync(comment => comment.Id == id, cancellationToken)) {
@@ -404,9 +392,17 @@ public static class CommentsEndpoints {
         }
     }
 
-    private record CreateCommentRequest(string Content, Guid? ParentId);
+    private static bool IsValidContent([NotNullWhen(true)] string? content) =>
+        content is { Length: >= 1 and <= 2_000 };
 
-    private record UpdateCommentRequest(string Content);
+    private static IResult InvalidContent() =>
+        Results.ValidationProblem(new Dictionary<string, string[]> {
+            ["content"] = ["Content must be between 1 and 2,000 characters."]
+        });
+
+    private record CreateCommentRequest(string? Content, Guid? ParentId);
+
+    private record UpdateCommentRequest(string? Content);
 
     private record VoteRequest(int Value);
 

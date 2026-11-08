@@ -11,6 +11,7 @@ public static class WebApplicationExtensions {
     public static async Task InitializeDatabaseAsync(this WebApplication app) {
         await using var scope = app.Services.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        // Startup migrations assume a single API instance.
         await db.Database.MigrateAsync();
         await DatabaseSeeder.SeedAsync(
             scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>(),
@@ -20,6 +21,10 @@ public static class WebApplicationExtensions {
     }
 
     public static void UseApiPipeline(this WebApplication app) {
+        app.UseForwardedHeaders();
+        app.UseExceptionHandler();
+        app.UseStatusCodePages();
+
         if (app.Environment.IsDevelopment()) {
             app.MapOpenApi();
             app.UseSwaggerUI(options => {

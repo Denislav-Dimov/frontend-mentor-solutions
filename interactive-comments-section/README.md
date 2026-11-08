@@ -131,6 +131,11 @@ dotnet user-secrets set "Storage:Region" "<your-region>"
 dotnet user-secrets set "Storage:Bucket" "<your-bucket>"
 ```
 
+- Production-only API settings (environment variables use `__` as the separator):
+  - `AllowedHosts`: the base `appsettings.json` allows any host (`*`); set this to the API's real host name(s), e.g. `AllowedHosts=api.example.com`. Development restricts it to `localhost;127.0.0.1`.
+  - `ForwardedHeaders__KnownProxies__0` / `ForwardedHeaders__KnownNetworks__0`: IPs or CIDR ranges of the reverse proxy in front of the API. Only `X-Forwarded-For`/`X-Forwarded-Proto` from the last hop are honoured (`ForwardLimit = 1`). If none are configured, that last hop is trusted from any peer, which is fine behind the Vercel proxy but means a client calling the API directly can spoof its IP for rate limiting. Configure them whenever the proxy egress addresses are known.
+  - `Cors__AllowedOrigins__0`: the frontend origin.
+
 ### Run locally
 
 - PostgreSQL
@@ -152,6 +157,12 @@ dotnet run --project .
 cd ./web
 npm i
 npm run dev
+```
+
+- API integration tests (needs Docker running; Testcontainers starts a throwaway Postgres and S3 is faked)
+
+```bash
+dotnet test api.tests
 ```
 
 ### Useful endpoints

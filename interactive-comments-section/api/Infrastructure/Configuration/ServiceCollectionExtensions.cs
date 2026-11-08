@@ -2,16 +2,23 @@ using Api.Features.Users;
 using Api.Infrastructure.Persistence;
 using Amazon.S3;
 using Amazon.Runtime;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 using System.Threading.RateLimiting;
 
 namespace Api.Infrastructure.Configuration;
 
 public static class ServiceCollectionExtensions {
+    private const long MaxRequestBodyBytes = 3 * 1024 * 1024;
+
     public static WebApplicationBuilder AddApiServices(this WebApplicationBuilder builder) {
         builder.Services.AddOpenApi();
+        builder.Services.AddProblemDetails();
+        builder.Services.ConfigureForwardedHeaders(builder.Configuration);
 
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                                ?? throw new InvalidOperationException(
@@ -52,7 +59,8 @@ public static class ServiceCollectionExtensions {
                 options.Password.RequireDigit = true;
                 options.Password.RequireUppercase = true;
                 options.Password.RequireNonAlphanumeric = false;
-                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.MaxFailedAccessAttempts = 10;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
             })
             .AddSignInManager()
             .AddEntityFrameworkStores<AppDbContext>()
@@ -63,9 +71,7 @@ public static class ServiceCollectionExtensions {
             .AddIdentityCookies();
         builder.Services.ConfigureApplicationCookie(options => {
             options.Cookie.HttpOnly = true;
-            options.Cookie.SameSite = builder.Environment.IsDevelopment()
-                ? SameSiteMode.Lax
-                : SameSiteMode.None;
+            options.Cookie.SameSite = SameSiteMode.Lax;
             options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
                 ? CookieSecurePolicy.SameAsRequest
                 : CookieSecurePolicy.Always;
@@ -84,20 +90,20 @@ public static class ServiceCollectionExtensions {
             options.HeaderName = "X-XSRF-TOKEN";
             options.Cookie.Name = "XSRF-TOKEN";
             options.Cookie.HttpOnly = false;
-            options.Cookie.SameSite = builder.Environment.IsDevelopment()
-                ? SameSiteMode.Lax
-                : SameSiteMode.None;
+            options.Cookie.SameSite = SameSiteMode.Lax;
             options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
                 ? CookieSecurePolicy.SameAsRequest
                 : CookieSecurePolicy.Always;
         });
+        var globalPermitLimit = builder.Configuration.GetValue("RateLimiting:GlobalPermitLimit", 300);
+        var authPermitLimit = builder.Configuration.GetValue("RateLimiting:AuthPermitLimit", 10);
         builder.Services.AddRateLimiter(options => {
             options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
             options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
                 RateLimitPartition.GetFixedWindowLimiter(
                     context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
                     _ => new FixedWindowRateLimiterOptions {
-                        PermitLimit = 300,
+                        PermitLimit = globalPermitLimit,
                         Window = TimeSpan.FromMinutes(1),
                         QueueLimit = 0
                     }));
@@ -105,7 +111,7 @@ public static class ServiceCollectionExtensions {
                 RateLimitPartition.GetFixedWindowLimiter(
                     context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
                     _ => new FixedWindowRateLimiterOptions {
-                        PermitLimit = 10,
+                        PermitLimit = authPermitLimit,
                         Window = TimeSpan.FromMinutes(1),
                         QueueLimit = 0
                     }));
@@ -129,9 +135,40 @@ public static class ServiceCollectionExtensions {
                     }));
         });
         builder.WebHost.ConfigureKestrel(options =>
-            options.Limits.MaxRequestBodySize = 2 * 1024 * 1024);
+            options.Limits.MaxRequestBodySize = MaxRequestBodyBytes);
+        builder.Services.Configure<FormOptions>(options =>
+            options.MultipartBodyLengthLimit = MaxRequestBodyBytes);
 
         return builder;
+    }
+
+    private static void ConfigureForwardedHeaders(
+        this IServiceCollection services,
+        IConfiguration configuration) {
+        var knownProxies = configuration
+                               .GetSection("ForwardedHeaders:KnownProxies")
+                               .Get<string[]>()
+                           ?? [];
+        var knownNetworks = configuration
+                                .GetSection("ForwardedHeaders:KnownNetworks")
+                                .Get<string[]>()
+                            ?? [];
+
+        services.Configure<ForwardedHeadersOptions>(options => {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            options.ForwardLimit = 1;
+            options.KnownProxies.Clear();
+            options.KnownIPNetworks.Clear();
+
+            // With no known proxies configured, the last hop is trusted from any peer, so direct callers can spoof it.
+            foreach (var proxy in knownProxies) {
+                options.KnownProxies.Add(IPAddress.Parse(proxy));
+            }
+
+            foreach (var network in knownNetworks) {
+                options.KnownIPNetworks.Add(System.Net.IPNetwork.Parse(network));
+            }
+        });
     }
 
     public record StorageOptions(
