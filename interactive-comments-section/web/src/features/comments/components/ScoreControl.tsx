@@ -107,8 +107,8 @@ export default function ScoreControl({
 
   const layout =
     orientation === 'vertical'
-      ? 'flex-col gap-4 px-3 py-3'
-      : 'flex-row gap-4 px-4 py-2 md:flex-col md:gap-4 md:px-3 md:py-3';
+      ? 'flex-col gap-2 px-2 py-2'
+      : 'flex-row gap-2 px-2 py-1.5 md:flex-col md:gap-2 md:px-2 md:py-2';
 
   return (
     <div
@@ -120,9 +120,9 @@ export default function ScoreControl({
       }}
     >
       <div
-        className={`bg-grey-50 flex h-fit w-fit items-center justify-center rounded-lg font-bold text-purple-600 ${layout}`}
+        className={`bg-grey-50 flex h-fit w-fit items-center justify-center rounded-lg text-purple-600 ${layout}`}
         role="group"
-        aria-label={`Score ${optimisticState.score}`}
+        aria-label="Comment score"
         aria-describedby={commentId ? tooltipId : undefined}
       >
         <button
@@ -131,20 +131,16 @@ export default function ScoreControl({
           onClick={() => castVote(1)}
           aria-label="Upvote"
           aria-pressed={optimisticState.vote === 1}
-          className="group grid place-items-center border-none bg-transparent p-1 transition-opacity duration-200 hover:opacity-70"
+          className="group grid size-6 place-items-center rounded-md"
         >
           <svg width="11" height="11" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path
               d="M6.33 10.896c.137 0 .255-.05.354-.149.1-.1.149-.217.149-.354V7.004h3.315c.136 0 .254-.05.354-.149.099-.1.148-.217.148-.354V5.272a.483.483 0 0 0-.148-.354.483.483 0 0 0-.354-.149H6.833V1.4a.483.483 0 0 0-.149-.354.483.483 0 0 0-.354-.149H4.915a.483.483 0 0 0-.354.149c-.1.1-.149.217-.149.354v3.37H1.08a.483.483 0 0 0-.354.15c-.1.099-.149.217-.149.353v1.23c0 .136.05.254.149.353.1.1.217.149.354.149h3.333v3.39c0 .136.05.254.15.353.098.1.216.149.353.149H6.33Z"
-              fill={optimisticState.vote === 1 ? 'hsl(238, 40%, 52%)' : 'hsl(239, 57%, 85%)'}
-              className="transition-colors duration-200 group-hover:fill-purple-600"
+              className={`transition-colors duration-200 group-hover:fill-purple-600 ${optimisticState.vote === 1 ? 'fill-purple-600' : 'fill-purple-200'}`}
             />
           </svg>
         </button>
-        <p
-          className="min-w-6 text-center text-base font-medium tabular-nums"
-          aria-live="polite"
-        >
+        <p className="min-w-6 text-center font-medium tabular-nums" aria-live="polite">
           {optimisticState.score}
         </p>
         <button
@@ -153,13 +149,12 @@ export default function ScoreControl({
           onClick={() => castVote(-1)}
           aria-label="Downvote"
           aria-pressed={optimisticState.vote === -1}
-          className="group grid place-items-center border-none bg-transparent p-1 transition-opacity duration-200 hover:opacity-70"
+          className="group grid size-6 place-items-center rounded-md"
         >
           <svg width="11" height="3" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path
               d="M9.256 2.66c.204 0 .38-.056.53-.167.148-.11.222-.243.222-.396V.722c0-.152-.074-.284-.223-.395a.859.859 0 0 0-.53-.167H.76a.859.859 0 0 0-.53.167C.083.437.009.57.009.722v1.375c0 .153.074.285.223.396a.859.859 0 0 0 .53.167h8.495Z"
-              fill={optimisticState.vote === -1 ? 'hsl(238, 40%, 52%)' : 'hsl(239, 57%, 85%)'}
-              className="transition-colors duration-200 group-hover:fill-purple-600"
+              className={`transition-colors duration-200 group-hover:fill-purple-600 ${optimisticState.vote === -1 ? 'fill-purple-600' : 'fill-purple-200'}`}
             />
           </svg>
         </button>
@@ -173,7 +168,7 @@ export default function ScoreControl({
             if (!mobileOpen) void loadReactions();
             setMobileOpen(value => !value);
           }}
-          className="text-xs font-bold text-purple-600 underline-offset-2 hover:underline md:hidden"
+          className="link text-xs md:hidden"
         >
           {mobileOpen ? 'Hide interactions' : 'View interactions'}
         </button>
@@ -184,7 +179,7 @@ export default function ScoreControl({
           role="tooltip"
           className={`border-grey-100 text-grey-800 invisible absolute top-[calc(100%+0.5rem)] left-0 z-30 max-h-64 w-56 max-w-[calc(100vw-2rem)] overflow-y-auto rounded-lg border bg-white p-3 text-left text-sm font-normal opacity-0 shadow-sm transition-opacity duration-200 md:left-1/2 md:-translate-x-1/2 md:group-focus-within/score:visible md:group-focus-within/score:opacity-100 md:group-hover/score:visible md:group-hover/score:opacity-100 ${mobileOpen ? 'max-md:visible max-md:opacity-100' : ''}`}
         >
-          <p className="mb-2 font-bold">Reactions</p>
+          <p className="mb-2 font-medium">Reactions</p>
           {loadingReactions ? (
             <p className="text-grey-500">Loading...</p>
           ) : reactions.length === 0 ? (
@@ -205,11 +200,11 @@ export default function ScoreControl({
                     className="h-6 w-6 rounded-full"
                   />
                   <span className="min-w-0 flex-1 truncate">{reaction.user.username}</span>
-                  <span
-                    className="font-bold text-purple-600"
-                    aria-label={reaction.value === 1 ? 'upvote' : 'downvote'}
-                  >
+                  <span aria-hidden="true" className="font-medium text-purple-600">
                     {reaction.value === 1 ? '+' : '−'}
+                  </span>
+                  <span className="sr-only">
+                    {reaction.value === 1 ? 'upvoted' : 'downvoted'}
                   </span>
                 </li>
               ))}

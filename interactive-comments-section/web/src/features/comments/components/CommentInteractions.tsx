@@ -11,14 +11,19 @@ type Props = {
   comment: AnyComment;
   isOwn: boolean;
   replyOpen?: boolean;
+  editing?: boolean;
   onReply?: () => void;
   onEdit: () => void;
 };
+
+const actionClass =
+  'flex items-center gap-2 rounded-md py-1 font-medium transition-opacity hover:opacity-60';
 
 export default function CommentInteractions({
   comment,
   isOwn,
   replyOpen,
+  editing,
   onReply,
   onEdit,
 }: Props) {
@@ -50,24 +55,15 @@ export default function CommentInteractions({
 
   return (
     <>
-      <div
-        className={`flex items-center gap-4 whitespace-nowrap ${pending ? 'opacity-60' : ''}`}
-      >
+      <div className="flex items-center gap-4 whitespace-nowrap">
         {!isOwn ? (
           <button
             type="button"
             onClick={onReply}
             aria-expanded={replyOpen}
-            className="flex items-center gap-2 border-none bg-transparent font-bold text-purple-600"
+            className={`${actionClass} text-purple-600`}
           >
-            <Image
-              src="/images/icon-reply.svg"
-              alt=""
-              aria-hidden="true"
-              width={12}
-              height={12}
-              className="w-full"
-            />
+            <Image src="/images/icon-reply.svg" alt="" width={14} height={13} />
             Reply
           </button>
         ) : (
@@ -75,36 +71,26 @@ export default function CommentInteractions({
             <button
               type="button"
               onClick={() => setShowDelete(true)}
-              className="flex items-center gap-2 border-none bg-transparent font-bold text-pink-400"
+              aria-haspopup="dialog"
+              className={`${actionClass} text-pink-400`}
             >
-              <Image
-                src="/images/icon-delete.svg"
-                alt=""
-                aria-hidden="true"
-                width={12}
-                height={14}
-              />
+              <Image src="/images/icon-delete.svg" alt="" width={12} height={14} />
               Delete
             </button>
             <button
               type="button"
               onClick={onEdit}
-              className="flex items-center gap-2 border-none bg-transparent font-bold text-purple-600"
+              aria-expanded={editing}
+              className={`${actionClass} text-purple-600`}
             >
-              <Image
-                src="/images/icon-edit.svg"
-                alt=""
-                aria-hidden="true"
-                width={14}
-                height={14}
-              />
+              <Image src="/images/icon-edit.svg" alt="" width={14} height={14} />
               Edit
             </button>
           </>
         )}
       </div>
       {error && (
-        <p className="mt-1 text-xs font-normal text-pink-400" role="alert">
+        <p className="field-error mt-1 text-xs" role="alert">
           {error}
         </p>
       )}
@@ -113,10 +99,11 @@ export default function CommentInteractions({
           textFields={{
             action: 'Delete comment',
             additional:
-              'Are you sure you want to delete this comment? This will remove the comment and can&apos;t be undone.',
+              "Are you sure you want to delete this comment? This will remove the comment and can't be undone.",
             confirm: 'Yes, delete',
             cancel: 'No, cancel',
           }}
+          pending={pending}
           onCancel={() => setShowDelete(false)}
           onConfirm={remove}
         />

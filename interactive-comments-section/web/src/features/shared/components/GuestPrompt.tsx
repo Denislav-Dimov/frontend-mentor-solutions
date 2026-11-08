@@ -1,99 +1,79 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useId, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { useId, useRef, useState, type ReactNode } from 'react';
+import Modal from './Modal';
 
-type Props = {
-  action: string;
-  children: React.ReactNode;
-};
-
-export function GuestDialog({
-  action,
-  open,
-  onClose,
-}: {
+type GuestDialogProps = {
   action: string;
   open: boolean;
   onClose: () => void;
-}) {
-  const titleId = useId();
-  const panelRef = useRef<HTMLDivElement>(null);
+};
 
-  useEffect(() => {
-    if (!open) return;
-    const closeOnEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-    document.addEventListener('keydown', closeOnEscape);
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    panelRef.current?.focus({ preventScroll: true });
-    return () => {
-      document.removeEventListener('keydown', closeOnEscape);
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [open, onClose]);
-
+export function GuestDialog({ action, open, onClose }: GuestDialogProps) {
   if (!open) return null;
+  return <GuestDialogContent action={action} onClose={onClose} />;
+}
 
-  return createPortal(
-    <div
-      className="fixed inset-0 z-50 grid place-items-center bg-black/50 px-4"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby={titleId}
-      onClick={e => {
-        if (e.target === e.currentTarget) {
-          onClose();
-        }
-      }}
+function GuestDialogContent({ action, onClose }: Omit<GuestDialogProps, 'open'>) {
+  const titleId = useId();
+  const descriptionId = useId();
+  const dismissRef = useRef<HTMLButtonElement>(null);
+
+  return (
+    <Modal
+      onClose={onClose}
+      labelledBy={titleId}
+      describedBy={descriptionId}
+      initialFocusRef={dismissRef}
     >
-      <div ref={panelRef} className="grid w-full max-w-100 gap-4 rounded-lg bg-white p-8">
-        <div>
-          <h2 id={titleId} className="text-grey-800 text-xl font-medium">
-            Create an account to {action}
-          </h2>
-          <p className="text-grey-500 mt-2 font-normal">
-            Register or log in to keep your comments, replies, and activity connected to you.
-          </p>
-        </div>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-          <Link
-            href="/login"
-            className="bg-grey-500 text-grey-50 w-full rounded-lg p-3 text-center text-sm font-medium uppercase transition-opacity hover:opacity-50"
-          >
-            Log in
-          </Link>
-          <Link
-            href="/register"
-            className="text-grey-50 w-full rounded-lg bg-purple-600 p-3 text-center text-sm font-medium uppercase transition-opacity hover:opacity-50"
-          >
-            Register
-          </Link>
-          <button
-            type="button"
-            onClick={onClose}
-            className="bg-grey-100 text-grey-800 w-full rounded-lg border-none p-3 text-sm font-medium uppercase transition-opacity hover:opacity-50"
-          >
-            Not now
-          </button>
-        </div>
+      <h2 id={titleId} className="text-grey-800 text-xl font-medium md:text-2xl">
+        Create an account to {action}
+      </h2>
+      <p id={descriptionId} className="mt-4">
+        Register or log in to keep your comments, replies and activity connected to you.
+      </p>
+      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+        <Link href="/register" className="button-primary">
+          Register
+        </Link>
+        <Link href="/login" className="button-secondary">
+          Log in
+        </Link>
       </div>
-    </div>,
-    document.body,
+      <button
+        ref={dismissRef}
+        type="button"
+        onClick={onClose}
+        className="link mx-auto mt-4 block text-sm"
+      >
+        Not now
+      </button>
+    </Modal>
   );
 }
 
-export default function GuestPrompt({ action, children }: Props) {
+type GuestPromptProps = {
+  action: string;
+  children: ReactNode;
+  className?: string;
+};
+
+export default function GuestPrompt({
+  action,
+  children,
+  className = 'link',
+}: GuestPromptProps) {
   const [open, setOpen] = useState(false);
 
   return (
     <>
-      <button type="button" onClick={() => setOpen(true)} className="contents">
+      <button
+        type="button"
+        aria-haspopup="dialog"
+        onClick={() => setOpen(true)}
+        className={className}
+      >
         {children}
       </button>
       <GuestDialog action={action} open={open} onClose={() => setOpen(false)} />

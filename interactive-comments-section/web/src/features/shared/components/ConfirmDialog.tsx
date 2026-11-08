@@ -1,5 +1,9 @@
 'use client';
 
+import { useId, useRef, type ReactNode } from 'react';
+import Modal from './Modal';
+import Spinner from './Spinner';
+
 type TextFields = {
   action: string;
   additional: string;
@@ -11,47 +15,64 @@ type Props = {
   textFields: TextFields;
   onCancel: () => void;
   onConfirm: () => void;
+  pending?: boolean;
+  confirmDisabled?: boolean;
+  children?: ReactNode;
 };
 
-export default function ConfirmDialog({ textFields, onCancel, onConfirm }: Props) {
+export default function ConfirmDialog({
+  textFields,
+  onCancel,
+  onConfirm,
+  pending = false,
+  confirmDisabled = false,
+  children,
+}: Props) {
   const { action, additional, confirm, cancel } = textFields;
+  const titleId = useId();
+  const descriptionId = useId();
+  const cancelRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <div
-      className="fixed inset-0 z-50 grid place-items-center bg-black/50 px-4"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="delete-heading"
-      onClick={e => {
-        if (e.target === e.currentTarget) onCancel();
+    <Modal
+      onClose={() => {
+        if (!pending) onCancel();
       }}
-      onKeyDown={e => {
-        if (e.key === 'Escape') onCancel();
-      }}
+      labelledBy={titleId}
+      describedBy={descriptionId}
+      initialFocusRef={cancelRef}
+      role="alertdialog"
     >
-      <div className="grid w-full max-w-100 gap-4 rounded-lg bg-white p-8">
-        <h2 id="delete-heading" className="text-grey-800 text-xl font-medium">
-          {action}
-        </h2>
-        <p className="text-grey-500 font-normal">{additional}</p>
-        <div className="flex items-center justify-between gap-4">
-          <button
-            type="button"
-            onClick={onCancel}
-            autoFocus
-            className="bg-grey-500 text-grey-50 w-full cursor-pointer rounded-lg border-none p-3 uppercase transition-opacity duration-200 hover:opacity-50"
-          >
-            {cancel}
-          </button>
-          <button
-            type="button"
-            onClick={onConfirm}
-            className="text-grey-50 w-full cursor-pointer rounded-lg border-none bg-pink-400 p-3 uppercase transition-opacity duration-200 hover:opacity-50"
-          >
-            {confirm}
-          </button>
-        </div>
+      <h2 id={titleId} className="text-grey-800 text-xl font-medium md:text-2xl">
+        {action}
+      </h2>
+      <p id={descriptionId} className="mt-4">
+        {additional}
+      </p>
+      {children && <div className="mt-4 grid gap-3">{children}</div>}
+      <div className="mt-6 grid grid-cols-2 gap-3">
+        <button
+          ref={cancelRef}
+          type="button"
+          onClick={() => {
+            if (!pending) onCancel();
+          }}
+          aria-disabled={pending || undefined}
+          className="button-secondary"
+        >
+          {cancel}
+        </button>
+        <button
+          type="button"
+          onClick={onConfirm}
+          disabled={pending || confirmDisabled}
+          aria-busy={pending || undefined}
+          className="button-danger"
+        >
+          {pending && <Spinner />}
+          {confirm}
+        </button>
       </div>
-    </div>
+    </Modal>
   );
 }

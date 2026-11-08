@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import GuestPrompt from './GuestPrompt';
+import NavLink from './NavLink';
 
 type Props = {
   user: {
@@ -9,33 +10,42 @@ type Props = {
   } | null;
 };
 
+const navItemClass = 'inline-block py-2 text-sm font-medium';
+
 export default function StatusBar({ user }: Props) {
   return (
-    <header className="relative bg-transparent">
-      <div className="sticky top-0 mx-auto flex w-full max-w-3xl items-center justify-between gap-3 px-4 py-6 md:gap-6 md:px-8">
-        <nav aria-label="Account" className="flex min-w-0 items-center gap-4 md:gap-5">
-          <Link href="/" className="text-sm font-bold text-purple-600 hover:underline">
-            Comments
-          </Link>
-          {user ? (
-            <Link
-              href="/history"
-              className="text-sm font-bold text-purple-600 hover:underline"
-            >
-              My activity
-            </Link>
-          ) : (
-            <GuestPrompt action="view your activity">
-              <span className="text-sm font-bold text-purple-600">My activity</span>
-            </GuestPrompt>
-          )}
+    <header className="border-grey-100 border-b bg-white">
+      <div className="mx-auto flex w-full max-w-3xl items-center justify-between gap-4 px-4 py-3 md:px-8">
+        <nav aria-label="Main">
+          <ul className="flex items-center gap-5 md:gap-6">
+            <li>
+              <NavLink href="/" className={navItemClass}>
+                Comments
+              </NavLink>
+            </li>
+            <li>
+              {user ? (
+                <NavLink href="/history" className={navItemClass}>
+                  My activity
+                </NavLink>
+              ) : (
+                <GuestPrompt
+                  action="view your activity"
+                  className={`${navItemClass} text-grey-500 hover:text-grey-800 transition-colors`}
+                >
+                  My activity
+                </GuestPrompt>
+              )}
+            </li>
+          </ul>
         </nav>
+
         {user ? (
-          <Link
+          <NavLink
             href="/profile"
-            className="flex items-center gap-3 rounded-lg p-1 transition-opacity hover:opacity-70"
+            className="hover:bg-grey-50 -mr-2 flex items-center gap-3 rounded-lg py-1 pr-2 pl-3"
           >
-            <span className="text-grey-800 hidden text-sm font-bold sm:inline">
+            <span className="text-grey-800 sr-only text-sm font-medium sm:not-sr-only">
               {user.username}
             </span>
             <Image
@@ -44,18 +54,15 @@ export default function StatusBar({ user }: Props) {
               width={32}
               height={32}
               unoptimized
-              className="h-8 w-8 rounded-full object-cover"
+              className="size-8 rounded-full object-cover"
             />
-          </Link>
+          </NavLink>
         ) : (
-          <div className="flex items-center gap-4 text-sm font-bold">
-            <Link href="/login" className="text-purple-600 hover:underline">
+          <div className="flex items-center gap-4">
+            <Link href="/login" className="link text-sm">
               Log in
             </Link>
-            <Link
-              href="/register"
-              className="rounded-[5px] bg-purple-600 px-4 py-2 text-white transition-opacity hover:opacity-50"
-            >
+            <Link href="/register" className="button-primary px-4 py-1.5 text-sm">
               Register
             </Link>
           </div>

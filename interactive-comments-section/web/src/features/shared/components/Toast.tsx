@@ -38,23 +38,23 @@ export default function ToastProvider({ children }: { children: ReactNode }) {
     <ToastContext.Provider value={{ notify }}>
       {children}
       <div
+        role="status"
         aria-live="polite"
-        className="pointer-events-none fixed right-4 bottom-4 z-60 grid w-[min(22rem,calc(100vw-2rem))] gap-2"
+        className="pointer-events-none fixed inset-x-4 bottom-4 z-60 grid justify-items-center gap-2 sm:inset-x-auto sm:right-6 sm:bottom-6 sm:w-88"
       >
         {toasts.map(toast => (
           <div
             key={toast.id}
-            role="alert"
-            className="toast-enter bg-grey-800 pointer-events-auto flex items-start gap-3 rounded-lg px-4 py-3 text-sm font-normal text-white shadow-lg"
+            className="toast-enter bg-grey-800 pointer-events-auto flex w-full items-start gap-3 rounded-lg py-3 pr-2 pl-4 text-sm text-white shadow-[0_8px_24px_rgb(0_0_0/0.15)]"
           >
-            <span className="min-w-0 flex-1">{toast.message}</span>
+            <p className="min-w-0 flex-1 py-0.5">{toast.message}</p>
             <button
               type="button"
               onClick={() => dismiss(toast.id)}
               aria-label="Dismiss notification"
-              className="rounded px-1 text-lg leading-none opacity-70 transition-opacity hover:opacity-100"
+              className="grid size-7 shrink-0 place-items-center rounded-md text-lg leading-none text-white/70 transition-colors hover:text-white"
             >
-              ×
+              <span aria-hidden="true">×</span>
             </button>
           </div>
         ))}

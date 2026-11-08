@@ -12,23 +12,22 @@ export default function CommentsList({ currentUser, comments }: CommentsListProp
   const mappedComments = comments.map(comment => mapComment(comment));
 
   return (
-    <main className="min-h-screen">
-      <div className="mx-auto grid w-full max-w-3xl gap-8 px-4 py-6 md:gap-10 md:px-8 md:py-10">
-        <section aria-label="Comments" className="grid gap-4 md:gap-6">
-          {mappedComments.length === 0 ? (
-            <div className="rounded-lg bg-white p-8 text-center">
-              <h1 className="text-grey-800 text-xl font-bold">No comments yet</h1>
-              <p className="text-grey-500 mt-2">Start the conversation below.</p>
-            </div>
-          ) : (
-            mappedComments.map(comment => (
-              <CommentCard key={comment.id} comment={comment} currentUser={currentUser} />
-            ))
-          )}
-        </section>
+    <main id="main" className="page">
+      <h1 className="sr-only">Comments</h1>
+      <section aria-label="Comments" className="grid gap-4 md:gap-5">
+        {mappedComments.length === 0 ? (
+          <div className="card text-center">
+            <h2 className="text-grey-800 text-xl font-medium">No comments yet</h2>
+            <p className="mt-2">Start the conversation below.</p>
+          </div>
+        ) : (
+          mappedComments.map(comment => (
+            <CommentCard key={comment.id} comment={comment} currentUser={currentUser} />
+          ))
+        )}
+      </section>
 
-        <CommentComposer currentUser={currentUser} />
-      </div>
+      <CommentComposer currentUser={currentUser} />
     </main>
   );
 }

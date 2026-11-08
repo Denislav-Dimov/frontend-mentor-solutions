@@ -28,4 +28,12 @@ export const apiHistoryItemSchema = z.object({
   author: apiUserSchema,
 });
 
-export const apiUserListSchema = z.array(apiUserSchema);
+
+export const antiforgerySchema = z.object({ token: z.string() });
+
+export const problemDetailsSchema = z.object({
+  title: z.string().optional(),
+  detail: z.string().optional(),
+  error: z.string().optional(),
+  errors: z.record(z.string(), z.array(z.string())).optional(),
+});

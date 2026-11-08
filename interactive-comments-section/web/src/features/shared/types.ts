@@ -1,9 +1,5 @@
 import { z } from 'zod';
-import {
-  apiCommentSchema,
-  apiHistoryItemSchema,
-  apiUserSchema,
-} from './schemas';
+import { apiCommentSchema, apiHistoryItemSchema, apiUserSchema } from './schemas';
 
 export type ApiUser = z.infer<typeof apiUserSchema>;
 

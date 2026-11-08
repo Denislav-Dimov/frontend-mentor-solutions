@@ -60,10 +60,10 @@ export default function CommentComposer({ currentUser }: CommentComposerProps) {
       {pendingComments.map((content, index) => (
         <p
           key={`${content}-${index}`}
-          className="text-grey-500 rounded-lg bg-white px-4 py-3 text-sm"
+          className="card py-3 text-sm md:py-3"
           aria-live="polite"
         >
-          Sending comment...
+          Sending comment…
         </p>
       ))}
       {isPending && <span className="sr-only">Sending comment</span>}
